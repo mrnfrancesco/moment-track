@@ -113,7 +113,7 @@ pygments_style = 'sphinx'
 keep_warnings = False
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = True
+todo_include_todos = False
 
 
 # -- Options for HTML output ----------------------------------------------
@@ -262,7 +262,7 @@ latex_elements = {
 
      # Latex figure (float) alignment
      #
-     # 'figure_align': 'htbp',
+     'figure_align': 'H',
 
      # Fix Package Babel Error for italian language
      #
