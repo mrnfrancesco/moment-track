@@ -7,7 +7,7 @@ SPHINXBUILD   	= sphinx-build
 BUILDDIR      	= build
 DISTDIR			= dist
 HTML			= $(DISTDIR)/html
-PDF				= $(DISTDIR)/pdf/manual.pdf
+PDF				= $(DISTDIR)/manual.pdf
 
 # Internal variables.
 ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) src
@@ -18,7 +18,7 @@ I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) src
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
 	@echo "  html       to make standalone HTML files"
-	@echo "  pdf   		to make LaTeX files and run them through pdflatex"
+	@echo "  pdf        to make LaTeX files and run them through pdflatex"
 	@echo "  linkcheck  to check all external links for integrity"
 	@echo "  dummy      to check syntax errors of document sources"
 

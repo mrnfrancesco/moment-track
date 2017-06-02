@@ -280,12 +280,12 @@ latex_documents = [
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
 #
-latex_logo = 'images/logo/logo-320x320.png'
+latex_logo = 'images/logo/logo-160x160.png'
 
 # For "manual" documents, the toplevel headings are parts.
 # Possible other values are None, 'section', 'chapter'
 #
-latex_toplevel_sectioning = 'part'
+latex_toplevel_sectioning = 'chapter'
 
 # If true, show page references after internal links.
 #
