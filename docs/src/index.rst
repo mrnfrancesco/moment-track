@@ -6,9 +6,8 @@ Documentazione di progetto
 
     revision-history
     introduction
-
-..
     overview
+..
     requirements-analysis
     architectural-decisions
     deployment-diagram
