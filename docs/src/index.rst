@@ -9,8 +9,8 @@ Documentazione di progetto
     introduction
     overview
     requirements-analysis
-..
     architectural-design
+..
     api
     cost-and-pricing
     conclusions-and-future-developments

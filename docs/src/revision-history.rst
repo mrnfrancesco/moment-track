@@ -12,6 +12,10 @@ Storico delle revisioni
 |            | * Aggiunti dettagli che meglio specificano alcuni requisiti   |
 |            | * Aggiunto schema delle dipendenze dei requisiti e relativa   |
 |            |   immagine                                                    |
+|            | * Aggiunta introduzione a :ref:`architectural_design`         |
+|            | * Spostata sezione "Manutenibilità" da :ref:`overview` a      |
+|            |   :ref:`architectural_design`                                 |
+|            | * Aggiunto diagramma di deployment                            |
 +------------+---------------------------------------------------------------+
 | 03/06/2017 | * Aggiunta :ref:`system_functionalities_overview`             |
 |            | * Aggiunti :ref:`constraints_overview`                        |
