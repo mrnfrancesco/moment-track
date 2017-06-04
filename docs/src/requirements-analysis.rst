@@ -237,5 +237,4 @@ Schema delle dipendenze
 .. image:: images/diagrams/requirements-dependencies-schema.png
     :alt: Schema delle dipendenze
     :align: center
-    :scale: 80%
 

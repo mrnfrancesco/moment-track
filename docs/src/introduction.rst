@@ -21,12 +21,10 @@ Durante tutte queste fasi si cercherà quanto più possibile di rispettare i
 principi fondamentali dell'ingegneria del software e del
 `Modello ISO/IEC 9126 <https://en.wikipedia.org/wiki/ISO/IEC_9126>`_.
 
-.. figure:: images/ISO-IEC_9126.png
+.. image:: images/ISO-IEC_9126.png
     :alt: Modello ISO/IEC 9126
     :align: center
-    :width: 79%
-
-    Modello ISO/IEC 9126
+    :width: 90%
 
 .. _product_purpose:
 

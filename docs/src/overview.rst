@@ -44,26 +44,6 @@ Sarà previsto inoltre l'utilizzo di un sistema di controllo delle versioni che
 tenga traccia delle modifiche apportate nel tempo e ne permetta il ripristino
 in caso di malfunzionamenti.
 
-.. _maintainability:
-
-Manutenibilità
---------------
-
-Data la natura commerciale dell'applicazione, è possibile che nel corso del
-tempo nascano nuovi requisiti dovuti a:
-
-    * nascita di nuovi concorrenti
-    * cambiamento delle necessità del mercato
-    * richieste di personalizzazione da parte dei clienti
-    * …
-
-L'architettura del sistema dovrà tenere conto di queste evenienze e sarà
-sviluppata in modo tale che una modifica nei requisiti non rappresenti un
-problema.
-
-.. todo::
-    Aggiungi riferimento alla sezione sull'architettura del sistema
-
 .. _confidentiality:
 
 Riservatezza
