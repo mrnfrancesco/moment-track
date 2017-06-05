@@ -214,7 +214,7 @@ Gestione richieste
 +-----------------+-----------------------------------------------------------+
 | **Requisiti**   | * Visualizzazione lista e stato di avanzamento delle      |
 | **funzionali**  |   richieste in fase di elaborazione                       |
-|                 | * Visualizzazione e modifica informazionsui file          |
+|                 | * Visualizzazione e modifica informazioni sui file        |
 |                 | * Cancellazione richieste precedenti                      |
 |                 | * Ricerca di testo nei file caricati e visualizzazione    |
 |                 |   dei risultati                                           |
