@@ -7,6 +7,11 @@ Storico delle revisioni
 +------------+---------------------------------------------------------------+
 | Data       | Note                                                          |
 +============+===============================================================+
+| 05/05/2017 | * Aggiunte immagini dei diagrammi dei casi d'uso              |
+|            | * Correzione errori di battitura nelle sezioni precedenti     |
+|            | * Nello schema delle dipendenze dei requisiti il nome dei     |
+|            |   requisiti è stato sostituito con il corrispondente UID      |
++------------+---------------------------------------------------------------+
 | 04/06/2017 | * Completata l':ref:`requirements_analysis`                   |
 |            | * Riviste le priorità dei requisiti                           |
 |            | * Aggiunti dettagli che meglio specificano alcuni requisiti   |
