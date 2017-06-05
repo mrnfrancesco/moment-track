@@ -101,8 +101,54 @@ Diagramma di deployment
 Diagramma dei casi d'uso
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. todo::
-    Aggiungere diagramma dei casi d'uso ed eventuali sottodiagrammi
+.. image:: images/diagrams/use-case/main.png
+    :alt: Diagramma principale dei casi d'uso
+    :align: center
+
+.. _access_management_use_case:
+
+Gestione degli accessi
+----------------------
+
+.. image:: images/diagrams/use-case/access-management.png
+    :alt: Diagramma dei casi d'uso della gestione degli accessi
+    :align: center
+
+.. _profile_management_use_case:
+
+Gestione del profilo
+--------------------
+
+.. image:: images/diagrams/use-case/profile-management.png
+    :alt: Diagramma dei casi d'uso della gestione del profilo
+    :align: center
+
+.. _payments_management_use_case:
+
+Gestione dei pagamenti
+----------------------
+
+.. image:: images/diagrams/use-case/payments-management.png
+    :alt: Diagramma dei casi d'uso della gestione dei pagamenti
+    :align: center
+
+.. _contents_upload_management_use_case:
+
+Gestione upload contenuti
+-------------------------
+
+.. image:: images/diagrams/use-case/contents-upload-management.png
+    :alt: Diagramma dei casi d'uso della gestione dell'upload dei contenuti
+    :align: center
+
+.. _requests_management_use_case:
+
+Gestione richieste
+------------------
+
+.. image:: images/diagrams/use-case/requests-management.png
+    :alt: Diagramma dei casi d'uso della gestione delle richieste
+    :align: center
 
 .. _activity_diagram:
 
