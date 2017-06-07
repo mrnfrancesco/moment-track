@@ -869,9 +869,14 @@ Gestione richieste
 Diagramma di attività
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. todo::
-    Aggiungere diagramma di attività o altro diagramma che mostri il
-    workflow dell'applicazione
+Il diagramma che segue mostra, a titolo esemplificativo, il workflow seguito
+dal sistema per l'invio di un file da parte di un utente registrato di tipo
+privato.
+
+.. image:: images/diagrams/activity/file-upload-registered-private-user.png
+    :alt: Diagramma di attività per l'upload di file per utenti privati
+    :align: center
+    :scale: 55%
 
 .. _data_diagram:
 

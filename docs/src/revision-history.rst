@@ -7,7 +7,11 @@ Storico delle revisioni
 +------------+---------------------------------------------------------------+
 | Data       | Note                                                          |
 +============+===============================================================+
-| 06/05/2017 | * Aggiunte descrizioni dei diagrammi dei casi d'uso           |
+| 07/05/2017 | * Aggiunto :ref:`activity_diagram`                            |
+|            | * Aggiunti link mancanti nello storico delle revisioni        |
++------------+---------------------------------------------------------------+
+| 06/05/2017 | * Aggiunte descrizioni dei diagrammi dei                      |
+|            |   :ref:`use_case_diagram`                                     |
 +------------+---------------------------------------------------------------+
 | 05/05/2017 | * Aggiunte immagini dei diagrammi dei casi d'uso              |
 |            | * Correzione errori di battitura nelle sezioni precedenti     |
