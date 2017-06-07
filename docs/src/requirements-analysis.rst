@@ -43,6 +43,8 @@ tipologie di utenti differenti:
 Gestione accesso
 ~~~~~~~~~~~~~~~~
 
+.. tabularcolumns:: |R|p{12cm}|
+
 +-----------------+-----------------------------------------------------------+
 | **UID**         | srs:gestione-accesso                                      |
 +-----------------+-----------------------------------------------------------+
@@ -96,6 +98,8 @@ Gestione pagamenti
 .. todo::
     Aggiungi riferimento alla tabella dei prezzi
 
+.. tabularcolumns:: |R|p{12cm}|
+
 +-----------------+-----------------------------------------------------------+
 | **UID**         | srs:gestione-pagamenti                                    |
 +-----------------+-----------------------------------------------------------+
@@ -145,6 +149,8 @@ Gestione pagamenti
 Gestione upload contenuti
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. tabularcolumns:: |R|p{12cm}|
+
 +-----------------+-----------------------------------------------------------+
 | **UID**         | srs:gestione-upload-contenuti                             |
 +-----------------+-----------------------------------------------------------+
@@ -184,6 +190,8 @@ Gestione upload contenuti
 
 Gestione richieste
 ~~~~~~~~~~~~~~~~~~
+
+.. tabularcolumns:: |R|p{12cm}|
 
 +-----------------+-----------------------------------------------------------+
 | **UID**         | srs:gestione-richieste                                    |

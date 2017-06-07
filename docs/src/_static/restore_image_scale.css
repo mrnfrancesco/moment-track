@@ -1,0 +1,5 @@
+/* override sections' images scale to make them fit the screen */
+div.section img[style] {
+    object-fit: contain !important;
+    width: 100% !important;
+}

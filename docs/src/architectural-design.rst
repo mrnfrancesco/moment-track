@@ -105,6 +105,8 @@ Diagramma dei casi d'uso
     :alt: Diagramma principale dei casi d'uso
     :align: center
 
+.. tabularcolumns:: |R|p{12cm}|
+
 +-----------------------------------------------------------------------------+
 | Ricerca testuale in file multimediali                                       |
 +=========================+===================================================+
@@ -128,6 +130,10 @@ Diagramma dei casi d'uso
 |                         | quale momento viene pronunciata la parola/frase   |
 |                         | cercata nel file multimediale scelto.             |
 +-------------------------+---------------------------------------------------+
+
+|
+
+.. tabularcolumns:: |R|p{12cm}|
 
 +-----------------------------------------------------------------------------+
 | Ricerca testuale in file multimediali                                       |
@@ -155,6 +161,10 @@ Diagramma dei casi d'uso
 |                         | quale momento viene pronunciata la parola/frase   |
 |                         | cercata nel file multimediale scelto.             |
 +-------------------------+---------------------------------------------------+
+
+|
+
+.. tabularcolumns:: |R|p{12cm}|
 
 +-----------------------------------------------------------------------------+
 | Ricerca testuale in file multimediali                                       |
@@ -195,6 +205,8 @@ Gestione degli accessi
     :alt: Diagramma dei casi d'uso della gestione degli accessi
     :align: center
 
+.. tabularcolumns:: |R|p{12cm}|
+
 +-----------------------------------------------------------------------------+
 | Registrazione utente tramite social                                         |
 +=========================+===================================================+
@@ -229,6 +241,10 @@ Gestione degli accessi
 |                         | un profilo social.                                |
 +-------------------------+---------------------------------------------------+
 
+|
+
+.. tabularcolumns:: |R|p{12cm}|
+
 +-----------------------------------------------------------------------------+
 | Registrazione utente classica (privato|azienda)                             |
 +=========================+===================================================+
@@ -257,6 +273,10 @@ Gestione degli accessi
 |                         | registrazione.                                    |
 +-------------------------+---------------------------------------------------+
 
+|
+
+.. tabularcolumns:: |R|p{12cm}|
+
 +-----------------------------------------------------------------------------+
 | Conferma registrazione utente                                               |
 +=========================+===================================================+
@@ -283,6 +303,10 @@ Gestione degli accessi
 |                         | specificate in fase di registrazione.             |
 +-------------------------+---------------------------------------------------+
 
+|
+
+.. tabularcolumns:: |R|p{12cm}|
+
 +-----------------------------------------------------------------------------+
 | Login utente classica                                                       |
 +=========================+===================================================+
@@ -304,6 +328,10 @@ Gestione degli accessi
 +-------------------------+---------------------------------------------------+
 | **Postcondizioni**      | L'utente risulta loggato nel sistema              |
 +-------------------------+---------------------------------------------------+
+
+|
+
+.. tabularcolumns:: |R|p{12cm}|
 
 +-----------------------------------------------------------------------------+
 | Login utente social                                                         |
@@ -337,6 +365,8 @@ Gestione del profilo
     :alt: Diagramma dei casi d'uso della gestione del profilo
     :align: center
 
+.. tabularcolumns:: |R|p{12cm}|
+
 +-----------------------------------------------------------------------------+
 | Visualizza profilo                                                          |
 +=========================+===================================================+
@@ -356,6 +386,10 @@ Gestione del profilo
 | **Postcondizioni**      | L'utente visualizza le informazioni del suo       |
 |                         | profilo inserite in fase di registrazione         |
 +-------------------------+---------------------------------------------------+
+
+|
+
+.. tabularcolumns:: |R|p{12cm}|
 
 +-----------------------------------------------------------------------------+
 | Modifica profilo                                                            |
@@ -379,6 +413,10 @@ Gestione del profilo
 +-------------------------+---------------------------------------------------+
 | **Postcondizioni**      | Il profilo utente viene modificato correttamente  |
 +-------------------------+---------------------------------------------------+
+
+|
+
+.. tabularcolumns:: |R|p{12cm}|
 
 +-----------------------------------------------------------------------------+
 | Elimina profilo                                                             |
@@ -405,6 +443,10 @@ Gestione del profilo
 |                         | tutti i dati ad esso associati                    |
 +-------------------------+---------------------------------------------------+
 
+|
+
+.. tabularcolumns:: |R|p{12cm}|
+
 +-----------------------------------------------------------------------------+
 | Gestione dipendenti / Visualizza lista dipendenti                           |
 +=========================+===================================================+
@@ -424,6 +466,10 @@ Gestione del profilo
 +-------------------------+---------------------------------------------------+
 | **Postcondizioni**      | L'utente visualizza la lista dei dipendenti       |
 +-------------------------+---------------------------------------------------+
+
+|
+
+.. tabularcolumns:: |R|p{12cm}|
 
 +-----------------------------------------------------------------------------+
 | Gestione dipendenti / Aggiungi dipendente                                   |
@@ -452,6 +498,10 @@ Gestione del profilo
 |                         | fornita dal sistema tramite mail.                 |
 +-------------------------+---------------------------------------------------+
 
+|
+
+.. tabularcolumns:: |R|p{12cm}|
+
 +-----------------------------------------------------------------------------+
 | Gestione dipendenti / Elimina dipendente                                    |
 +=========================+===================================================+
@@ -479,6 +529,10 @@ Gestione del profilo
 |                         | ai file da lui caricati.                          |
 +-------------------------+---------------------------------------------------+
 
+|
+
+.. tabularcolumns:: |R|p{12cm}|
+
 +-----------------------------------------------------------------------------+
 | Gestione dipendenti / Visualizza profilo dipendente                         |
 +=========================+===================================================+
@@ -500,6 +554,10 @@ Gestione del profilo
 | **Postcondizioni**      | L'utente visualizza le informazioni di profilo e  |
 |                         | i file caricati dal dipendente scelto.            |
 +-------------------------+---------------------------------------------------+
+
+|
+
+.. tabularcolumns:: |R|p{12cm}|
 
 +-----------------------------------------------------------------------------+
 | Gestione dipendenti / Gestisci permessi dipendente                          |
@@ -538,6 +596,8 @@ Gestione dei pagamenti
     :alt: Diagramma dei casi d'uso della gestione dei pagamenti
     :align: center
 
+.. tabularcolumns:: |R|p{12cm}|
+
 +-----------------------------------------------------------------------------+
 | Visualizza piani di pagamento                                               |
 +=========================+===================================================+
@@ -559,6 +619,10 @@ Gestione dei pagamenti
 |                         | messi a disposizione per l'eventuale acquisto da  |
 |                         | parte dell'azeinda.                               |
 +-------------------------+---------------------------------------------------+
+
+|
+
+.. tabularcolumns:: |R|p{12cm}|
 
 +-----------------------------------------------------------------------------+
 | Acquista abbonamento                                                        |
@@ -587,6 +651,10 @@ Gestione dei pagamenti
 |                         | altrimenti sono da considerarsi persi e non       |
 |                         | rimborsabili.                                     |
 +-------------------------+---------------------------------------------------+
+
+|
+
+.. tabularcolumns:: |R|p{12cm}|
 
 +-----------------------------------------------------------------------------+
 | Acquista estensione abbonamento                                             |
@@ -619,6 +687,10 @@ Gestione dei pagamenti
 |                         | rimborsabili.                                     |
 +-------------------------+---------------------------------------------------+
 
+|
+
+.. tabularcolumns:: |R|p{12cm}|
+
 +-----------------------------------------------------------------------------+
 | Effettua pagamento                                                          |
 +=========================+===================================================+
@@ -645,6 +717,10 @@ Gestione dei pagamenti
 |                         | dal conto Paypal dell'utente e accreditato su     |
 |                         | un apposito conto di riferimento per il servizio. |
 +-------------------------+---------------------------------------------------+
+
+|
+
+.. tabularcolumns:: |R|p{12cm}|
 
 +-----------------------------------------------------------------------------+
 | Visualizza stato abbonamento + Visualizza crediti rimanenti                 |
@@ -680,6 +756,8 @@ Gestione upload contenuti
 .. image:: images/diagrams/use-case/contents-upload-management.png
     :alt: Diagramma dei casi d'uso della gestione dell'upload dei contenuti
     :align: center
+
+.. tabularcolumns:: |R|p{12cm}|
 
 +-----------------------------------------------------------------------------+
 | Upload contenuti multimediali                                               |
@@ -742,6 +820,8 @@ Gestione richieste
     :alt: Diagramma dei casi d'uso della gestione delle richieste
     :align: center
 
+.. tabularcolumns:: |R|p{12cm}|
+
 +-----------------------------------------------------------------------------+
 | Visualizza lista richieste inviate                                          |
 +=========================+===================================================+
@@ -774,6 +854,10 @@ Gestione richieste
 |                         | richieste ancora in fase di elaborazione.         |
 +-------------------------+---------------------------------------------------+
 
+|
+
+.. tabularcolumns:: |R|p{12cm}|
+
 +-----------------------------------------------------------------------------+
 | Visualizza informazioni sui file inviati                                    |
 +=========================+===================================================+
@@ -802,6 +886,10 @@ Gestione richieste
 | **Postcondizioni**      | L'utente visualizza tutte le informazioni sul     |
 |                         | file caricato scelto.                             |
 +-------------------------+---------------------------------------------------+
+
+|
+
+.. tabularcolumns:: |R|p{12cm}|
 
 +-----------------------------------------------------------------------------+
 | Modifica informazioni sui file inviati                                      |
@@ -833,6 +921,10 @@ Gestione richieste
 | **Postcondizioni**      | Le informazioni sul file vengono modificate       |
 |                         | correttamente.                                    |
 +-------------------------+---------------------------------------------------+
+
+|
+
+.. tabularcolumns:: |R|p{12cm}|
 
 +-----------------------------------------------------------------------------+
 | Rimuovi richiesta                                                           |

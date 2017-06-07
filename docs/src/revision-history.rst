@@ -4,11 +4,14 @@
 Storico delle revisioni
 =======================
 
+.. tabularcolumns:: |p{2cm}|p{13cm}|
+
 +------------+---------------------------------------------------------------+
 | Data       | Note                                                          |
 +============+===============================================================+
 | 07/05/2017 | * Aggiunto :ref:`activity_diagram`                            |
 |            | * Aggiunti link mancanti nello storico delle revisioni        |
+|            | * Risolti problemi nella renderizzazione delle tabelle        |
 +------------+---------------------------------------------------------------+
 | 06/05/2017 | * Aggiunte descrizioni dei diagrammi dei                      |
 |            |   :ref:`use_case_diagram`                                     |

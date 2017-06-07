@@ -161,6 +161,7 @@ html_static_path = ['_static']
 html_context = {
     'css_files': [
         '_static/fix_table_text_wrapping.css',
+        '_static/restore_image_scale.css',
     ],
 }
 
