@@ -582,11 +582,10 @@ Gestione dei pagamenti
 |                         | un prezzo dipendente dal numero stesso scelto     |
 |                         | dal sistema. I crediti acquistati sono subito     |
 |                         | utilizzabili e disponibili a tutti i dipendenti   |
-|                         | dell'azienda entro la scadenza dell'estensione    |
-|                         | stabilita sulla base del numero di crediti        |
-|                         | acquistati. I crediti non utilizzati alla data di |
-|                         | scadenza sono da considerarsi persi e non         |
-|                         | rimborsabili.                                     |
+|                         | dell'azienda entro la scadenza dell'abbonamento   |
+|                         | che si sta estendendo. I crediti non utilizzati   |
+|                         | alla data di scadenza sono da considerarsi persi  |
+|                         | e non rimborsabili.                               |
 +-------------------------+---------------------------------------------------+
 
 |
