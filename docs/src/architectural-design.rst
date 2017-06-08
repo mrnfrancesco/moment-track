@@ -117,6 +117,7 @@ privato.
 Diagramma dei dati
 ~~~~~~~~~~~~~~~~~~
 
-.. todo::
-    Aggiungere diagramma ER dei dati
+.. image:: images/diagrams/data-diagram.png
+    :alt: Diagramma dei dati
+    :align: center
 

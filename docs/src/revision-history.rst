@@ -11,6 +11,7 @@ Storico delle revisioni
 +============+===============================================================+
 | 08/05/2017 | * La scadenza dell'estensione dell'abbonamento ora coincide   |
 |            |   con la scadenza dell'abbonamento stesso                     |
+|            | * Aggiunto :ref:`data_diagram`                                |
 +------------+---------------------------------------------------------------+
 | 07/05/2017 | * Aggiunto :ref:`activity_diagram`                            |
 |            | * Aggiunti link mancanti nello storico delle revisioni        |
