@@ -13,3 +13,6 @@ def home(request):
 def privacy_policy(request):
     return render(request, 'website/privacy-policy.html')
 
+
+def terms_of_service(request):
+    return render(request, 'website/terms-of-service.html')
