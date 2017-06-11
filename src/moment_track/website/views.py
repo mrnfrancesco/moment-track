@@ -9,3 +9,7 @@ from django.shortcuts import render
 def home(request):
     return render(request, 'website/home.html')
 
+
+def privacy_policy(request):
+    return render(request, 'website/privacy-policy.html')
+

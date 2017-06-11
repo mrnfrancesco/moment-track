@@ -20,4 +20,5 @@ from website import views
 app_name = 'website'
 urlpatterns = [
     url(r'^$', views.home, name='home'),
+    url(r'^privacy-policy/$', views.privacy_policy, name='privacy-policy'),
 ]
