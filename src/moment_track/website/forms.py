@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from allauth.account.forms import SignupForm
+from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from vatno_validator.validators import VATNoValidator
@@ -45,6 +46,23 @@ class PrivateSignupForm(SignupForm):
 
     def save(self, request):
         user = super(PrivateSignupForm, self).save(request)
+        user.first_name = self.cleaned_data.get('first_name')
+        user.last_name = self.cleaned_data.get('last_name')
+        user.save()
+
+        private_user = PrivateUser(user=user)
+        private_user.save()
+
+        return user
+
+
+class PrivateSocialSignupForm(SocialSignupForm):
+    first_name = forms.CharField(max_length=30, required=True, strip=True)
+    last_name = forms.CharField(max_length=30, required=True, strip=True)
+
+    def save(self, request):
+        user = super(PrivateSocialSignupForm, self).save(request)
+
         user.first_name = self.cleaned_data.get('first_name')
         user.last_name = self.cleaned_data.get('last_name')
         user.save()
