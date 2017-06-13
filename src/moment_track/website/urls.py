@@ -22,4 +22,6 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^privacy-policy/$', views.privacy_policy, name='privacy-policy'),
     url(r'^terms-of-service/$', views.terms_of_service, name='terms-of-service'),
+
+    url(r'^accounts/signup/company/$', views.company_signup, name='signup-company'),
 ]
