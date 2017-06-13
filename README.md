@@ -144,11 +144,11 @@ $ (venv) python2 manage.py collectstatic
 Start a local webserver from Django project folder:
 
 ```bash
-$ (venv) python2 manage.py runserver 127.0.0.1 8000
+$ (venv) python2 manage.py runsslserver 127.0.0.1 9000
 ```
 
 You can view running instance of Moment Track with your preferred browser at
-[http://127.0.0.1:8000](http://127.0.0.1:8000) address.
+[https://127.0.0.1:9000](https://127.0.0.1:9000) address.
 
 ### Deploy on Google App Engine
 
