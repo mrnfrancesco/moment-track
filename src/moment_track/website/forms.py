@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from vatno_validator.validators import VATNoValidator
 from phonenumber_field.formfields import PhoneNumberField
 
-from website.models import CompanyUser
+from website.models import CompanyUser, PrivateUser
 
 
 class CompanySignupForm(SignupForm):
@@ -37,3 +37,19 @@ class CompanySignupForm(SignupForm):
         company_user.save()
 
         return company_user.contact_person
+
+
+class PrivateSignupForm(SignupForm):
+    first_name = forms.CharField(max_length=30, required=True, strip=True)
+    last_name = forms.CharField(max_length=30, required=True, strip=True)
+
+    def save(self, request):
+        user = super(PrivateSignupForm, self).save(request)
+        user.first_name = self.cleaned_data.get('first_name')
+        user.last_name = self.cleaned_data.get('last_name')
+        user.save()
+
+        private_user = PrivateUser(user=user)
+        private_user.save()
+
+        return user
