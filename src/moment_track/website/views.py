@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from allauth.account.views import SignupView
 from django.shortcuts import render
 
-from website.forms import CompanySignupForm
+from website.forms import CompanySignupForm, PrivateSignupForm
 
 
 def home(request):
@@ -25,3 +25,11 @@ class CompanyUserSignupView(SignupView):
     view_name = 'website:company_signup'
 
 company_signup = CompanyUserSignupView.as_view()
+
+
+class PrivateUserSignupView(SignupView):
+    template_name = 'account/signup_private.html'
+    form_class = PrivateSignupForm
+    view_name = 'website:private_signup'
+
+private_signup = PrivateUserSignupView.as_view()

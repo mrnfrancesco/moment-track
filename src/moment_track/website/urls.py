@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^terms-of-service/$', views.terms_of_service, name='terms-of-service'),
 
     url(r'^accounts/signup/company/$', views.company_signup, name='signup-company'),
+    url(r'^accounts/signup/private/$', views.private_signup, name='signup-private'),
 ]

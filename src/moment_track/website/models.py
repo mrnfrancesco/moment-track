@@ -10,6 +10,14 @@ from vatno_validator.validators import VATNoValidator
 
 
 @python_2_unicode_compatible
+class PrivateUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.email
+
+
+@python_2_unicode_compatible
 class CompanyUser(models.Model):
     contact_person = models.OneToOneField(User, on_delete=models.CASCADE)
     company_name = models.CharField(max_length=50, null=False, blank=False)
