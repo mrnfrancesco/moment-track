@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from vatno_validator.validators import VATNoValidator
 from phonenumber_field.formfields import PhoneNumberField
 
-from website.models import CompanyUser, PrivateUser
+from dashboard.models import CompanyUser, PrivateUser
 
 
 class CompanySignupForm(SignupForm):

@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from allauth.account.views import SignupView
 from django.shortcuts import render
 
-from website.forms import CompanySignupForm, PrivateSignupForm
+from dashboard.forms import CompanySignupForm, PrivateSignupForm
 
 
 def privacy_policy(request):

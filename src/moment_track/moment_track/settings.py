@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'sslserver',
-    'website.apps.WebsiteConfig',
+    'dashboard.apps.WebsiteConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.sites',
@@ -139,12 +139,12 @@ ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300
 ACCOUNT_PRESERVE_USERNAME_CASING = False
 ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = False
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
-ACCOUNT_USER_DISPLAY = 'website.accounts.user_displayable_name'
+ACCOUNT_USER_DISPLAY = 'dashboard.accounts.user_displayable_name'
 SOCIALACCOUNT_EMAIL_REQUIRED = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'optional'
 SOCIALACCOUNT_AUTO_SIGNUP = False
 SOCIALACCOUNT_FORMS = {
-    'signup': 'website.forms.PrivateSocialSignupForm'
+    'signup': 'dashboard.forms.PrivateSocialSignupForm'
 }
 SOCIALACCOUNT_QUERY_EMAIL = True
 
