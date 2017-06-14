@@ -14,6 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
+from django.http import Http404
+from django.views.defaults import page_not_found
 
 from dashboard import views
 
@@ -25,4 +27,8 @@ urlpatterns = [
 
     url(r'^accounts/signup/company/$', views.company_signup, name='signup-company'),
     url(r'^accounts/signup/private/$', views.private_signup, name='signup-private'),
+
+    # Prevent default django-allauth from using default (generic) signup form
+    url(r'^accounts/signup/$', page_not_found, {'exception': Http404()}),
+
 ]
