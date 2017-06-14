@@ -22,7 +22,6 @@
     <link href="{% static 'dashboard/vendors/nprogress/nprogress.css' %}" rel="stylesheet">
     <link href="{% static 'dashboard/vendors/pnotify/pnotify.css' %}" rel="stylesheet">
     <link href="{% static 'dashboard/vendors/pnotify/pnotify.buttons.css' %}" rel="stylesheet">
-    <link href="{% static 'dashboard/vendors/pnotify/pnotify.nonblock.css' %}" rel="stylesheet">
     <link href="{% static 'dashboard/vendors/pnotify/pnotify.mobile.css' %}" rel="stylesheet">
     {% block extra_css %}{% endblock %}
     <link href="{% static 'dashboard/css/custom.css' %}" rel="stylesheet">
@@ -65,7 +64,6 @@
         <script src="{% static 'dashboard/vendors/nprogress/nprogress.js' %}"></script>
         <script src="{% static 'dashboard/vendors/pnotify/pnotify.js' %}"></script>
         <script src="{% static 'dashboard/vendors/pnotify/pnotify.buttons.js' %}"></script>
-        <script src="{% static 'dashboard/vendors/pnotify/pnotify.nonblock.js' %}"></script>
         <script src="{% static 'dashboard/vendors/pnotify/pnotify.mobile.js' %}"></script>
         <script src="{% static 'dashboard/vendors/pnotify/pnotify.desktop.js' %}"></script>
         {% block extra_vendor_script %}{% endblock %}
@@ -90,9 +88,7 @@
                                 icon: false,
                                 type: 'info',
                                 styling: 'bootstrap3',
-                                nonblock: {nonblock: true},
                                 buttons: {
-                                    show_on_nonblock: true,
                                     sticker: false
                                 },
                                 desktop: {
