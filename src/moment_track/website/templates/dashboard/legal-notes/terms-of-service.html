@@ -1,87 +1,150 @@
-{% extends 'website/base.html' %}
+{% extends 'dashboard/base.html' %}
 
 {% load i18n %}
 
-{% block page-title %}Terms of Service{% endblock %}
+{% block head_title %}{% trans "Terms of Service" %}{% endblock %}
 
-{% block page-content %}
-    <div class="row">
-        <div class="medium-9 medium-centered columns">
-            <h1 class="text-center">
-                {% trans "Moment Track Terms of Service" %}
-            </h1>
+{% block content %}
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Moment Track {% trans "Terms of Service" %}</h3>
+            </div>
         </div>
-    </div>
 
-    <div class="row column">
-        <hr class="dotted">
-    </div>
+        <div class="clearfix"></div>
 
-    <div class="row">
-        <div class="medium-9 medium-centered columns">
-            <h2 class="text-center">
-                {% trans "Terms of Use" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Terms of Use" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     These Terms of Use govern your access to and use of Moment Track Web sites (collectively the
                     “Site”), any information, text, graphics, or other materials appearing on the Site (the “Content”),
                     and any services provided through the Site (the “Services”). Your access to and use of the Site,
                     Content, and/or Services are expressly conditioned on your compliance with these Terms of Use. By
                     accessing or using the Site, Content, or Services, you agree to be bound by these Terms of Use.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Modification of Terms of Use" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
-                    You acknowledge and agree that Moment Track may revise these Terms of Use from time to time. By
-                    continuing to access or use the Site, Content, or Services after Moment Track makes any such
-                    revision, you agree to be bound by the revised Terms of Use.
-                {% endblocktrans %}
-            </h4>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Modification of Terms of Use" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
+                        We will not sell, rent, loan or lease your personally information to others unless we have your
+                    permission or are required by law to do so. We will not use or share the personal information that
+                    you provide us online in ways unrelated to those described herein without first letting you know and
+                    seeking your consent. We may use your contact information to tell you about other products we think
+                    might interest you. However, if you don’t want us to contact you for promotional purposes, you can
+                    tell us when you provide the information. Your contact preferences only apply to marketing contact.
+                    We may need to communicate with you regarding the usability of your product or critical messages
+                    relating to your service or software (such as service messages, subscription renewal notices,
+                    critical notices, or legally mandated notices).<br/>
+                    We use anonymous information, such as that pertaining to web pages viewed, to analyze trends, track
+                    users movements, provide a better website experience and gather broad demographic information for
+                    aggregate use. We do not use this data in a manner that would identify you personally.
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Privacy" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
-                    See Moment Track’s Privacy Policy at for information and notices concerning Moment Track’s
-                    collection and use of your personal information.
-                {% endblocktrans %}
-            </h4>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Privacy" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% url 'dashboard:privacy-policy' as privacy_policy_url %}
+                    {% blocktrans %}
+                        See Moment Track’s <a href="{{ privacy_policy_url }}">Privacy Policy</a> for
+                        information and notices concerning Moment Track’s collection and use of your personal
+                        information.
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Guard Your Password" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Guard Your Password" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     You are responsible for safeguarding the password that you use to access any secure areas of the
                     Site. You agree not to disclose your password to any third party. You agree to take sole
                     responsibility for any activities or actions under your password, whether or not you have authorized
                     such activities or actions. You will immediately notify Moment Track of any unauthorized use of your
                     password.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Your Use of the Content" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Security" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
+                    We use physical, electronic and administrative safeguards, including firewall, encryption and
+                    password protection for our databases, designed to protect the security of the data collected and to
+                    prevent unauthorized access or disclosure to any of your information.
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Your Use of the Content" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     Moment Track authorizes you to download, view, and print a single copy of any Content, solely for
                     your personal and non-commercial purposes, and subject to the restrictions set forth in these Terms
                     of Use.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Moment Track Property" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Moment Track Property" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     All right, title, and interest in and to the Site, Content, and Services are and will remain the
                     exclusive property of Moment Track and its licensors. The Site, Content, and Services are protected
                     by copyright, trademark, and other laws of both the United States and foreign countries. Except as
@@ -153,14 +216,21 @@
                             administrative agency or other governmental body.
                         </li>
                     </ul>
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Links" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Links" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     The Site may contain links to third-party websites or resources. You acknowledge and agree that
                     Moment Track is not responsible or liable for: (i) the availability or accuracy of such websites or
                     resources; or (ii) the content, products, or services on or available from such websites or
@@ -168,37 +238,58 @@
                     websites or resources or the content, products, or services available from such websites or
                     resources. You acknowledge sole responsibility for and assume all risk arising from your use of any
                     such websites or resources.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Termination" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Termination" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     If you violate any of these Terms of Use, your permission to use the Site, Content, and Services
                     will automatically terminate. Moment Track reserves the right to revoke your access to and use of
                     the Site, Content, and Services at any time, with or without cause. Moment Track also reserves the
                     right to cease providing or to change the Site, Content, or Services at any time and without notice.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Use of the Site at Your Own Risk" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Use of the Site at Your Own Risk" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     Your access to and use of the Site, Content, and Services is at your own risk. Moment Track will
                     have no responsibility for any harm to your computer system, loss of data, or other harm that
                     results from your access to or use of the Site, Content, or Services.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "The Site is Available “AS-IS”" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "The Site is Available “AS-IS”" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     THE SITE, CONTENT, AND SERVICES ARE PROVIDED “AS IS”, WITHOUT WARRANTY OR CONDITION OF ANY KIND,
                     EITHER EXPRESS OR IMPLIED. WITHOUT LIMITING THE FOREGOING, Moment Track EXPLICITLY DISCLAIMS ANY
                     WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR
@@ -209,27 +300,41 @@
                     RELIABILITY OF ANY INFORMATION OBTAINED THROUGH THE SITE, CONTENT OR SERVICES. NO ADVICE OR
                     INFORMATION, WHETHER ORAL OR WRITTEN, OBTAINED FROM Moment Track OR THROUGH THE SITE, CONTENT, OR
                     SERVICES, WILL CREATE ANY WARRANTY NOT EXPRESSLY MADE HEREIN.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Indemnity" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Indemnity" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     You agree h4to defend, indemnify, and hold harmless Moment Track, its officers, directors, employees
                     and agents, from and against any claims, liabilities, damages, losses, and expenses, including,
                     without limitation, reasonable legal and accounting fees, arising out of or in any way connected
                     with your access to or use of the Site, Content, or Services, or your violation of these Terms of
                     Use.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Limitation of Liability" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Limitation of Liability" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, NEITHER Moment Track NOR ANY OTHER PARTY INVOLVED
                     IN CREATING, PRODUCING, OR DELIVERING THE SITE, CONTENT, OR SERVICES WILL BE LIABLE FOR ANY
                     INCIDENTAL, SPECIAL, CONSEQUENTIAL OR PUNITIVE DAMAGES RESULTING FROM YOUR ACCESS TO OR USE OF, OR
@@ -246,64 +351,88 @@
                     THE USE OF THE SITE, CONTENT OR SERVICES IS LIMITED TO THE AMOUNTS YOU HAVE PAID TO Moment Track FOR
                     ACCESS TO AND USE OF THE SITE, CONTENT, OR SERVICES. THE LIMITATIONS OF DAMAGES SET FORTH ABOVE ARE
                     FUNDAMENTAL ELEMENTS OF THE BASIS OF THE BARGAIN BETWEEN Moment Track AND YOU.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Construction" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Construction" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     In the event that any provision of these Terms of Use is held to be invalid or unenforceable, the
                     remaining provisions of these Terms of Use will remain in full force and effect. The failure of
                     Moment Track to enforce any right or provision of these Terms of Use will not be deemed a waiver of
                     such right or provision.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Controlling Law and Jurisdiction" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Controlling Law and Jurisdiction" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     These Terms of Use and any action related thereto will be governed by the laws of the State of
                     California without regard to its conflict of law provisions. The exclusive jurisdiction and venue of
                     any action with respect to the subject matter of these Terms of Use will be the state and federal
                     courts located in San Francisco County, California, and each of the parties hereto waives any
                     objection to jurisdiction and venue in such courts.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Entire Agreement" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Entire Agreement" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     These Terms of Use are the entire and exclusive agreement between Moment Track and you regarding the
                     Site, Content, and Services, and these Terms of Use supersede and replace any prior agreements
                     between Moment Track and you regarding the Site, Content, and Services.<br/>
                     <br/>
                     If you have any questions about these Terms of Use, please contact Moment Track
                     <a href="mailto:support@moment-track.com">support@moment-track.com</a>
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Trademarks" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Trademarks" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     Moment Track and the Moment Track logo are trademarks of Moment Track, Inc. All other trademarks are
                     the property of their respective owners.
-                {% endblocktrans %}
-            </h4>
-
-            <h2 class="text-center">
-                {% trans "Copyright" %}
-            </h2>
-            <h4 class="page-intro">
-                {% trans "Copyright © Moment Track, Inc. All rights reserved." %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 {% endblock %}

@@ -17,9 +17,9 @@ from django.conf.urls import url
 
 from website import views
 
-app_name = 'website'
+app_name = 'dashboard'
 urlpatterns = [
-    url(r'^$', views.home, name='home'),
+    url(r'^$', views.index, name='index'),
     url(r'^privacy-policy/$', views.privacy_policy, name='privacy-policy'),
     url(r'^terms-of-service/$', views.terms_of_service, name='terms-of-service'),
 

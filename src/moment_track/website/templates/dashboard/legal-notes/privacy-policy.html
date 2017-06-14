@@ -1,47 +1,53 @@
-{% extends 'website/base.html' %}
+{% extends 'dashboard/base.html' %}
 
 {% load i18n %}
 
-{% block page-title %}Privacy Policy{% endblock %}
+{% block head_title %}{% trans "Privacy Policy" %}{% endblock %}
 
-{% block page-content %}
-    <div class="row">
-        <div class="medium-9 medium-centered columns">
-            <h1 class="text-center">
-                {% trans "Moment Track Privacy Policy" %}
-            </h1>
-            <h4 class="page-intro">
-                {% blocktrans %}
+{% block content %}
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>{% trans "Privacy Policy" %}</h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_content">
+                    {% blocktrans %}
                     Your privacy is very important to us at Moment Track and we are committed to protecting it. Please
                     take a moment to read our Privacy Policy below. This Privacy Policy applies to the data collected
                     through the Moment Track Web site and services, and it describes our practices for collecting and
-                    using information and the choices you have.
+                    using information and the choices you have.<br/>
                     Your accessing and continued use of our Web sites signifies your explicit consent to these terms and
                     conditions of our Privacy Policy. We may update this Privacy Policy from time to time as our
                     services change and expand. We will notify you of such changes by posting them on our site. All
                     amendments will be automatically effective 30 days after they are posted.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="row column">
-        <hr class="dotted">
-    </div>
-
-    <div class="row">
-        <div class="medium-9 medium-centered columns">
-            <h2 class="text-center">
-                {% trans "Information We Collect" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Information We Collect" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     We may collect personal information about you, such as your name, address and email address and
                     other information that can be used to contact you. We will only collect such information where it is
                     helpful for us to communicate with you, for example to fulfill an order you place, register for a
                     service from us, or provide you with additional information you have requested. Because of the
                     financial nature of our business, our Web sites are not designed to appeal to children under the age
-                    of 13 and we do not knowingly request or receive any information from children.
+                    of 13 and we do not knowingly request or receive any information from children.<br/>
                     Like many websites, Moment Track uses cookies on our Web site to collect information anonymously. A
                     cookie is a small bit of information stored by your browser on your hard drive that is used to
                     identify your computer. Cookies collect information like IP addresses and the name of your operating
@@ -49,15 +55,22 @@
                     better serve you when you visit our Web sites, and maintain the quality of interaction when you
                     return to our Web site. You can set your browser to notify you when you receive a cookie, giving you
                     the chance to decide whether to accept it.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Use of your Information" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
-                    We will not sell, rent, loan or lease your personally information to others unless we have your
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Use of your Information" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
+                        We will not sell, rent, loan or lease your personally information to others unless we have your
                     permission or are required by law to do so. We will not use or share the personal information that
                     you provide us online in ways unrelated to those described herein without first letting you know and
                     seeking your consent. We may use your contact information to tell you about other products we think
@@ -65,18 +78,25 @@
                     tell us when you provide the information. Your contact preferences only apply to marketing contact.
                     We may need to communicate with you regarding the usability of your product or critical messages
                     relating to your service or software (such as service messages, subscription renewal notices,
-                    critical notices, or legally mandated notices).
+                    critical notices, or legally mandated notices).<br/>
                     We use anonymous information, such as that pertaining to web pages viewed, to analyze trends, track
                     users movements, provide a better website experience and gather broad demographic information for
                     aggregate use. We do not use this data in a manner that would identify you personally.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "How We Share Information" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "How We Share Information" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     We may share your information with our affiliates, consultants, vendors and service providers who
                     assist us in maintaining the Moment Track Web sites and provide related services such as fulfilling
                     orders or providing customer service. When we supply your information to our partners and these
@@ -92,49 +112,79 @@
                     bankruptcy. In such an event, your personal information may be transferred to and used by another
                     company. If so, you will have the opportunity to ask not to receive promotional information
                     following any change of control.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Access to Your Information" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Access to Your Information" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     You have the right to access and correct your personal information at any time. To review, update or
                     make changes to your personal information, please send us an email to
                     <a href="mailto:support@moment-track.com">support@moment-track.com</a> .
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h2 class="text-center">
-                {% trans "Security" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Security" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
                     We use physical, electronic and administrative safeguards, including firewall, encryption and
                     password protection for our databases, designed to protect the security of the data collected and to
                     prevent unauthorized access or disclosure to any of your information.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <h4 class="page-intro">
-                {% blocktrans %}
-                    If you have any questions about this Privacy Policy, you can contact
-                    <a href="mailto:support@moment-track.com">support@moment-track.com</a> .
-                {% endblocktrans %}
-            </h4>
-
-            <h2 class="text-center">
-                {% trans "Transfer to and Use in the United States" %}
-            </h2>
-            <h4 class="page-intro">
-                {% blocktrans %}
-                    Moment Track will transfer any personal information you provide to the United States of America to
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{% trans "Transfer to and Use in the United States" %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% blocktrans %}
+                    Moment Track could transfer any personal information you provide to the United States of America to
                     use and store the information for the purposes described herein. By using our Web sites and
                     providing us with your personal information, you consent to such transfer, use, and storage of your
                     personal information.
-                {% endblocktrans %}
-            </h4>
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_content text-center">
+                    {% blocktrans %}
+                    If you have any questions about this Privacy Policy, you can contact
+                    <a href="mailto:support@moment-track.com">support@moment-track.com</a> .
+                    {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 {% endblock %}
