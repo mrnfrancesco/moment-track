@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 
-from website import views
+from dashboard import views
 
 app_name = 'dashboard'
 urlpatterns = [

@@ -13,19 +13,19 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{% static 'website/favicon.ico' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'dashboard/favicon.ico' %}" type="image/x-icon">
 
     <title>{% block head_title %}Moment Track{% endblock %}</title>
 
-    <link href="{% static 'website/vendors/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'website/vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
-    <link href="{% static 'website/vendors/nprogress/nprogress.css' %}" rel="stylesheet">
-    <link href="{% static 'website/vendors/pnotify/pnotify.css' %}" rel="stylesheet">
-    <link href="{% static 'website/vendors/pnotify/pnotify.buttons.css' %}" rel="stylesheet">
-    <link href="{% static 'website/vendors/pnotify/pnotify.nonblock.css' %}" rel="stylesheet">
-    <link href="{% static 'website/vendors/pnotify/pnotify.mobile.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/vendors/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/vendors/nprogress/nprogress.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/vendors/pnotify/pnotify.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/vendors/pnotify/pnotify.buttons.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/vendors/pnotify/pnotify.nonblock.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/vendors/pnotify/pnotify.mobile.css' %}" rel="stylesheet">
     {% block extra_css %}{% endblock %}
-    <link href="{% static 'website/css/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/css/custom.css' %}" rel="stylesheet">
     {% block extra_head %}{% endblock %}
 </head>
 <body class="nav-md">
@@ -59,28 +59,24 @@
 
         {% endblock %}
 
-        <script src="{% static 'website/vendors/jquery/jquery.min.js' %}"></script>
-        <script src="{% static 'website/vendors/bootstrap/js/bootstrap.min.js' %}"></script>
-        <script src="{% static 'website/vendors/fastclick/fastclick.js' %}"></script>
-        <script src="{% static 'website/vendors/nprogress/nprogress.js' %}"></script>
-        <script src="{% static 'website/vendors/pnotify/pnotify.js' %}"></script>
-        <script src="{% static 'website/vendors/pnotify/pnotify.buttons.js' %}"></script>
-        <script src="{% static 'website/vendors/pnotify/pnotify.nonblock.js' %}"></script>
-        <script src="{% static 'website/vendors/pnotify/pnotify.mobile.js' %}"></script>
-        <script src="{% static 'website/vendors/pnotify/pnotify.desktop.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/jquery/jquery.min.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/bootstrap/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/fastclick/fastclick.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/nprogress/nprogress.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/pnotify/pnotify.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/pnotify/pnotify.buttons.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/pnotify/pnotify.nonblock.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/pnotify/pnotify.mobile.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/pnotify/pnotify.desktop.js' %}"></script>
         {% block extra_vendor_script %}{% endblock %}
-        <script src="{% static 'website/js/custom.js' %}"></script>
+        <script src="{% static 'dashboard/js/custom.js' %}"></script>
         {% block extra_body %}
             {% if messages %}
                 <script type="text/javascript">
                     <!--
-                    {# Permission request to use PNotify with desktop notification #}
                     $(function () {
-                        if ("Notification" in window) {
-                            if (Notification.permission !== 'denied' || Notification.permission === 'default') {
-                                Notification.requestPermission();
-                            }
-                        }
+                        {# Permission request to use PNotify with desktop notification #}
+                        PNotify.desktop.permission();
                     });
                     //-->
                 </script>
@@ -89,7 +85,6 @@
                         <!--
                         $(function () {
                             new PNotify({
-                                title: "Moment Track",
                                 text: '{{ message | escapejs }}',
                                 text_escape: true,
                                 icon: false,
@@ -102,7 +97,8 @@
                                 },
                                 desktop: {
                                     desktop: true,
-                                    icon: "{% static 'website/favicon.ico' %}"
+                                    title: "Moment Track",
+                                    icon: "{% static 'dashboard/favicon.ico' %}"
                                 }
                             });
                         });
