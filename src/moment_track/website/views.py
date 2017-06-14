@@ -7,16 +7,12 @@ from django.shortcuts import render
 from website.forms import CompanySignupForm, PrivateSignupForm
 
 
-def home(request):
-    return render(request, 'website/home.html')
-
-
 def privacy_policy(request):
-    return render(request, 'website/privacy-policy.html')
+    return render(request, 'dashboard/legal-notes/privacy-policy.html')
 
 
 def terms_of_service(request):
-    return render(request, 'website/terms-of-service.html')
+    return render(request, 'dashboard/legal-notes/terms-of-service.html')
 
 
 class CompanyUserSignupView(SignupView):
@@ -33,3 +29,7 @@ class PrivateUserSignupView(SignupView):
     view_name = 'website:private_signup'
 
 private_signup = PrivateUserSignupView.as_view()
+
+
+def index(request):
+    return render(request, 'dashboard/index.html')
