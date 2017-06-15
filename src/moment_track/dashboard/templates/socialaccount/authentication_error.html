@@ -1,0 +1,31 @@
+{% extends "socialaccount/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Social Network Login Failure" %}{% endblock %}
+
+{% block content %}
+
+<div class="page-title"><div class="title_left"><h3>&nbsp</h3></div></div>
+<div class="clearfix"></div>
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="x_panel">
+            <div class="x_title text-center">
+                <h1>{% trans "Social Network Login Failure" %}</h1>
+                <span>{% trans "An error occurred while attempting to login via your social network account." %}</span>
+            </div>
+            <div class="x_content text-center">
+                {% url 'account_login' as login_url %}
+                {% blocktrans %}
+                    Please, try again to
+                    <a href="{{ login_url }}" class="btn btn-default btn-xs">Login</a>
+                    or contact us if the problem persists.
+                {% endblocktrans %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
