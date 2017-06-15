@@ -18,8 +18,7 @@ class PrivateUser(models.Model):
 
 
 @python_2_unicode_compatible
-class CompanyUser(models.Model):
-    contact_person = models.OneToOneField(User, on_delete=models.CASCADE)
+class Company(models.Model):
     company_name = models.CharField(max_length=50, null=False, blank=False)
     vat_no = models.CharField(
         max_length=30,
@@ -28,9 +27,17 @@ class CompanyUser(models.Model):
         null=False,
         blank=False
     )
-    phone_number = PhoneNumberField(null=False, blank=False)
 
     def __str__(self):
         return self.company_name
 
+
+@python_2_unicode_compatible
+class CompanyUser(models.Model):
+    contact_person = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = PhoneNumberField(null=False, blank=False)
+    company = models.OneToOneField(Company, on_delete=models.CASCADE, related_name='contact_person')
+
+    def __str__(self):
+        return user_displayable_name(self.contact_person)
 
