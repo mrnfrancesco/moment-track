@@ -8,13 +8,15 @@ from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 from vatno_validator.validators import VATNoValidator
 
+from dashboard.accounts import user_displayable_name
+
 
 @python_2_unicode_compatible
 class PrivateUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.user.email
+        return user_displayable_name(self.user)
 
 
 @python_2_unicode_compatible
