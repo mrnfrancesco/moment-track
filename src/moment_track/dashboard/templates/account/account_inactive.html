@@ -1,0 +1,31 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Account Inactive" %}{% endblock %}
+
+{% block content %}
+<div class="page-title"><div class="title_left"><h3>&nbsp</h3></div></div>
+<div class="clearfix"></div>
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="x_panel text-center">
+            <div class="x_title">
+                <h1>{% trans "Account Inactive" %}</h1>
+                <span>{% trans "Your account has been suspended" %}</span>
+            </div>
+            <div class="x_content">
+                <p>
+                    {% blocktrans %}
+                        This could happen because of legal infringements or by explicit request
+                        of your company's contact person if you had a company's employee account.
+                    {% endblocktrans %}
+                </p>
+                <p>{% trans "Please, contact us if you think there is a mistake." %}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
