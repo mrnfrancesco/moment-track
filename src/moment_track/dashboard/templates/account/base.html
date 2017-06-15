@@ -2,8 +2,13 @@
 
 {% block extra_head %}
 <style type="text/css">
-    form input:not([type=checkbox],[type=radio]) {
+    form input {
         width: 100%;
+    }
+
+    form input[type=checkbox],
+    form input[type=radio] {
+        width: auto;
     }
 
     ul.errorlist {
