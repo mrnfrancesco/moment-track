@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from allauth.account.forms import SignupForm
 from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 from django import forms
+from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 from vatno_validator.validators import VATNoValidator
 from phonenumber_field.formfields import PhoneNumberField
@@ -46,23 +47,24 @@ class CompanySignupForm(SignupForm):
     )
 
     def save(self, request):
-        user = super(CompanySignupForm, self).save(request)
+        with transaction.atomic():
+            user = super(CompanySignupForm, self).save(request)
 
-        user.user_type = user.COMPANY
-        user.save()
+            user.user_type = user.COMPANY
+            user.save()
 
-        company = Company(
-            company_name=self.cleaned_data.get('company_name'),
-            vat_no=self.cleaned_data.get('vat_no')
-        )
-        company.save()
+            company = Company(
+                name=self.cleaned_data.get('company_name'),
+                vat_no=self.cleaned_data.get('vat_no')
+            )
+            company.save()
 
-        company_user = CompanyUser(
-            contact_person=user,
-            phone_number=self.cleaned_data.get('contact_person_phone_number'),
-            company=company
-        )
-        company_user.save()
+            company_user = CompanyUser(
+                user=user,
+                phone_number=self.cleaned_data.get('contact_person_phone_number'),
+                company=company
+            )
+            company_user.save()
 
         return user
 
@@ -82,13 +84,14 @@ class PrivateSignupForm(SignupForm):
     )
 
     def save(self, request):
-        user = super(PrivateSignupForm, self).save(request)
+        with transaction.atomic():
+            user = super(PrivateSignupForm, self).save(request)
 
-        user.user_type = user.PRIVATE
-        user.save()
+            user.user_type = user.PRIVATE
+            user.save()
 
-        private_user = PrivateUser(user=user)
-        private_user.save()
+            private_user = PrivateUser(user=user)
+            private_user.save()
 
         return user
 
@@ -108,13 +111,14 @@ class PrivateSocialSignupForm(SocialSignupForm):
     )
 
     def save(self, request):
-        user = super(PrivateSocialSignupForm, self).save(request)
+        with transaction.atomic():
+            user = super(PrivateSocialSignupForm, self).save(request)
 
-        user.user_type = user.PRIVATE
-        user.save()
+            user.user_type = user.PRIVATE
+            user.save()
 
-        private_user = PrivateUser(user=user)
-        private_user.save()
+            private_user = PrivateUser(user=user)
+            private_user.save()
 
         return user
 
