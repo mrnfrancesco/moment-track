@@ -51,7 +51,7 @@ class PrivateUser(models.Model):
 
 @python_2_unicode_compatible
 class Company(models.Model):
-    company_name = models.CharField(max_length=50, null=False, blank=False)
+    name = models.CharField(max_length=50, null=False, blank=False)
     vat_no = models.CharField(
         max_length=30,
         validators=[VATNoValidator()],
@@ -61,7 +61,7 @@ class Company(models.Model):
     )
 
     def __str__(self):
-        return self.company_name
+        return self.name
 
 
 @python_2_unicode_compatible
