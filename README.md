@@ -128,7 +128,7 @@ Run the Django migrations to set up ORM models:
 ```bash
 $ cd moment_track/
 $ (venv) python2 manage.py makemigrations
-$ (venv) python2 manage.py makemigrations website
+$ (venv) python2 manage.py makemigrations dashboard
 $ (venv) python2 manage.py migrate
 $ (venv) python2 manage.py shell -c "execfile('preparedb.py')"
 ```
