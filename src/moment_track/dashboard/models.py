@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.utils.encoding import python_2_unicode_compatible
 
+from django.contrib.auth import get_user_model
+from django.utils.encoding import python_2_unicode_compatible
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -42,7 +43,7 @@ class User(AbstractUser):
 
 @python_2_unicode_compatible
 class PrivateUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
 
     def __str__(self):
         return user_displayable_name(self.user)
@@ -65,7 +66,7 @@ class Company(models.Model):
 
 @python_2_unicode_compatible
 class CompanyUser(models.Model):
-    contact_person = models.OneToOneField(User, on_delete=models.CASCADE)
+    contact_person = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     phone_number = PhoneNumberField(null=False, blank=False)
     company = models.OneToOneField(Company, on_delete=models.CASCADE, related_name='contact_person')
 
