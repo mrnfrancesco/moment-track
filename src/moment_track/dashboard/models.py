@@ -42,11 +42,31 @@ class User(AbstractUser):
 
 
 @python_2_unicode_compatible
-class PrivateUser(models.Model):
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+class AbstractUserModel(models.Model):
+    """Abstract user model class to simplify accessing
+    User personal data through foreign key"""
+
+    @property
+    def first_name(self):
+        return self.user.first_name
+
+    @property
+    def last_name(self):
+        return self.user.last_name
+
+    @property
+    def email(self):
+        return self.user.email
 
     def __str__(self):
         return user_displayable_name(self.user)
+
+    class Meta:
+        abstract = True
+
+
+class PrivateUser(AbstractUserModel):
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='private_user')
 
 
 @python_2_unicode_compatible
@@ -64,12 +84,9 @@ class Company(models.Model):
         return self.name
 
 
-@python_2_unicode_compatible
-class CompanyUser(models.Model):
+class CompanyUser(AbstractUserModel):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='company_user')
     phone_number = PhoneNumberField(null=False, blank=False)
     company = models.OneToOneField(Company, on_delete=models.CASCADE, related_name='contact_person')
 
-    def __str__(self):
-        return user_displayable_name(self.contact_person)
 
