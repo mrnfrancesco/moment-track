@@ -11,6 +11,7 @@ from dashboard.models import CompanyUser, PrivateUser, Company
 
 
 class CompanySignupForm(SignupForm):
+    """Form used to signup company user"""
     contact_person_first_name = forms.CharField(
         max_length=30, required=True, strip=True,
         label=_("First name"),
@@ -67,6 +68,7 @@ class CompanySignupForm(SignupForm):
 
 
 class PrivateSignupForm(SignupForm):
+    """Form used to signup private user who are performing manual registration"""
     first_name = forms.CharField(
         max_length=30, required=True, strip=True,
         label=_("First name"),
@@ -92,6 +94,7 @@ class PrivateSignupForm(SignupForm):
 
 
 class PrivateSocialSignupForm(SocialSignupForm):
+    """Form used to complete signup of private users using social login"""
     first_name = forms.CharField(
         max_length=30, required=True, strip=True,
         label=_("First name"),
