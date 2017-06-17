@@ -90,3 +90,13 @@ class CompanyUser(AbstractUserModel):
     company = models.OneToOneField(Company, on_delete=models.CASCADE, related_name='contact_person')
 
 
+@python_2_unicode_compatible
+class EmployeeUser(AbstractUserModel):
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='employee_user')
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='employees')
+
+    def __str__(self):
+        return '{user} @ {company}'.format(
+            user=user_displayable_name(self.user),
+            company=str(self.company)
+        )
