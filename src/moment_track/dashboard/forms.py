@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from vatno_validator.validators import VATNoValidator
 from phonenumber_field.formfields import PhoneNumberField
 
-from dashboard.models import CompanyUser, PrivateUser, Company
+from dashboard.models import CompanyUser, PrivateUser, Company, EmployeeUser
 
 
 class CompanySignupForm(SignupForm):
@@ -115,5 +115,29 @@ class PrivateSocialSignupForm(SocialSignupForm):
 
         private_user = PrivateUser(user=user)
         private_user.save()
+
+        return user
+
+
+class EmployeeSignupForm(SignupForm):
+    """Form used to signup company's employee"""
+
+    def __init__(self, *args, **kwargs):
+        super(EmployeeSignupForm, self).__init__(*args, **kwargs)
+        # remove the ask for password
+        del self.fields['password1']
+        if self.fields.get('password2'):
+            del self.fields['password2']
+
+    def save(self, request):
+        with transaction.atomic():
+            user = super(EmployeeSignupForm, self).save(request)
+
+            user.user_type = user.EMPLOYEE
+            user.save()
+
+            company = request.user.company_user.company
+            employee = EmployeeUser(user=user, company=company)
+            employee.save()
 
         return user
