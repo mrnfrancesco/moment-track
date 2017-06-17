@@ -1,0 +1,4 @@
+{% load i18n %}
+{% autoescape off %}
+{% blocktrans with site_name=current_site.name company_name=company.name %}New employee on {{ site_name }} for {{ company_name }}{% endblocktrans %}
+{% endautoescape %}

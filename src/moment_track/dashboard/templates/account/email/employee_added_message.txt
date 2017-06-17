@@ -1,0 +1,11 @@
+{% load account %}
+{% load i18n %}
+{% autoescape off %}{% blocktrans with site_name=current_site.name company_name=company.name employee_email=employee.email %}Hello from {{ site_name }}!
+
+You're receiving this e-mail to confirm that {{ employee_email }} was added successfully to {{ company_name }}'s employees.
+He/She will receive soon an e-mail with the instructions to use the account.
+
+If this was a mistake just sign in with your company account and go to the employees management page.
+{% endblocktrans %}{% endautoescape %}
+{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}Thank you from {{ site_name }}!
+{{ site_domain }}{% endblocktrans %}

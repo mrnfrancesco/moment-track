@@ -27,6 +27,7 @@ urlpatterns = [
 
     url(r'^accounts/signup/company/$', views.company_signup, name='signup-company'),
     url(r'^accounts/signup/private/$', views.private_signup, name='signup-private'),
+    url(r'^accounts/signup/employee/$', views.employee_signup, name='signup-employee'),
 
     # Prevent default django-allauth from using default (generic) signup form
     url(r'^accounts/signup/$', page_not_found, {'exception': Http404()}),
