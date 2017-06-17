@@ -66,7 +66,7 @@ class Company(models.Model):
 
 @python_2_unicode_compatible
 class CompanyUser(models.Model):
-    contact_person = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='company_user')
     phone_number = PhoneNumberField(null=False, blank=False)
     company = models.OneToOneField(Company, on_delete=models.CASCADE, related_name='contact_person')
 
