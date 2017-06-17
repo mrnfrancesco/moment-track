@@ -14,16 +14,27 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from django.http import Http404
-from django.views.defaults import page_not_found
+from django.http import Http404, HttpResponseForbidden
+from django.views.defaults import page_not_found, permission_denied
+from django.views.generic import TemplateView
 
 from dashboard import views
 
 app_name = 'dashboard'
 urlpatterns = [
+    url(r'^forbidden/$', permission_denied, {'exception': HttpResponseForbidden()}),
+
     url(r'^$', views.index, name='index'),
-    url(r'^privacy-policy/$', views.privacy_policy, name='privacy-policy'),
-    url(r'^terms-of-service/$', views.terms_of_service, name='terms-of-service'),
+    url(
+        r'^privacy-policy/$',
+        TemplateView.as_view(template_name='dashboard/legal-notes/privacy-policy.html'),
+        name='privacy-policy'
+    ),
+    url(
+        r'^terms-of-service/$',
+        TemplateView.as_view(template_name='dashboard/legal-notes/terms-of-service.html'),
+        name='terms-of-service'
+    ),
 
     url(r'^accounts/signup/company/$', views.company_signup, name='signup-company'),
     url(r'^accounts/signup/private/$', views.private_signup, name='signup-private'),

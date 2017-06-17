@@ -3,8 +3,6 @@ from __future__ import unicode_literals
 
 from allauth.account.decorators import verified_email_required
 from allauth.account.views import SignupView
-def privacy_policy(request):
-    return render(request, 'dashboard/legal-notes/privacy-policy.html')
 from allauth.account.models import EmailAddress
 from allauth.account import signals
 from allauth.account.adapter import get_adapter
@@ -15,8 +13,6 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.db import transaction
 from django.shortcuts import render
 
-def terms_of_service(request):
-    return render(request, 'dashboard/legal-notes/terms-of-service.html')
 from dashboard.forms import CompanySignupForm, PrivateSignupForm, EmployeeSignupForm
 from dashboard.utils import get_actual_user, company_user_only
 
