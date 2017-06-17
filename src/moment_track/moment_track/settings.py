@@ -154,6 +154,19 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/accounts/login'
 
+# E-mail and SMTP backend settings
+# https://docs.djangoproject.com/en/1.11/ref/settings/#email-backend
+# https://docs.djangoproject.com/en/1.11/topics/email/#smtp-backend
+DEFAULT_FROM_EMAIL = 'support@moment-track.it'
+EMAIL_SUBJECT_PREFIX = '[Moment Track] '
+EMAIL_USE_LOCALTIME = False
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 25
+# Empty user and password means no authentication
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+
 if DEBUG:
     # If in debug mode, just send emails as console messages
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
