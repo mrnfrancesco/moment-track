@@ -15,7 +15,8 @@
                         <a href="javascript:" class="user-profile dropdown-toggle" data-toggle="dropdown"
                            aria-expanded="false">
                             <img src="{% static 'dashboard/img/logo-160x160.png' %}" style="border-radius: 0">
-                            {{ user.first_name }}&nbsp;{{ user.last_name }}
+                            {% user_display user as user_display %}
+                            {{ user_display }}
                             <span class=" fa fa-angle-down"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-usermenu pull-right">
