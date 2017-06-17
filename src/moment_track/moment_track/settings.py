@@ -127,8 +127,9 @@ AUTHENTICATION_BACKENDS = (
 
 AUTH_USER_MODEL = 'dashboard.User'
 
-# Authetication settings
+# Django-Allauth settings
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
