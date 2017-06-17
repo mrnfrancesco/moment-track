@@ -46,6 +46,8 @@ class CompanySignupForm(SignupForm):
 
     def save(self, request):
         user = super(CompanySignupForm, self).save(request)
+
+        user.user_type = user.COMPANY
         user.first_name = self.cleaned_data.get('contact_person_first_name')
         user.last_name = self.cleaned_data.get('contact_person_last_name')
         user.save()
@@ -81,6 +83,8 @@ class PrivateSignupForm(SignupForm):
 
     def save(self, request):
         user = super(PrivateSignupForm, self).save(request)
+
+        user.user_type = user.PRIVATE
         user.first_name = self.cleaned_data.get('first_name')
         user.last_name = self.cleaned_data.get('last_name')
         user.save()
@@ -107,6 +111,7 @@ class PrivateSocialSignupForm(SocialSignupForm):
     def save(self, request):
         user = super(PrivateSocialSignupForm, self).save(request)
 
+        user.user_type = user.PRIVATE
         user.first_name = self.cleaned_data.get('first_name')
         user.last_name = self.cleaned_data.get('last_name')
         user.save()
