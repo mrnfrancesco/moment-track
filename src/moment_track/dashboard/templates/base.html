@@ -115,9 +115,25 @@
                                                 <i class="fa fa-sign-in pull-right"></i>{% trans "Log in" %}
                                             </a>
                                         </li>
+
                                         {% for provider in socialaccount_providers %}
+                                            {% if provider.id == "openid" %}
+                                                {% for brand in provider.get_brands %}
+                                                    <li>
+                                                        <a title="{{ brand.name }}"
+                                                           href="{% provider_login_url provider.id openid=brand.openid_url process='login' %}">
+                                                            <i class="fa fa-{{ brand.name | lower }} pull-right"></i>
+                                                            {{ brand.name }}
+                                                            {% blocktrans with brand_name=brand.name %}
+                                                                Log in with {{ brand_name }}
+                                                            {% endblocktrans %}
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            {% endif %}
                                             <li>
-                                                <a href="{% provider_login_url provider.id process='login' scope=scope auth_params=auth_params %}">
+                                                <a title="{{ provider.name }}"
+                                                   href="{% provider_login_url provider.id process='login' scope=scope auth_params=auth_params %}">
                                                     <i class="fa fa-{{ provider.name | lower }} pull-right"></i>
                                                     {% blocktrans with provider_name=provider.name %}
                                                         Log in with {{ provider_name }}
@@ -125,6 +141,7 @@
                                                 </a>
                                             </li>
                                         {% endfor %}
+
                                         <li class="separator"></li>
                                         <li>
                                             <a href="{% url 'dashboard:signup-private' %}">
