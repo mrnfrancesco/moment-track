@@ -2,7 +2,7 @@ def user_displayable_name(user):
     """
     Use some basic information to build a string representing the given user.
     :param user: the user you want a displayable name
-    :type user: settings.AUTH_USER_MODEL(=django.contrib.auth.models.User)
+    :type user: settings.AUTH_USER_MODEL | PrivateUser | CompanyUser | EmployeeUser
     :return: the user displayable name
     :rtype: str
     """

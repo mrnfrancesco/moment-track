@@ -43,20 +43,14 @@ class User(AbstractUser):
 
 @python_2_unicode_compatible
 class AbstractUserModel(models.Model):
-    """Abstract user model class to simplify accessing
-    User personal data through foreign key"""
+    """Abstract user model to make custom user models
+    interchangeable with User"""
 
-    @property
-    def first_name(self):
-        return self.user.first_name
-
-    @property
-    def last_name(self):
-        return self.user.last_name
-
-    @property
-    def email(self):
-        return self.user.email
+    def __getattribute__(self, name):
+        try:
+            return object.__getattribute__(self, name)
+        except AttributeError:
+            return getattr(self.user, name)
 
     def __str__(self):
         return user_displayable_name(self.user)
