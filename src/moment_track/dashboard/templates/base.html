@@ -49,7 +49,15 @@
 
                     {# sidebar menu #}
                     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-                        {% block sidebar_menu %}{% endblock %}
+                        {% if user.is_private %}
+                            {% include 'dashboard/user/private/sidebar_menu.html' %}
+                        {% elif user.is_company %}
+                            {% include 'dashboard/user/company/sidebar_menu.html' %}
+                        {% elif user.is_employee %}
+                            {% include 'dashboard/user/employee/sidebar_menu.html' %}
+                        {% else %}
+                            {% include 'dashboard/user/guest/sidebar_menu.html' %}
+                        {% endif %}
                     </div>
                     {# /sidebar menu #}
 
