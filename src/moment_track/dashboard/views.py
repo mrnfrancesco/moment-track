@@ -139,5 +139,12 @@ def _user_profile(request):
     return context
 
 
+@verified_email_required
+@private_user_only
+def private_user_profile(request):
+    context = _user_profile(request)
+    return render(request, 'dashboard/user/private/profile.html', context)
+
+
 def index(request):
     return render(request, 'dashboard/index.html')
