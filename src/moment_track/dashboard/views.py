@@ -153,5 +153,40 @@ def employee_user_profile(request):
     return render(request, 'dashboard/user/employee/profile.html', context)
 
 
+@verified_email_required
+@company_user_only
+def company_user_profile(request):
+    user = request.user
+    company_user = get_actual_user(request.user)
+
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=user)
+        company_user_form = CompanyUserForm(request.POST, instance=company_user)
+
+        account_adapter = get_adapter(request)
+
+        if user_form.is_valid() and company_user_form.is_valid():
+            with transaction.atomic():
+                user_form.save()
+                company_user_form.save()
+
+            account_adapter.add_message(
+                request,
+                messages.SUCCESS,
+                'dashboard/messages/profile_update_success.txt'
+            )
+    else:
+        user_form = UserForm(instance=user)
+        company_user_form = CompanyUserForm(instance=company_user)
+
+    context = {
+        'user_has_usable_password': user.has_usable_password(),
+        'user_form': user_form,
+        'company_user_form': company_user_form,
+    }
+
+    return render(request, 'dashboard/user/company/profile.html', context)
+
+
 def index(request):
     return render(request, 'dashboard/index.html')
