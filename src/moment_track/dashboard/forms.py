@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from allauth.account.forms import SignupForm
 from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 from django import forms
+from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 from vatno_validator.validators import VATNoValidator
@@ -145,3 +146,45 @@ class EmployeeSignupForm(SignupForm):
             employee.save()
 
         return user
+
+
+class UserForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        for field_name in ('date_joined', 'last_login', 'email'):
+            if field_name in self.fields:
+                self.fields[field_name].disabled = True
+                self.fields[field_name].required = False
+
+    def clean(self):
+        cleaned_data = super(UserForm, self).clean()
+
+        required_fields = {
+            field_name
+            for field_name in self._meta.fields
+            if not self.fields[field_name].disabled
+        }
+        unwanted_fields = set(cleaned_data) - required_fields
+        for field_name in unwanted_fields:
+            del cleaned_data[field_name]
+
+        return cleaned_data
+
+    class Meta:
+        model = get_user_model()
+        fields = (
+            'date_joined', 'last_login',
+            'email', 'first_name', 'last_name',
+        )
+
+
+class CompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ('name', 'vat_no')
+
+
+class CompanyUserForm(forms.ModelForm):
+    class Meta:
+        model = CompanyUser
+        fields = ('phone_number',)
