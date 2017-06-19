@@ -26,6 +26,37 @@
     <link href="{% static 'dashboard/vendors/pnotify/pnotify.mobile.css' %}" rel="stylesheet">
     {% block extra_css %}{% endblock %}
     <link href="{% static 'dashboard/css/custom.css' %}" rel="stylesheet">
+    <style type="text/css">
+        form input,
+        form button[type=submit] {
+            width: 100%;
+        }
+
+        form input[type=checkbox],
+        form input[type=radio] {
+            width: auto;
+        }
+
+        ul.errorlist {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+
+        ul.errorlist li {
+            padding: .2em .6em .3em;
+            font-size: 75%;
+            font-weight: 700;
+            line-height: 1;
+            color: #fff;
+            vertical-align: baseline;
+            border-radius: .25em;
+            background-color: #c9302c;
+            border-color: #ac2925;
+            margin-bottom: 0.5rem;
+        }
+    </style>
     {% block extra_head %}{% endblock %}
 </head>
 <body class="nav-md">
@@ -60,12 +91,6 @@
                         {% endif %}
                     </div>
                     {# /sidebar menu #}
-
-                    {# menu footer buttons #}
-                    <div class="sidebar-footer hidden-small">
-                        {% block sidebar_menu_footer_buttons %}{% endblock %}
-                    </div>
-                    {# menu footer buttons #}
                 </div>
             </div>
             {# /sidebar menu #}
@@ -96,7 +121,7 @@
                                         {# /extra user menu fields #}
 
                                         <li>
-                                            <a href="#">
+                                            <a href="{% url 'dashboard:user-profile' %}">
                                                 <i class="fa fa-user pull-right"></i>
                                                 {% trans "Profile" %}
                                             </a>
