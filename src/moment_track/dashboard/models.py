@@ -49,8 +49,26 @@ class AbstractUserModel(models.Model):
     def __getattribute__(self, name):
         try:
             return object.__getattribute__(self, name)
-        except AttributeError:
-            return getattr(self.user, name)
+        except AttributeError as error:
+            # search attribute in user model's django fields
+            if name in [field.name for field in get_user_model()._meta.fields]:
+                return getattr(self.user, name)
+            # search attribute in user model's python properties
+            elif name in [prop_name
+                          for prop_name, prop in vars(get_user_model()).iteritems()
+                          if type(prop) == property
+                          ]:
+                return getattr(self.user, name)
+            else:
+                raise error
+
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
 
     def __str__(self):
         return user_displayable_name(self.user)
