@@ -190,6 +190,24 @@ def company_user_profile(request):
 
 
 @verified_email_required
+@company_user_only
+def company_details(request):
+    company_user = get_actual_user(request.user)
+    company = company_user.company
+
+    if request.method == 'POST':
+        company_form = CompanyForm(request.POST, instance=company)
+
+        if company_form.is_valid():
+            company_form.save()
+    else:
+        company_form = CompanyForm(instance=company)
+
+    context = {'company_form': company_form}
+    return render(request, 'dashboard/user/company/company_details.html', context)
+
+
+@verified_email_required
 @employee_user_only
 def employee_company_details(request):
     employee_user = get_actual_user(request.user)

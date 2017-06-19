@@ -48,4 +48,7 @@ urlpatterns = [
     url(r'^profile/company/$', views.company_user_profile, name='company-user-profile'),
     url(r'^profile/employee/$', views.employee_user_profile, name='employee-user-profile'),
     url(r'^profile/employee/company/$', views.employee_company_details, name='employee-company-details'),
+
+    # Company user management pages
+    url(r'^company/details/$', views.company_details, name='company-details'),
 ]

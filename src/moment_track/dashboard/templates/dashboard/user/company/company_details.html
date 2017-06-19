@@ -1,0 +1,25 @@
+{% extends 'dashboard/base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="x_panel">
+                <div class="x_title text-center">
+                    <h1>{% trans "Update company details" %}</h1>
+                </div>
+                <div class="x_content">
+                    <form method="post" action="{% url 'dashboard:company-details' %}">
+                        {% csrf_token %}
+                        {{ company_form.as_p }}
+                        {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                        {% endif %}
+                        <br/>
+                        <button class="btn btn-success" type="submit">{% trans "Update" %}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
