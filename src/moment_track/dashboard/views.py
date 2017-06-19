@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.db import transaction
+from django.forms import model_to_dict
 from django.shortcuts import render
 
 from dashboard.forms import CompanySignupForm, PrivateSignupForm, EmployeeSignupForm, UserForm, CompanyForm, \
@@ -186,6 +187,22 @@ def company_user_profile(request):
     }
 
     return render(request, 'dashboard/user/company/profile.html', context)
+
+
+@verified_email_required
+@employee_user_only
+def employee_company_details(request):
+    employee_user = get_actual_user(request.user)
+    company = employee_user.company
+    company_user = company.contact_person
+
+    context = {
+        'company': CompanyForm(model_to_dict(company)),
+        'contact_person_user': UserForm(model_to_dict(company_user.user)),
+        'company_contact_person': CompanyUserForm(model_to_dict(company_user)),
+    }
+
+    return render(request, 'dashboard/user/employee/company.html', context)
 
 
 def index(request):

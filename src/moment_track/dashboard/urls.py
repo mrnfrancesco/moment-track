@@ -47,4 +47,5 @@ urlpatterns = [
     url(r'^profile/private/$', views.private_user_profile, name='private-user-profile'),
     url(r'^profile/company/$', views.company_user_profile, name='company-user-profile'),
     url(r'^profile/employee/$', views.employee_user_profile, name='employee-user-profile'),
+    url(r'^profile/employee/company/$', views.employee_company_details, name='employee-company-details'),
 ]
