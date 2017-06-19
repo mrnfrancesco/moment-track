@@ -13,7 +13,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.db import transaction
 from django.shortcuts import render
 
-from dashboard.forms import CompanySignupForm, PrivateSignupForm, EmployeeSignupForm
+from dashboard.forms import CompanySignupForm, PrivateSignupForm, EmployeeSignupForm, UserForm, CompanyForm, \
+    CompanyUserForm
 from dashboard.utils import get_actual_user, company_user_only
 
 
@@ -109,6 +110,33 @@ def employee_signup(request):
             context['form'] = form
 
     return render(request, 'account/signup_employee.html', context)
+
+
+def _user_profile(request):
+    user = request.user
+    # in case the user is trying to modify data
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=user)
+
+        account_adapter = get_adapter(request)
+
+        if user_form.is_valid():
+            user_form.save()
+
+            account_adapter.add_message(
+                request,
+                messages.SUCCESS,
+                'dashboard/messages/profile_update_success.txt'
+            )
+    else:
+        user_form = UserForm(instance=user)
+
+    context = {
+        'user_has_usable_password': user.has_usable_password(),
+        'user_form': user_form
+    }
+
+    return context
 
 
 def index(request):
