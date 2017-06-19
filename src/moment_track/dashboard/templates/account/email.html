@@ -43,10 +43,10 @@
                             </div>
                         {% endfor %}
                             <div class="separator"></div>
-                            <div class="text-center">
-                                <button class="btn btn-info" type="submit" name="action_primary" >{% trans 'Make Primary' %}</button>
-                                <button class="btn btn-warning" type="submit" name="action_send" >{% trans 'Re-send Verification' %}</button>
-                                <button class="btn btn-danger" type="submit" name="action_remove" >{% trans 'Remove' %}</button>
+                            <div class="row">
+                                <button class="btn btn-info col-md-4" type="submit" name="action_primary" style="width: 30%">{% trans 'Make Primary' %}</button>
+                                <button class="btn btn-warning col-md-4" type="submit" name="action_send" style="width: 37%">{% trans 'Re-send Verification' %}</button>
+                                <button class="btn btn-danger col-md-4" type="submit" name="action_remove" style="width: 30%">{% trans 'Remove' %}</button>
                             </div>
                         </fieldset>
                     </form>
@@ -68,9 +68,7 @@
                     {% csrf_token %}
                     {{ form.as_p }}
                     <br/>
-                    <button class="btn btn-default" name="action_add" style="width: 100%;" type="submit">
-                        {% trans "Add E-mail" %}
-                    </button>
+                    <button class="btn btn-success" name="action_add" type="submit">{% trans "Add E-mail" %}</button>
                 </form>
             </div>
         </div>
