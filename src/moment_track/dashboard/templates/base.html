@@ -121,7 +121,14 @@
                                         {# /extra user menu fields #}
 
                                         <li>
-                                            <a href="{% url 'dashboard:user-profile' %}">
+                                            {% if user.is_private %}
+                                                {% url 'dashboard:private-user-profile' as profile_url %}
+                                            {% elif user.is_employee %}
+                                                {% url 'dashboard:employee-user-profile' as profile_url %}
+                                            {% elif user.is_company %}
+                                                {% url 'dashboard:company-user-profile'  as profile_url %}
+                                            {% endif %}
+                                            <a href="{{ profile_url }}">
                                                 <i class="fa fa-user pull-right"></i>
                                                 {% trans "Profile" %}
                                             </a>

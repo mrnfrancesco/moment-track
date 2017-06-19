@@ -43,4 +43,8 @@ urlpatterns = [
     # Prevent default django-allauth from using default (generic) signup form
     url(r'^accounts/signup/$', page_not_found, {'exception': Http404()}),
 
+    # Users' profile management pages
+    url(r'^profile/private/$', views.private_user_profile, name='private-user-profile'),
+    url(r'^profile/company/$', views.company_user_profile, name='company-user-profile'),
+    url(r'^profile/employee/$', views.employee_user_profile, name='employee-user-profile'),
 ]

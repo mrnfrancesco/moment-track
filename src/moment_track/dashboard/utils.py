@@ -41,3 +41,25 @@ def company_user_only(view_function):
 
     return actual_decorator(view_function)
 
+
+def employee_user_only(view_function):
+    """Decorator for views that limits visibility to specified type of user(s)."""
+    actual_decorator = user_passes_test(
+        lambda user: user.is_employee,
+        login_url='/forbidden/',
+        redirect_field_name=''  # no redirect field accepted
+    )
+
+    return actual_decorator(view_function)
+
+
+def private_user_only(view_function):
+    """Decorator for views that limits visibility to specified type of user(s)."""
+    actual_decorator = user_passes_test(
+        lambda user: user.is_private,
+        login_url='/forbidden/',
+        redirect_field_name=''  # no redirect field accepted
+    )
+
+    return actual_decorator(view_function)
+
