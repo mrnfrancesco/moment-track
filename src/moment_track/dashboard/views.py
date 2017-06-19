@@ -15,7 +15,7 @@ from django.shortcuts import render
 
 from dashboard.forms import CompanySignupForm, PrivateSignupForm, EmployeeSignupForm, UserForm, CompanyForm, \
     CompanyUserForm
-from dashboard.utils import get_actual_user, company_user_only
+from dashboard.utils import get_actual_user, company_user_only, employee_user_only, private_user_only
 
 
 class CompanyUserSignupView(SignupView):
