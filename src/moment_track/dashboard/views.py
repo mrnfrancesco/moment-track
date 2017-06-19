@@ -16,6 +16,7 @@ from django.shortcuts import render
 
 from dashboard.forms import CompanySignupForm, PrivateSignupForm, EmployeeSignupForm, UserForm, CompanyForm, \
     CompanyUserForm
+from dashboard.models import EmployeeUser
 from dashboard.utils import get_actual_user, company_user_only, employee_user_only, private_user_only
 
 
@@ -37,17 +38,15 @@ private_signup = PrivateUserSignupView.as_view()
 
 @verified_email_required
 @company_user_only
-def employee_signup(request):
-    context = {'form': EmployeeSignupForm()}
-
+def company_employees(request):
     # if this is a POST request we need to process the form data
     # otherwise we just create a blank employee signup form
     if request.method == 'POST':
-        form = EmployeeSignupForm(request.POST)
+        employee_signup_form = EmployeeSignupForm(request.POST)
 
-        if form.is_valid():
+        if employee_signup_form.is_valid():
             with transaction.atomic():
-                user = form.save(request)
+                user = employee_signup_form.save(request)
 
                 signals.user_signed_up.send(sender=user.__class__, user=user)
 
@@ -106,11 +105,20 @@ def employee_signup(request):
                         'employee': employee
                     }
                 )
-        else:
-            # in case of invalid data we'll send the precompiled form with error messages in it
-            context['form'] = form
+    # If this is a GET (or any other methods) request, create a blank form
+    else:
+        employee_signup_form = EmployeeSignupForm()
 
-    return render(request, 'account/signup_employee.html', context)
+    company_user = get_actual_user(request.user)
+    company = company_user.company
+    employees = EmployeeUser.objects.filter(company=company)
+
+    context = {
+        'employee_signup_form': employee_signup_form,
+        'employees': employees,
+    }
+
+    return render(request, 'dashboard/user/company/employees.html', context)
 
 
 def _user_profile(request):

@@ -36,9 +36,9 @@ urlpatterns = [
         name='terms-of-service'
     ),
 
+    # Account signup
     url(r'^accounts/signup/company/$', views.company_signup, name='signup-company'),
     url(r'^accounts/signup/private/$', views.private_signup, name='signup-private'),
-    url(r'^accounts/signup/employee/$', views.employee_signup, name='signup-employee'),
 
     # Prevent default django-allauth from using default (generic) signup form
     url(r'^accounts/signup/$', page_not_found, {'exception': Http404()}),
@@ -51,4 +51,5 @@ urlpatterns = [
 
     # Company user management pages
     url(r'^company/details/$', views.company_details, name='company-details'),
+    url(r'^company/employees/$', views.company_employees, name='company-employees'),
 ]
