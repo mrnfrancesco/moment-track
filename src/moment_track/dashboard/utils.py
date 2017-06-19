@@ -9,12 +9,14 @@ def get_actual_user(user):
     Get the actual user type
 
     :param user: the user you want to know the actual type
-    :type user: dashboard.models.User | django.contrib.auth.models.AnonymousUser
+    :type user: User | AnonymousUser | PrivateUser | CompanyUser | EmployeeUser
     :return: the actual user instance of the specified user or None if guest
     :rtype: PrivateUser | CompanyUser | EmployeeUser | None
     :raise ValueError: if user instance has an unknown user_type field value
     """
     if user.is_authenticated and user.user_type:
+        if not isinstance(user, get_user_model()):
+            return user
         if user.is_private:
             actual_user = user.private_user
         elif user.is_company:
