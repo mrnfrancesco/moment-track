@@ -12,10 +12,13 @@ from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.db import transaction
 from django.forms import model_to_dict
+from django.http import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from dashboard.forms import CompanySignupForm, PrivateSignupForm, EmployeeSignupForm, UserForm, CompanyForm, \
     CompanyUserForm
+from dashboard.models import EmployeeUser
 from dashboard.utils import get_actual_user, company_user_only, employee_user_only, private_user_only
 
 
@@ -37,17 +40,15 @@ private_signup = PrivateUserSignupView.as_view()
 
 @verified_email_required
 @company_user_only
-def employee_signup(request):
-    context = {'form': EmployeeSignupForm()}
-
+def company_employees(request):
     # if this is a POST request we need to process the form data
     # otherwise we just create a blank employee signup form
     if request.method == 'POST':
-        form = EmployeeSignupForm(request.POST)
+        employee_signup_form = EmployeeSignupForm(request.POST)
 
-        if form.is_valid():
+        if employee_signup_form.is_valid():
             with transaction.atomic():
-                user = form.save(request)
+                user = employee_signup_form.save(request)
 
                 signals.user_signed_up.send(sender=user.__class__, user=user)
 
@@ -106,11 +107,40 @@ def employee_signup(request):
                         'employee': employee
                     }
                 )
-        else:
-            # in case of invalid data we'll send the precompiled form with error messages in it
-            context['form'] = form
+    # If this is a GET (or any other methods) request, create a blank form
+    else:
+        employee_signup_form = EmployeeSignupForm()
 
-    return render(request, 'account/signup_employee.html', context)
+    company_user = get_actual_user(request.user)
+    company = company_user.company
+    employees = EmployeeUser.objects.filter(company=company)
+
+    context = {
+        'employee_signup_form': employee_signup_form,
+        'employees': employees,
+    }
+
+    return render(request, 'dashboard/user/company/employees.html', context)
+
+
+@verified_email_required
+@company_user_only
+@ensure_csrf_cookie
+def invert_employee_account_active_status(request, employee_id):
+    status = 'unknown'
+    got_error = True
+
+    if request.method == 'POST':
+        if EmployeeUser.objects.filter(id=employee_id).exists():
+            employee = EmployeeUser.objects.get(id=employee_id)
+            user = employee.user
+            user.is_active = not user.is_active
+            user.save()
+
+            status = 'active' if user.is_active else 'inactive'
+            got_error = False
+
+    return JsonResponse({'error': got_error, 'status': status})
 
 
 def _user_profile(request):
