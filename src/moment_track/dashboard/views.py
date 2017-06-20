@@ -12,7 +12,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.db import transaction
 from django.forms import model_to_dict
+from django.http import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from dashboard.forms import CompanySignupForm, PrivateSignupForm, EmployeeSignupForm, UserForm, CompanyForm, \
     CompanyUserForm
@@ -119,6 +121,26 @@ def company_employees(request):
     }
 
     return render(request, 'dashboard/user/company/employees.html', context)
+
+
+@verified_email_required
+@company_user_only
+@ensure_csrf_cookie
+def invert_employee_account_active_status(request, employee_id):
+    status = 'unknown'
+    got_error = True
+
+    if request.method == 'POST':
+        if EmployeeUser.objects.filter(id=employee_id).exists():
+            employee = EmployeeUser.objects.get(id=employee_id)
+            user = employee.user
+            user.is_active = not user.is_active
+            user.save()
+
+            status = 'active' if user.is_active else 'inactive'
+            got_error = False
+
+    return JsonResponse({'error': got_error, 'status': status})
 
 
 def _user_profile(request):

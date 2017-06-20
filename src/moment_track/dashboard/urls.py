@@ -22,7 +22,7 @@ from dashboard import views
 
 app_name = 'dashboard'
 urlpatterns = [
-    url(r'^forbidden/$', permission_denied, {'exception': HttpResponseForbidden()}),
+    url(r'^forbidden/$', permission_denied, {'exception': HttpResponseForbidden()}, name='forbidden'),
 
     url(r'^$', views.index, name='index'),
     url(
@@ -52,4 +52,14 @@ urlpatterns = [
     # Company user management pages
     url(r'^company/details/$', views.company_details, name='company-details'),
     url(r'^company/employees/$', views.company_employees, name='company-employees'),
+    url(  # used for using reverse url function without employee_id parameter
+        r'^company/employees/invert-active-status/$',
+        page_not_found, {'exception': Http404()},
+        name='invert-employee-account-active-status'
+    ),
+    url(
+        r'^company/employees/invert-active-status/(?P<employee_id>[0-9]+)$',
+        views.invert_employee_account_active_status,
+        name='invert-employee-account-active-status'
+    ),
 ]

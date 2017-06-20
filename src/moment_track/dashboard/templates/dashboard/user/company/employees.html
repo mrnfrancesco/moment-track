@@ -30,9 +30,13 @@
                                 <td>{{ employee.email }}</td>
                                 <td>
                                     {% if employee.is_active %}
-                                        <span class="badge bg-green">{% trans "Active" %}</span>
+                                        <span id="employee-{{ employee.id }}-account-status" class="badge bg-green">
+                                            {% trans "Active" %}
+                                        </span>
                                     {% else %}
-                                        <span class="badge bg-red">{% trans "Inactive" %}</span>
+                                        <span id="employee-{{ employee.id }}-account-status" class="badge bg-red">
+                                            {% trans "Inactive" %}
+                                        </span>
                                     {% endif %}
                                 </td>
                                 <td>{{ employee.date_joined }}</td>
@@ -41,13 +45,10 @@
                                     <a class="btn btn-info" href="#{{ employee.id }}">
                                         {% trans "View files" %}
                                     </a>
-                                    {% if employee.is_active %}
-                                        <a class="btn btn-danger" href="#{{ employee.id }}">
-                                            {% trans "Deactivate account" %}
-                                        </a>
-                                    {% else %}
-                                        <a class="btn btn-warning" href="#{{ employee.id }}">{% trans "Activate" %}</a>
-                                    {% endif %}
+                                    <button class="btn btn-danger" type="button"
+                                            onclick="invert_employee_account_status({{ employee.id }})">
+                                        {% trans "Change status" %}
+                                    </button>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -92,19 +93,59 @@
 
 {% block extra_vendor_css %}
     <link href="{% static 'dashboard/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'dashboard/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}"
+          rel="stylesheet">
 {% endblock %}
 
 {% block extra_vendor_script %}
     <script src="{% static 'dashboard/vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'dashboard/vendors/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
     <script src="{% static 'dashboard/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+    <script src="{% static 'dashboard/vendors/js-cookie/js.cookie.js' %}"></script>
 {% endblock %}
 
 {% block extra_body %}
     <script type="text/javascript">
+        $('#datatable-responsive').DataTable();
+
         $(function () {
-            $('#datatable-responsive').dataTable();
+            var csrftoken = Cookies.get('csrftoken');
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
         });
+    </script>
+
+    <script type="text/javascript">
+        function invert_employee_account_status(employee_id) {
+            $.post(
+                "{% url 'dashboard:invert-employee-account-active-status' %}" + employee_id,
+                {csrftoken: Cookies.get('csrftoken')}
+            ).success(function (response) {
+                if (response['error'] === false) {
+                    var span = $('#employee-' + employee_id + '-account-status');
+                    var status = response['status'];
+                    if (status === 'active') {
+                        span.removeClass('bg-red');
+                        span.addClass('bg-green');
+                        span.text('{% trans "Active" %}');
+                    } else if (status === 'inactive') {
+                        span.removeClass('bg-green');
+                        span.addClass('bg-red');
+                        span.text('{% trans "Inactive" %}');
+                    }
+                }
+            });
+        }
     </script>
 {% endblock %}
