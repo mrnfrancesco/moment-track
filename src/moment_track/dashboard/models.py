@@ -25,7 +25,7 @@ class User(AbstractUser):
         (EMPLOYEE, _('Employee User')),
     )
     user_type = models.PositiveSmallIntegerField(
-        editable=False, null=True, blank=False,
+        editable=False, null=True,
         choices=USER_TYPE_CHOICES
     )
 
@@ -94,14 +94,8 @@ class PrivateUser(AbstractUserModel):
 
 @python_2_unicode_compatible
 class Company(models.Model):
-    name = models.CharField(max_length=50, null=False, blank=False)
-    vat_no = models.CharField(
-        max_length=30,
-        validators=[VATNoValidator()],
-        unique=True,
-        null=False,
-        blank=False
-    )
+    name = models.CharField(max_length=50)
+    vat_no = models.CharField(max_length=30, validators=[VATNoValidator()], unique=True)
 
     def __str__(self):
         return self.name
@@ -110,7 +104,7 @@ class Company(models.Model):
 @python_2_unicode_compatible
 class CompanyUser(AbstractUserModel):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='company_user')
-    phone_number = PhoneNumberField(null=False, blank=False)
+    phone_number = PhoneNumberField()
     company = models.OneToOneField(Company, on_delete=models.CASCADE, related_name='contact_person')
 
     def __str__(self):
