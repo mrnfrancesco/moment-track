@@ -13,6 +13,7 @@ from vatno_validator.validators import VATNoValidator
 from dashboard.accounts import user_displayable_name
 
 
+@python_2_unicode_compatible
 class User(AbstractUser):
     PRIVATE = 1
     COMPANY = 2
@@ -39,6 +40,12 @@ class User(AbstractUser):
     @property
     def is_employee(self):
         return self.user_type == User.EMPLOYEE
+
+    def __str__(self):
+        return '{displayable_name} ({email})'.format(
+            displayable_name=user_displayable_name(self),
+            email=self.email
+        )
 
 
 @python_2_unicode_compatible
@@ -71,14 +78,18 @@ class AbstractUserModel(models.Model):
         return False
 
     def __str__(self):
-        return user_displayable_name(self.user)
+        return str(self.user)
 
     class Meta:
         abstract = True
 
 
+@python_2_unicode_compatible
 class PrivateUser(AbstractUserModel):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='private_user')
+
+    def __str__(self):
+        return super(PrivateUser, self).__str__()
 
 
 @python_2_unicode_compatible
@@ -96,10 +107,17 @@ class Company(models.Model):
         return self.name
 
 
+@python_2_unicode_compatible
 class CompanyUser(AbstractUserModel):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='company_user')
     phone_number = PhoneNumberField(null=False, blank=False)
     company = models.OneToOneField(Company, on_delete=models.CASCADE, related_name='contact_person')
+
+    def __str__(self):
+        return '{user} contact person for {company}'.format(
+            user=str(self.user),
+            company=str(self.company)
+        )
 
 
 @python_2_unicode_compatible
@@ -108,7 +126,7 @@ class EmployeeUser(AbstractUserModel):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='employees')
 
     def __str__(self):
-        return '{user} @ {company}'.format(
-            user=user_displayable_name(self.user),
+        return '{user} employee @ {company}'.format(
+            user=str(self.user),
             company=str(self.company)
         )
