@@ -15,33 +15,30 @@ from dashboard.models import CompanyUser, PrivateUser, Company, EmployeeUser
 class CompanySignupForm(SignupForm):
     """Form used to signup company user"""
     contact_person_first_name = forms.CharField(
-        max_length=30, required=True, strip=True,
+        max_length=30,
         label=_("First name"),
         widget=forms.TextInput(attrs={'placeholder': _("Contact person first name")})
     )
 
     contact_person_last_name = forms.CharField(
-        max_length=30, required=True, strip=True,
+        max_length=30,
         label=_("Last name"),
         widget=forms.TextInput(attrs={'placeholder': _("Contact person last name")})
     )
 
     contact_person_phone_number = PhoneNumberField(
-        required=True, strip=True,
         label=_("Phone number"),
         widget=forms.TextInput(attrs={'placeholder': _("Contact person phone number")})
     )
 
     company_name = forms.CharField(
-        max_length=50, required=True, strip=True,
+        max_length=50,
         label=_("Company name"),
         widget=forms.TextInput(attrs={'placeholder': _("Company name")})
     )
 
     vat_no = forms.CharField(
         max_length=30,
-        required=True,
-        strip=True,
         validators=[VATNoValidator()],
         label=_("VAT Number"),
         widget=forms.TextInput(attrs={'placeholder': _("Company VAT number")})
@@ -73,13 +70,13 @@ class CompanySignupForm(SignupForm):
 class PrivateSignupForm(SignupForm):
     """Form used to signup private user who are performing manual registration"""
     first_name = forms.CharField(
-        max_length=30, required=True, strip=True,
+        max_length=30,
         label=_("First name"),
         widget=forms.TextInput(attrs={'placeholder': _("First name")})
     )
 
     last_name = forms.CharField(
-        max_length=30, required=True, strip=True,
+        max_length=30,
         label=_("Last name"),
         widget=forms.TextInput(attrs={'placeholder': _("Last name")})
     )
@@ -100,13 +97,13 @@ class PrivateSignupForm(SignupForm):
 class PrivateSocialSignupForm(SocialSignupForm):
     """Form used to complete signup of private users using social login"""
     first_name = forms.CharField(
-        max_length=30, required=True, strip=True,
+        max_length=30,
         label=_("First name"),
         widget=forms.TextInput(attrs={'placeholder': _("First name")})
     )
 
     last_name = forms.CharField(
-        max_length=30, required=True, strip=True,
+        max_length=30,
         label=_("Last name"),
         widget=forms.TextInput(attrs={'placeholder': _("Last name")})
     )
