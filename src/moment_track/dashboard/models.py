@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from datetime import date
+
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.encoding import python_2_unicode_compatible
 
 from django.db import models
@@ -123,4 +126,140 @@ class EmployeeUser(AbstractUserModel):
         return '{user} employee @ {company}'.format(
             user=str(self.user),
             company=str(self.company)
+        )
+
+
+@python_2_unicode_compatible
+class CreditsPacketOffer(models.Model):
+    MIN_MINUTES_PER_CREDIT = 5
+    MAX_MINUTES_PER_CREDIT = 60
+
+    date_start = models.DateField(default=date.today)
+    date_end = models.DateField(null=True, blank=True)
+    minutes_per_credit = models.PositiveSmallIntegerField(
+        validators=[
+            MinValueValidator(
+                MIN_MINUTES_PER_CREDIT,
+                _("Cannot set minutes per credit value less than %d" % MIN_MINUTES_PER_CREDIT)
+            ),
+            MaxValueValidator(
+                MAX_MINUTES_PER_CREDIT,
+                _("Cannot set minutes per credit value greater than %d" % MAX_MINUTES_PER_CREDIT)
+            )
+        ]
+    )
+    cost_per_credit = models.FloatField()
+
+    def __str__(self):
+        return '{cost} USD/min (from {date_start} to {date_end})'.format(
+            cost=(float(self.cost_per_credit)/float(self.minutes_per_credit)),
+            date_start=self.date_start,
+            date_end=self.date_end if self.date_end else '?'
+        )
+
+
+@python_2_unicode_compatible
+class CreditsPacketPurchase(models.Model):
+    MIN_CREDITS_PURCHASED = 1
+
+    customer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='purchases')
+    offer = models.ForeignKey(CreditsPacketOffer, related_name='purchases', on_delete=models.PROTECT)
+    datetime = models.DateTimeField(auto_now_add=True)
+    expiration_date = models.DateField()
+    credits_purchased = models.PositiveSmallIntegerField(
+        validators=[
+            MinValueValidator(
+                MIN_CREDITS_PURCHASED,
+                _("You cannot buy less than %d credit" % MIN_CREDITS_PURCHASED)
+            )
+        ]
+    )
+    credits_remaining = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return '[{datetime}] {user_name} purchased {purchased} credits ({remaining} remaining)'.format(
+            datetime=self.datetime,
+            user_name=user_displayable_name(self.customer),
+            purchased=self.credits_purchased,
+            remaining=self.credits_remaining
+        )
+
+
+@python_2_unicode_compatible
+class AudioFile(models.Model):
+    from django.conf import global_settings
+    LANGUAGE_SPOKEN_CHOICES = global_settings.LANGUAGES
+
+    class Status(object):
+        STORING = 1
+        PROCESSING = 2
+        DONE = 3
+
+        @classmethod
+        def choices(cls):
+            return (
+                (cls.STORING, _("Storing")),
+                (cls.PROCESSING, _("Processing")),
+                (cls.DONE, _("Done")),
+            )
+
+    uploader = models.ForeignKey(User, on_delete=models.CASCADE, related_name='files')
+    file = models.FileField(upload_to='uploads/%Y/%m/%d/')
+    file_status = models.PositiveSmallIntegerField(choices=Status.choices())
+    is_public = models.BooleanField(default=False)
+    name = models.CharField(max_length=256)
+    description = models.CharField(max_length=500)
+    language_spoken = models.CharField(max_length=5, choices=LANGUAGE_SPOKEN_CHOICES)
+    duration = models.DurationField()
+
+    def __str__(self):
+        return '{name} @ "{path}"'.format(name=self.name, path=self.file.path)
+
+
+@python_2_unicode_compatible
+class CreditsUsage(models.Model):
+    MIN_CREDITS_USED = 1
+
+    file = models.OneToOneField(
+        AudioFile,
+        on_delete=models.CASCADE,
+        related_name='credits_usage'
+    )
+    credits_packet_purchase = models.OneToOneField(
+        CreditsPacketPurchase,
+        on_delete=models.CASCADE,
+        related_name='credits_usage'
+    )
+    credits_used = models.PositiveSmallIntegerField(
+        validators=[
+            MinValueValidator(
+                MIN_CREDITS_USED,
+                _("You cannot use less than %d credit(s)" % MIN_CREDITS_USED)
+            )
+        ]
+    )
+    datetime = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '[{datetime}] {user_name} used {used} credit(s) for file "{file_name}"'.format(
+            datetime=self.datetime,
+            user_name=user_displayable_name(self.file.uploader),
+            used=self.credits_used,
+            file_name=self.file.name
+        )
+
+
+@python_2_unicode_compatible
+class Transcription(models.Model):
+    file = models.ForeignKey(AudioFile, on_delete=models.CASCADE, related_name='transcriptions')
+    time_start = models.TimeField()
+    duration = models.DurationField()
+    confidence = models.FloatField()
+    text = models.TextField(blank=True)
+
+    def __str__(self):
+        return 'Transcription for "{file_name}" starting at {time_start} ({duration} sec)'.format(
+            file_name=file.name,
+            time_start=self.time_start,
+            duration=self.duration
         )
