@@ -204,16 +204,11 @@
             {# /top navigation #}
 
             <div class="right_col" role="main">
-                <div class="page-title">
-                    <div class="title_left">
-                        {% block page_title_left %}
-                            {# Little hack to have top margin #}
-                            <h3>&nbsp</h3>
-                        {% endblock %}
-                    </div>
-                    <div class="title_right">{% block page_title_right %}{% endblock %}</div>
-                </div>
-                <div class="clearfix"></div>
+                {% block top_page_content %}
+                    {# Little hack to have top margin if no top page content is specified #}
+                    <div class="page-title"><div class="title_left"><h3>&nbsp</h3></div></div>
+                    <div class="clearfix"></div>
+                {% endblock %}
                 {% block content %}{% endblock %}
             </div>
 
