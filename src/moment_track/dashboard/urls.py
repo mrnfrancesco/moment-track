@@ -62,4 +62,7 @@ urlpatterns = [
         views.invert_employee_account_active_status,
         name='invert-employee-account-active-status'
     ),
+
+    # credits management
+    url(r'credits/$', views.private_user_credits, name='private-user-credits'),
 ]
