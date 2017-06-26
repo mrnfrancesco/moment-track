@@ -4,12 +4,19 @@ from allauth.account.forms import SignupForm
 from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
+from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.forms import NumberInput
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from paypal.standard.forms import PayPalPaymentsForm
+from paypal.standard.widgets import ValueHiddenInput
 from vatno_validator.validators import VATNoValidator
 from phonenumber_field.formfields import PhoneNumberField
 
 from dashboard.models import CompanyUser, PrivateUser, Company, EmployeeUser
+from moment_track import settings
 
 
 class CompanySignupForm(SignupForm):
@@ -185,3 +192,39 @@ class CompanyUserForm(forms.ModelForm):
     class Meta:
         model = CompanyUser
         fields = ('phone_number',)
+
+
+class PayPalCreditsPacketPurchaseForm(PayPalPaymentsForm):
+    def __init__(self, *args, **kwargs):
+        super(PayPalCreditsPacketPurchaseForm, self).__init__(*args, **kwargs)
+
+        # Automatically set business email address to the correct value
+        self.fields['business'] = forms.CharField(
+            widget=ValueHiddenInput(),
+            initial=settings.PAYPAL_BUSINESS_EMAIL_ADDRESS
+        )
+
+        # Let the user choose the quantity
+        self.fields['quantity'] = forms.IntegerField(
+            label=_('Quantity'),
+            widget=NumberInput(attrs={'min': 1}),
+            initial=1
+        )
+
+        current_domain = Site.objects.get_current().domain
+        self.fields['notify_url'] = forms.URLField(
+            widget=ValueHiddenInput(),
+            initial=(current_domain + reverse('paypal-ipn'))
+        )
+        self.fields['return_url'] = forms.URLField(
+            widget=ValueHiddenInput(),
+            initial=(current_domain + reverse('dashboard:private-user-payment-completed'))
+        )
+        self.fields['cancel_return'] = forms.URLField(
+            widget=ValueHiddenInput(),
+            initial=(current_domain + reverse('dashboard:private-user-payment-cancelled'))
+        )
+
+    @property
+    def endpoint(self):
+        return self.get_endpoint()
