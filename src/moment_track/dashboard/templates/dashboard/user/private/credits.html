@@ -55,11 +55,15 @@
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">
                                     <span class="label label-{% if t.days_before_expiration <= 3 %}danger{% elif t.days_before_expiration <= 7 %}warning{% else %}success{% endif %}">
-                                        {% blocktrans count days_left=t.days_before_expiration %}
-                                            1 day before expiration
-                                        {% plural %}
-                                            {{ days_left }} days before expiration
-                                        {% endblocktrans %}
+                                        {% ifequal t.days_before_expiration 0 %}
+                                            {% trans "Last day before expiration" %}
+                                        {% else %}
+                                            {% blocktrans count days_left=t.days_before_expiration %}
+                                                1 day before expiration
+                                            {% plural %}
+                                                {{ days_left }} days before expiration
+                                            {% endblocktrans %}
+                                        {% endifequal %}
                                     </span>
                                 </div>
                             </div>
