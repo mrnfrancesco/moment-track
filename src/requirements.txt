@@ -4,3 +4,4 @@ django-allauth==0.32.0
 django-vatno-validator==0.1.1
 django-phonenumber-field==1.3.0
 django-sslserver==0.19
+django-paypal==0.3.6

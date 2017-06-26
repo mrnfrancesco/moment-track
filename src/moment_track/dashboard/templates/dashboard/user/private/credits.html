@@ -99,15 +99,14 @@
                                             <span>{{ offer.cost_per_credit }} {% trans "$/credit" %}</span>
                                         </div>
                                         <div class="x_content">
-                                            <form method="post" action="#">
-                                                {# TODO: implement credits buying form #}
-                                                {% csrf_token %}
+                                            <form method="post" action="{{ offer.paypal_form.endpoint }}">
                                                 <div style="padding-top: 1rem"></div>
-                                                <label for="credits_number">{% trans "Number of credits" %}:</label>
-                                                <input id="credits_number" type="number" value="1" style="width: 25%; float: right"/>
+                                                {{ offer.paypal_form.as_p }}
                                                 <div style="padding-bottom: 1rem"></div>
                                                 <div class="pricing_footer">
-                                                    <button type="submit" class="btn btn-success btn-block">{% trans "Buy now" %}</button>
+                                                    <button type="submit" class="btn btn-success btn-block">
+                                                        <i class="fa fa-paypal"></i> {% trans "Buy now" %}
+                                                    </button>
                                                 </div>
                                             </form>
                                         </div>
