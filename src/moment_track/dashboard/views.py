@@ -13,14 +13,14 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.db import transaction
-from django.db.models import Sum, F, ExpressionWrapper, DurationField
+from django.db.models import Sum, F
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from dashboard.forms import CompanySignupForm, PrivateSignupForm, EmployeeSignupForm, UserForm, CompanyForm, \
-    CompanyUserForm
+    CompanyUserForm, PayPalCreditsPacketPurchaseForm
 from dashboard.models import EmployeeUser, CreditsPacketPurchase, CreditsPacketOffer
 from dashboard.utils import get_actual_user, company_user_only, employee_user_only, private_user_only
 
@@ -303,18 +303,32 @@ def private_user_credits(request):
     offers = CreditsPacketOffer.objects.exclude(
         date_end__lt=today
     ).values(
+        'id',
         'date_end',
         'minutes_per_credit',
         'cost_per_credit'
     )
 
-    # Change offer expiration date into days left before expiration
     for offer in offers:
+        # Change offer expiration date into days left before expiration
         if offer['date_end']:
             offer['days_left'] = (offer['date_end'] - today).days
         else:
             offer['days_left'] = None
         del offer['date_end']
+
+        # Paypal dictionary for receiving payments
+        offer['paypal_form'] = PayPalCreditsPacketPurchaseForm(initial={
+            'amount': offer['cost_per_credit'],
+            'item_name': 'Moment Track Credit Packet ({mpc} min/credit, {cpc} $/credit)'.format(
+                mpc=offer['minutes_per_credit'],
+                cpc=offer['cost_per_credit'],
+                custom={
+                    'buyer_email': request.user.email,
+                    'offer_id': offer['id']
+                }
+            ),
+        })
 
     context = {
         'total_available_credits': total_available_credits,
