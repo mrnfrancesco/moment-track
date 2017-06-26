@@ -16,7 +16,8 @@ from django.db import transaction
 from django.db.models import Sum, F
 from django.forms import model_to_dict
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from dashboard.forms import CompanySignupForm, PrivateSignupForm, EmployeeSignupForm, UserForm, CompanyForm, \
@@ -338,3 +339,27 @@ def private_user_credits(request):
     }
 
     return render(request, 'dashboard/user/private/credits.html', context)
+
+
+@verified_email_required
+@private_user_only
+def private_user_payment_cancelled(request):
+    account_adapter = get_adapter(request)
+    account_adapter.add_message(
+        request,
+        messages.ERROR,
+        'dashboard/messages/payment_cancelled.txt'
+    )
+    return redirect(reverse('dashboard:private-user-credits'))
+
+
+@verified_email_required
+@private_user_only
+def private_user_payment_completed(request):
+    account_adapter = get_adapter(request)
+    account_adapter.add_message(
+        request,
+        messages.SUCCESS,
+        'dashboard/messages/payment_completed.txt'
+    )
+    return redirect(reverse('dashboard:private-user-credits'))

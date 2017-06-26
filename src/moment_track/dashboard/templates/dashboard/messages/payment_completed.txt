@@ -1,0 +1,4 @@
+{% load i18n %}
+{% blocktrans %}Your payment has been completed.
+You should receive your credits in a moment.
+{% endblocktrans %}
