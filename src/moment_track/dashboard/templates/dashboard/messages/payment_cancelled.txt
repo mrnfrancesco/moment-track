@@ -1,0 +1,4 @@
+{% load i18n %}
+{% blocktrans %}Your payment has been cancelled.
+No credits will be added to your account.
+{% endblocktrans %}

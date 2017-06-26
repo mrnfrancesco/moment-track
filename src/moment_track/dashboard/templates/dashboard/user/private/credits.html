@@ -1,0 +1,134 @@
+{% extends 'dashboard/base.html' %}
+
+{% load i18n %}
+{% load staticfiles %}
+
+{% block top_page_content %}
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="tile-stats">
+                <div class="icon"><i class="fa fa-ticket"></i></div>
+                <div class="count {% ifequal total_available_credits 0 %}red{% endifequal %}">
+                    {{ total_available_credits }}
+                </div>
+                <h3>{% trans "Total Available Credits" %}</h3>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="tile-stats">
+                <div class="icon"><i class="fa fa-clock-o"></i></div>
+                <div class="count {% if total_available_processing_minutes < 60 %}red{% elif total_available_processing_minutes < 150 %}orange{% else %}green{% endif %}">
+                    {{ total_available_processing_minutes }}
+                    <small>min</small>
+                </div>
+                <h3>
+                    {% trans "Total Available Processing Time" %}
+                </h3>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    {% if credits_distribution %}
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_content">
+                        {% for t in credits_distribution %}
+                            <div class="row">
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">
+                                    <p><i class="fa fa-ticket"></i>{{ t.offer__minutes_per_credit }} min/credit</p>
+
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                    <div class="progress">
+                                        {% widthratio t.credits_remaining t.credits_purchased 100 as percentage %}
+                                        {% with percentage=percentage|add:0 %}
+                                            <div class="progress-bar progress-bar-striped progress-bar-{% if percentage < 25 %}danger{% elif percentage < 50 %}warning{% else %}success{% endif %}"
+                                                 data-transitiongoal="{{ percentage }}">
+                                                <span>{{ t.credits_remaining }}/{{ t.credits_purchased }} ({{ percentage }}%)</span>
+                                            </div>
+                                        {% endwith %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">
+                                    <span class="label label-{% if t.days_before_expiration <= 3 %}danger{% elif t.days_before_expiration <= 7 %}warning{% else %}success{% endif %}">
+                                        {% ifequal t.days_before_expiration 0 %}
+                                            {% trans "Last day before expiration" %}
+                                        {% else %}
+                                            {% blocktrans count days_left=t.days_before_expiration %}
+                                                1 day before expiration
+                                            {% plural %}
+                                                {{ days_left }} days before expiration
+                                            {% endblocktrans %}
+                                        {% endifequal %}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>{% trans "Credits Packets Princing Table" %}</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {% for offer in offers %}
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="pricing ui-ribbon-container">
+                                        {% if offer.days_left %}
+                                        <div class="ui-ribbon-wrapper">
+                                            <div class="ui-ribbon">
+                                                {% blocktrans count days=offer.days_left %}
+                                                    last day
+                                                {% plural %}
+                                                    -{{ days }} days
+                                                {% endblocktrans %}
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        <div class="title">
+                                            <h1>{{ offer.minutes_per_credit }} {% trans "min/credit" %}</h1>
+                                            <span>{{ offer.cost_per_credit }} {% trans "$/credit" %}</span>
+                                        </div>
+                                        <div class="x_content">
+                                            <form method="post" action="{{ offer.paypal_form.endpoint }}">
+                                                <div style="padding-top: 1rem"></div>
+                                                {{ offer.paypal_form.as_p }}
+                                                <div style="padding-bottom: 1rem"></div>
+                                                <div class="pricing_footer">
+                                                    <button type="submit" class="btn btn-success btn-block">
+                                                        <i class="fa fa-paypal"></i> {% trans "Buy now" %}
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_vendor_css %}
+<link href="{% static 'dashboard/vendors/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block extra_vendor_script %}
+<script src="{% static 'dashboard/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+{% endblock %}

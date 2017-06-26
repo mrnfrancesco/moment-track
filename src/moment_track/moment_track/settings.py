@@ -25,6 +25,7 @@ SECRET_KEY = 'uf0#4+i!c8a^r4h8voz16be8=)-n8qgn)p^w4(^^fvw4d!6&1v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+PAYPAL_TEST = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.dropbox_oauth2',
+    'paypal.standard.ipn',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -167,6 +169,14 @@ EMAIL_HOST_PASSWORD = ''
 if DEBUG:
     # If in debug mode, just send emails as console messages
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+# PayPal settings
+if PAYPAL_TEST:
+    PAYPAL_BUSINESS_EMAIL_ADDRESS = 'seller@moment-track.it'
+    PAYPAL_BUYER_EMAIL_ADDRESS = 'buyer@moment-track.it'
+else:
+    PAYPAL_BUSINESS_EMAIL_ADDRESS = 'francesco.mrn24@gmail.com'
 
 
 # Password validation
