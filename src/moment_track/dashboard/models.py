@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from datetime import date
+from datetime import date, timedelta
 
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -175,6 +175,12 @@ class CreditsPacketPurchase(models.Model):
         ]
     )
     credits_remaining = models.PositiveSmallIntegerField()
+
+    def __init__(self, *args, **kwargs):
+        super(CreditsPacketPurchase, self).__init__(*args, **kwargs)
+        if not self.expiration_date:
+            self.expiration_date = (self.datetime.date() + timedelta(days=30))
+        self.credits_remaining = self.credits_purchased
 
     def __str__(self):
         return '[{datetime}] {user_name} purchased {purchased} credits ({remaining} remaining)'.format(
