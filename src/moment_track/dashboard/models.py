@@ -3,7 +3,13 @@ from __future__ import unicode_literals
 
 from datetime import date, timedelta
 
+import magic
+import os
+
+import uuid
+from django.conf import global_settings
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.encoding import python_2_unicode_compatible
 
@@ -193,7 +199,6 @@ class CreditsPacketPurchase(models.Model):
 
 @python_2_unicode_compatible
 class AudioFile(models.Model):
-    from django.conf import global_settings
     LANGUAGE_SPOKEN_CHOICES = global_settings.LANGUAGES
 
     ALLOWED_MIME_TYPES = (
@@ -222,6 +227,31 @@ class AudioFile(models.Model):
     description = models.CharField(max_length=500, blank=True)
     language_spoken = models.CharField(max_length=5, choices=LANGUAGE_SPOKEN_CHOICES)
     duration = models.DurationField()
+
+    def clean(self):
+        # Get first 1024 Bytes file chunk
+        chunk = next(chunk for chunk in self.file.chunks(1024))
+        self.file.seek(0)
+        # Retrieve the mime type of the file
+        mime = magic.from_buffer(chunk, mime=True)
+
+        if mime not in AudioFile.ALLOWED_MIME_TYPES:
+            raise ValidationError(
+                'Unsupported file type {actual_type}. Allowed type(s) are: {allowed_types}'.format(
+                    actual_type=mime,
+                    allowed_types=(', '.join(AudioFile.ALLOWED_MIME_TYPES))
+                ),
+                code='invalid'
+            )
+
+        # Give file a unique name
+        self.file.name = str(uuid.uuid4()) + '.flac'
+
+        super(AudioFile, self).clean()
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super(AudioFile, self).save(*args, **kwargs)
 
     def __str__(self):
         return '{name} @ "{path}"'.format(name=self.name, path=self.file.path)
