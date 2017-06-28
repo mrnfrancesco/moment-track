@@ -196,6 +196,11 @@ class AudioFile(models.Model):
     from django.conf import global_settings
     LANGUAGE_SPOKEN_CHOICES = global_settings.LANGUAGES
 
+    ALLOWED_MIME_TYPES = (
+        'audio/flac',
+        'audio/x-flac'
+    )
+
     class Status(object):
         STORING = 1
         PROCESSING = 2
