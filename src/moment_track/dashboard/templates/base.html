@@ -255,11 +255,20 @@
                 <script type="text/javascript">
                     <!--
                     $(function () {
+                        var level = 'info';
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                            level = 'error';
+                        {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                            level = 'warning';
+                        {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                            level = 'success';
+                        {% endif %}
+
                         new PNotify({
                             text: '{{ message | escapejs }}',
                             text_escape: true,
                             icon: false,
-                            type: 'info',
+                            type: level,
                             styling: 'bootstrap3',
                             buttons: {
                                 sticker: false
