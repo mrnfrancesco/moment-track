@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from datetime import date, timedelta
 
 import magic
-import os
 
 import uuid
 from django.conf import global_settings

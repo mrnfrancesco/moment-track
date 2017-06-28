@@ -1,3 +1,4 @@
+import os
 from allauth.account.models import EmailAddress
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from paypal.standard.models import ST_PP_COMPLETED
@@ -41,3 +42,10 @@ def private_user_bought_credits_packet(sender, **kwargs):
                     purchase.save()
                 except ValidationError:
                     return
+
+
+def delete_file_on_model_deletion(sender, instance, **kwargs):
+    """Deletes file from filesystem when corresponding sender model object is deleted."""
+    if instance.file:
+        if os.path.isfile(instance.file.path):
+            os.remove(instance.file.path)
