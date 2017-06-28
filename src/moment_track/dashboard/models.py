@@ -219,7 +219,7 @@ class AudioFile(models.Model):
     file_status = models.PositiveSmallIntegerField(choices=Status.choices())
     is_public = models.BooleanField(default=False)
     name = models.CharField(max_length=256)
-    description = models.CharField(max_length=500)
+    description = models.CharField(max_length=500, blank=True)
     language_spoken = models.CharField(max_length=5, choices=LANGUAGE_SPOKEN_CHOICES)
     duration = models.DurationField()
 
