@@ -3,9 +3,14 @@ from datetime import date
 from django.db.models import F, Sum
 
 from dashboard.models import CreditsPacketPurchase, CreditsPacketOffer
+from dashboard.utils import get_actual_user
 
 
 def get_unexpired_credits(user):
+    # if employee look at the company's contact person credits
+    if user.is_employee:
+        user = get_actual_user(user).company.contact_person.user
+
     return CreditsPacketPurchase.objects.filter(
         customer=user,
         expiration_date__gte=date.today(),
