@@ -15,8 +15,8 @@ class WebsiteConfig(AppConfig):
         from dashboard.models import AudioFile
 
         valid_ipn_received.connect(
-            signals.private_user_bought_credits_packet,
-            dispatch_uid='private-user-bought-credits-packet'
+            signals.user_bought_credits_packet,
+            dispatch_uid='user-bought-credits-packet'
         )
 
         models.signals.post_delete.connect(

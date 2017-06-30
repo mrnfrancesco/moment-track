@@ -7,7 +7,7 @@ from dashboard.models import CreditsPacketOffer, CreditsPacketPurchase
 from moment_track import settings
 
 
-def private_user_bought_credits_packet(sender, **kwargs):
+def user_bought_credits_packet(sender, **kwargs):
     # Get the Instant Payment Notification object
     ipn = sender
 
