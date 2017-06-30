@@ -1,0 +1,4 @@
+{% load i18n %}
+{% blocktrans %}Your file has been correctly uploaded.
+Please, wait for processing to be done.
+{% endblocktrans %}

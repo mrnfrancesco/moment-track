@@ -67,4 +67,10 @@ urlpatterns = [
     url(r'^credits/$', views.private_user_credits, name='private-user-credits'),
     url(r'^credits/payment-cancelled/$', views.private_user_payment_cancelled, name='private-user-payment-cancelled'),
     url(r'^credits/payment-completed/$', views.private_user_payment_completed, name='private-user-payment-completed'),
+
+    # File upload
+    url(r'^upload-file/$', views.upload_file, name='upload-file'),
+    url(r'^upload-file/error/$', views.upload_file_error, name='upload-file-error'),
+    url(r'^upload-file/success/$', views.upload_file_success, name='upload-file-success'),
+    url(r'^upload-file/not-enough-credits/$', views.not_enough_credits, name='not-enough-credits'),
 ]
