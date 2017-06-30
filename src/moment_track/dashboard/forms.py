@@ -224,6 +224,18 @@ class PayPalCreditsPacketPurchaseForm(PayPalPaymentsForm):
             initial=(current_domain + reverse('dashboard:private-user-payment-cancelled'))
         )
 
+        # Subscription options
+        # monthly price
+        self.fields['a3'] = forms.FloatField(widget=ValueHiddenInput(), initial=.0)
+        # duration of each units (depends on unit)
+        self.fields['p3'] = forms.IntegerField(widget=ValueHiddenInput(), initial=12)
+        # duration unit ('M' for Months)
+        self.fields['t3'] = forms.CharField(max_length=1, min_length=1, widget=ValueHiddenInput(), initial='M')
+        # make payment recur
+        self.fields['src'] = forms.IntegerField(widget=ValueHiddenInput(), initial=True)
+        # reattempt payment on error
+        self.fields['sra'] = forms.IntegerField(widget=ValueHiddenInput(), initial=True)
+
     @property
     def endpoint(self):
         return self.get_endpoint()
