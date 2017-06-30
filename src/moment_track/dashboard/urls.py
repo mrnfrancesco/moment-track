@@ -71,4 +71,5 @@ urlpatterns = [
     # File upload
     url(r'^upload-file/error/$', views.upload_file_error, name='upload-file-error'),
     url(r'^upload-file/success/$', views.upload_file_success, name='upload-file-success'),
+    url(r'^upload-file/not-enough-credits/$', views.not_enough_credits, name='not-enough-credits'),
 ]

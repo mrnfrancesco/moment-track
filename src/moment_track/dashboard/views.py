@@ -321,6 +321,17 @@ def upload_file_error(request):
 
 
 @verified_email_required
+def not_enough_credits(request):
+    context = {
+        'total_available_credits': get_total_available_credits(request.user),
+        'total_available_processing_minutes': get_total_available_processing_minutes(request.user),
+        'user': request.user
+    }
+
+    return render(request, 'dashboard/not_enough_credits.html', context)
+
+
+@verified_email_required
 def upload_file_success(request):
     get_adapter(request).add_message(
         request,
