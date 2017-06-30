@@ -262,8 +262,10 @@ def index(request):
 
 
 @verified_email_required
-@private_user_only
-def private_user_credits(request):
+def credits(request):
+    # exclude employees from this view
+    if not (request.user.is_private or request.user.is_company):
+        redirect(reverse('dashboard:forbidden'))
 
     offers = get_unexpired_offers()
 
@@ -288,31 +290,33 @@ def private_user_credits(request):
         'offers': offers
     }
 
-    return render(request, 'dashboard/user/private/credits.html', context)
+    return render(
+        request,
+        'dashboard/user/{user_type}/credits.html'.format(
+            user_type='private' if request.user.is_private else 'company'
+        ),
+        context
+    )
 
 
 @verified_email_required
-@private_user_only
-def private_user_payment_cancelled(request):
-    account_adapter = get_adapter(request)
-    account_adapter.add_message(
+def payment_cancelled(request):
+    get_adapter(request).add_message(
         request,
-        messages.ERROR,
+        messages.WARNING,
         'dashboard/messages/payment_cancelled.txt'
     )
-    return redirect(reverse('dashboard:private-user-credits'))
+    return redirect(reverse('dashboard:credits'))
 
 
 @verified_email_required
-@private_user_only
-def private_user_payment_completed(request):
-    account_adapter = get_adapter(request)
-    account_adapter.add_message(
+def payment_completed(request):
+    get_adapter(request).add_message(
         request,
         messages.SUCCESS,
         'dashboard/messages/payment_completed.txt'
     )
-    return redirect(reverse('dashboard:private-user-credits'))
+    return redirect(reverse('dashboard:credits'))
 
 
 @verified_email_required

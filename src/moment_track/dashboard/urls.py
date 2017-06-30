@@ -63,10 +63,12 @@ urlpatterns = [
         name='invert-employee-account-active-status'
     ),
 
-    # credits management
-    url(r'^credits/$', views.private_user_credits, name='private-user-credits'),
-    url(r'^credits/payment-cancelled/$', views.private_user_payment_cancelled, name='private-user-payment-cancelled'),
-    url(r'^credits/payment-completed/$', views.private_user_payment_completed, name='private-user-payment-completed'),
+    # payment management
+    url(r'^payment-cancelled/$', views.payment_cancelled, name='payment-cancelled'),
+    url(r'^payment-completed/$', views.payment_completed, name='payment-completed'),
+
+    # private and company user credits management
+    url(r'^credits/$', views.credits, name='credits'),
 
     # File upload
     url(r'^upload-file/$', views.upload_file, name='upload-file'),

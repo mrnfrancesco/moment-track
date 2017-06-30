@@ -217,11 +217,11 @@ class PayPalCreditsPacketPurchaseForm(PayPalPaymentsForm):
         )
         self.fields['return_url'] = forms.URLField(
             widget=ValueHiddenInput(),
-            initial=(current_domain + reverse('dashboard:private-user-payment-completed'))
+            initial=(current_domain + reverse('dashboard:payment-completed'))
         )
         self.fields['cancel_return'] = forms.URLField(
             widget=ValueHiddenInput(),
-            initial=(current_domain + reverse('dashboard:private-user-payment-cancelled'))
+            initial=(current_domain + reverse('dashboard:payment-cancelled'))
         )
 
         # Subscription options
