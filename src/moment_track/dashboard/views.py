@@ -312,3 +312,9 @@ def private_user_payment_completed(request):
         'dashboard/messages/payment_completed.txt'
     )
     return redirect(reverse('dashboard:private-user-credits'))
+
+
+@verified_email_required
+def upload_file_error(request):
+    errors = request.session.pop('errors', [_("Unknown error")])
+    return render(request, 'dashboard/upload_file_error.html', {'errors': errors})
