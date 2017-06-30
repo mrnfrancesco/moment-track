@@ -1,0 +1,4 @@
+{% load i18n %}
+{% blocktrans %}You have no credits available.
+Buy some before uploading a new file.
+{% endblocktrans %}

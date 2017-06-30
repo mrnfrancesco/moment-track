@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from datetime import date
-
 from allauth.account.decorators import verified_email_required
 from allauth.account.views import SignupView
 from allauth.account.models import EmailAddress
@@ -12,15 +10,18 @@ from django.contrib import messages
 
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from dashboard.forms import CompanySignupForm, PrivateSignupForm, EmployeeSignupForm, UserForm, CompanyForm, \
     CompanyUserForm, PayPalCreditsPacketPurchaseForm, UploadAudioFileForm
+from dashboard.models import EmployeeUser, AudioFile
 from dashboard.shortcuts import *
 from dashboard.utils import get_actual_user, company_user_only, employee_user_only, private_user_only
 
@@ -339,3 +340,61 @@ def upload_file_success(request):
         'dashboard/messages/upload_file_succeed.txt'
     )
     return redirect(reverse('dashboard:index'))
+
+
+@verified_email_required
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadAudioFileForm(request.POST)
+
+        if form.is_valid():
+            file = request.FILES['file']
+
+            # TODO: check audio duration and compare with user's available processing minutes
+
+            audio = AudioFile(
+                uploader=request.user,
+                file=file,
+                file_status=AudioFile.Status.STORING,
+                is_public=form.cleaned_data.get('is_public'),
+                name=form.cleaned_data.get('name'),
+                description=form.cleaned_data.get('description'),
+                language_spoken=form.cleaned_data.get('language_spoken'),
+                duration=form.cleaned_data.get('duration')  # FIXME: field vulnerable to data tampering
+            )
+            try:
+                audio.save()
+            except ValidationError as error:
+                request.session['errors'] = error.messages
+                return JsonResponse({'success': False, 'errors': error.messages})
+            return JsonResponse({'success': True, 'errors': []})
+        else:
+            request.session['errors'] = form.errors
+            return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        # If no credits left, just switch to credits page
+        credits_left = get_total_available_credits(request.user)
+        if not credits_left:
+            if request.user.is_employee:
+                return redirect(reverse('dashboard:not-enough-credits'))
+            else:
+                get_adapter(request).add_message(
+                    request,
+                    messages.ERROR,
+                    'dashboard/messages/no_credits_available.txt'
+                )
+                return redirect(
+                    reverse(
+                        'dashboard:{user_type}-user-credits'.format(
+                            user_type='private' if request.user.is_private else 'company'
+                        )
+                    )
+                )
+        else:
+            context = {
+                'total_available_credits': get_total_available_credits(request.user),
+                'total_available_processing_minutes': get_total_available_processing_minutes(request.user),
+                'form': UploadAudioFileForm(),
+                'user': request.user
+            }
+            return render(request, 'dashboard/upload_file.html', context)
