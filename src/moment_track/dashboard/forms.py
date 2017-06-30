@@ -5,7 +5,6 @@ from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
-from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.forms import NumberInput
 from django.urls import reverse
@@ -15,7 +14,7 @@ from paypal.standard.widgets import ValueHiddenInput
 from vatno_validator.validators import VATNoValidator
 from phonenumber_field.formfields import PhoneNumberField
 
-from dashboard.models import CompanyUser, PrivateUser, Company, EmployeeUser
+from dashboard.models import CompanyUser, PrivateUser, Company, EmployeeUser, AudioFile
 from moment_track import settings
 
 
@@ -228,3 +227,18 @@ class PayPalCreditsPacketPurchaseForm(PayPalPaymentsForm):
     @property
     def endpoint(self):
         return self.get_endpoint()
+
+
+class UploadAudioFileForm(forms.Form):
+    language_spoken = forms.CharField(
+        widget=forms.Select(choices=AudioFile.LANGUAGE_SPOKEN_CHOICES),
+        initial='it'
+    )
+    name = forms.CharField(max_length=256)
+    description = forms.CharField(
+        required=False,
+        max_length=500,
+        widget=forms.Textarea(attrs={'maxlength': 500})
+    )
+    is_public = forms.BooleanField(initial=False)
+    duration = forms.DurationField(widget=forms.HiddenInput())
