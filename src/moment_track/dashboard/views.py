@@ -318,3 +318,13 @@ def private_user_payment_completed(request):
 def upload_file_error(request):
     errors = request.session.pop('errors', [_("Unknown error")])
     return render(request, 'dashboard/upload_file_error.html', {'errors': errors})
+
+
+@verified_email_required
+def upload_file_success(request):
+    get_adapter(request).add_message(
+        request,
+        messages.SUCCESS,
+        'dashboard/messages/upload_file_succeed.txt'
+    )
+    return redirect(reverse('dashboard:index'))
