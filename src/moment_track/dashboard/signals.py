@@ -9,6 +9,7 @@ from moment_track import settings
 
 
 def user_bought_credits_packet(sender, **kwargs):
+    """Update user credits on payment received"""
     # Get the Instant Payment Notification object
     ipn = sender
 
