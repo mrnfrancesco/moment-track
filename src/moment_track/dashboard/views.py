@@ -321,7 +321,7 @@ def payment_completed(request):
 
 @verified_email_required
 def upload_file_error(request):
-    errors = request.session.pop('errors', [_("Unknown error")])
+    errors = request.session.pop('errors', {_("Unknown field"): [_("Unknown error")]})
     return render(request, 'dashboard/upload_file_error.html', {'errors': errors})
 
 
@@ -369,7 +369,7 @@ def upload_file(request):
             try:
                 audio.save()
             except ValidationError as error:
-                request.session['errors'] = error.messages
+                request.session['errors'] = error.message_dict
                 return JsonResponse({'success': False, 'errors': error.messages})
             return JsonResponse({'success': True, 'errors': []})
         else:

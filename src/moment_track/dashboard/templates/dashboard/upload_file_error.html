@@ -20,13 +20,15 @@
                 </div>
                 <div class="x_content">
                     <ul class="to_do">
-                        {% for error in errors %}
-                            <li>
-                                <p>
-                                    <i style="position: relative;" class="fa fa-times red"></i>
-                                    {{ error }}
-                                </p>
-                            </li>
+                        {% for field, field_errors in errors.items %}
+                            {% for error in field_errors %}
+                                <li>
+                                    <p>
+                                        <i style="position: relative;" class="fa fa-times red"></i>
+                                        <strong>{{ field }}</strong>: {{ error }}
+                                    </p>
+                                </li>
+                            {% endfor %}
                         {% endfor %}
                     </ul>
                 </div>
