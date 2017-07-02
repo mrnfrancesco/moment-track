@@ -256,37 +256,9 @@ class AudioFile(models.Model):
         return '{name} @ "{path}"'.format(name=self.name, path=self.file.path)
 
 
-@python_2_unicode_compatible
-class CreditsUsage(models.Model):
-    MIN_CREDITS_USED = 1
 
-    file = models.OneToOneField(
-        AudioFile,
-        on_delete=models.CASCADE,
-        related_name='credits_usage'
-    )
-    credits_packet_purchase = models.OneToOneField(
-        CreditsPacketPurchase,
-        on_delete=models.CASCADE,
-        related_name='credits_usage'
-    )
-    credits_used = models.PositiveSmallIntegerField(
-        validators=[
-            MinValueValidator(
-                MIN_CREDITS_USED,
-                _("You cannot use less than %d credit(s)" % MIN_CREDITS_USED)
-            )
-        ]
-    )
-    datetime = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '[{datetime}] {user_name} used {used} credit(s) for file "{file_name}"'.format(
-            datetime=self.datetime,
-            user_name=user_displayable_name(self.file.uploader),
-            used=self.credits_used,
-            file_name=self.file.name
-        )
 
 
 @python_2_unicode_compatible
