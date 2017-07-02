@@ -1,5 +1,7 @@
 from datetime import date
 
+import math
+from django.db import transaction
 from django.db.models import F, Sum
 
 from dashboard.models import CreditsPacketPurchase, CreditsPacketOffer
@@ -70,3 +72,29 @@ def get_unexpired_offers():
         del offer['date_end']
 
     return offers
+
+
+def calculate_credits_usage(audio):
+    duration = math.ceil(audio.duration.total_seconds() / 60.0)
+
+    with transaction.atomic():
+        while duration > 0:
+            unexpired_credits = get_unexpired_credits(audio.uploader)\
+                .select_related('offer')\
+                .order_by('offer__minutes_per_credit')
+
+            # take the biggest credit with minutes-per-credit <= duration
+            result = unexpired_credits.filter(offer__minutes_per_credit__lte=duration).last()
+            if result is not None:
+                result.credits_remaining -= 1
+                result.save()
+                duration -= result.offer.minutes_per_credit
+            else:
+                # take the smallest credit with minute-per-credit > duration
+                result = unexpired_credits.filter(offer__minutes_per_credit__gt=duration).first()
+                if result is not None:
+                    result.credits_remaining -= 1
+                    result.save()
+                    duration -= result.offer.minutes_per_credit
+                else:
+                    raise ValueError('Not enough credits left')
