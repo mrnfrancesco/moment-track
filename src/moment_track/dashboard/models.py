@@ -196,6 +196,14 @@ class CreditsPacketPurchase(models.Model):
         )
 
 
+def _get_relative_file_path(instance, filename):
+    # Give file a unique name
+    return '{date}/{filename}.flac'.format(
+        date=date.today().strftime('%Y/%m/%d'),
+        filename=str(uuid.uuid4())
+    )
+
+
 @python_2_unicode_compatible
 class AudioFile(models.Model):
     LANGUAGE_SPOKEN_CHOICES = global_settings.LANGUAGES
@@ -205,32 +213,17 @@ class AudioFile(models.Model):
         'audio/x-flac'
     )
 
-    class Status(object):
-        STORING = 1
-        PROCESSING = 2
-        DONE = 3
-
-        @classmethod
-        def choices(cls):
-            return (
-                (cls.STORING, _("Storing")),
-                (cls.PROCESSING, _("Processing")),
-                (cls.DONE, _("Done")),
-            )
-
     uploader = models.ForeignKey(User, on_delete=models.CASCADE, related_name='files')
-    file = models.FileField(upload_to='uploads/%Y/%m/%d/')
-    file_status = models.PositiveSmallIntegerField(choices=Status.choices())
+    file = models.FileField(upload_to=_get_relative_file_path)
     is_public = models.BooleanField(default=False)
     name = models.CharField(max_length=256)
     description = models.CharField(max_length=500, blank=True)
     language_spoken = models.CharField(max_length=5, choices=LANGUAGE_SPOKEN_CHOICES)
     duration = models.DurationField()
 
-    def clean(self):
+    def clean_file(self):
         # Get first 1024 Bytes file chunk
         chunk = next(chunk for chunk in self.file.chunks(1024))
-        self.file.seek(0)
         # Retrieve the mime type of the file
         mime = magic.from_buffer(chunk, mime=True)
 
@@ -243,22 +236,12 @@ class AudioFile(models.Model):
                 code='invalid'
             )
 
-        # Give file a unique name
-        self.file.name = str(uuid.uuid4()) + '.flac'
-
-        super(AudioFile, self).clean()
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super(AudioFile, self).save(*args, **kwargs)
-
-    def __str__(self):
-        return '{name} @ "{path}"'.format(name=self.name, path=self.file.path)
 
 
 
 
     def __str__(self):
+        return '{name} @ "{path}"'.format(name=self.name, path=self.file.name)
 
 
 @python_2_unicode_compatible
