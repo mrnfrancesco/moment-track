@@ -11,7 +11,6 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
-from django.db import transaction
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
