@@ -264,14 +264,17 @@ class AudioFile(models.Model):
 @python_2_unicode_compatible
 class Transcription(models.Model):
     file = models.ForeignKey(AudioFile, on_delete=models.CASCADE, related_name='transcriptions')
-    time_start = models.TimeField()
-    duration = models.DurationField()
+    offset = models.DurationField()
     confidence = models.FloatField()
     text = models.TextField(blank=True)
 
     def __str__(self):
-        return 'Transcription for "{file_name}" starting at {time_start} ({duration} sec)'.format(
-            file_name=file.name,
-            time_start=self.time_start,
-            duration=self.duration
+        audio = self.file
+
+        hours, remainder = divmod(self.offset.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+
+        return 'Transcription for "{file_name}" starting at {hh}:{mm}:{ss}'.format(
+            file_name=audio.file.name,
+            hh=hours, mm=minutes, ss=seconds
         )
