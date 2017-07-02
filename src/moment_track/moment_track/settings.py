@@ -29,11 +29,22 @@ PAYPAL_TEST = True
 
 ALLOWED_HOSTS = ['*']
 
+# Celery settings
+if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
+    CELERY_BROKER_URL = 'amqp://<username>:<password>@<host>:<port>//'
+else:
+    CELERY_BROKER_URL = 'amqp://guest:guest@127.0.0.1:5672//'
+
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_RESULT_BACKEND = 'django-db'
+
 
 # Application definition
 
 INSTALLED_APPS = [
     'sslserver',
+    'django_celery_results',
     'dashboard.apps.WebsiteConfig',
     'django.contrib.auth',
     'django.contrib.sites',

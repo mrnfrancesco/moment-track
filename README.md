@@ -8,6 +8,8 @@ when such text has been pronounced.
 - Python 2.7
 - Django 1.11
 - MySQL-compliant DBMS (MySQL, MariaDB, …)
+- RabbitMQ 3.6.10
+
 
 ## Getting Started
 
@@ -142,9 +144,10 @@ $ (venv) python2 manage.py collectstatic
 
 ### Run Django on local webserver
 
-Start a local webserver from Django project folder:
+Start a local webserver and Celery worker from Django project folder:
 
 ```bash
+$ celery multi start w1 -A moment_track -l error --pidfile=/var/run/celery/%n.pid --logfile=/var/log/celery/%n%I.log
 $ (venv) python2 manage.py runsslserver 127.0.0.1 9000
 ```
 
