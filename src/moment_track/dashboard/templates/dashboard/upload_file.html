@@ -372,13 +372,13 @@
                     onFileConvertionDone(filename, outputFile.data);
                 };
 
-                {# Generate output file name removing extension if it exists #}
-                var outputFilename = filename.substr(0, filename.lastIndexOf('.')) + '.flac';
+                var ext = filename.substr(filename.lastIndexOf('.'), filename.length);
+                var inputFilename = 'input' + ext;
 
                 {# Run the ffmpeg's worker to start converting file #}
                 VideoConverterJsApp.run(
-                    '-i ' + filename + ' -acodec flac ' + outputFilename,
-                    VideoConverterJsApp.File(filename, fileData)
+                    '-i ' + inputFilename + ' -acodec flac output.flac',
+                    VideoConverterJsApp.File(inputFilename, fileData)
                 );
             }
 
@@ -500,7 +500,7 @@
                     var fileData = new Uint8Array(event.target.result);
 
                     onFileLoadingDone(file.name, fileData);
-                }
+                };
 
                 {# When user choose a file read it as an array buffer #}
                 reader.readAsArrayBuffer(file);
