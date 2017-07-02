@@ -359,7 +359,6 @@ def upload_file(request):
             audio = AudioFile(
                 uploader=request.user,
                 file=file,
-                file_status=AudioFile.Status.STORING,
                 is_public=form.cleaned_data.get('is_public'),
                 name=form.cleaned_data.get('name'),
                 description=form.cleaned_data.get('description'),
@@ -367,6 +366,7 @@ def upload_file(request):
                 duration=form.cleaned_data.get('duration')  # FIXME: field vulnerable to data tampering
             )
             try:
+                audio.full_clean()
                 audio.save()
             except ValidationError as error:
                 request.session['errors'] = error.message_dict
