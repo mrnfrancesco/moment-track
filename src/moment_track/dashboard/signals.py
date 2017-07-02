@@ -3,6 +3,7 @@ from allauth.account.models import EmailAddress
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from paypal.standard.models import ST_PP_COMPLETED
 
+from dashboard.tasks import process_audio_file
 from dashboard.models import CreditsPacketOffer, CreditsPacketPurchase
 from moment_track import settings
 
@@ -49,3 +50,12 @@ def delete_file_on_model_deletion(sender, instance, **kwargs):
     if instance.file:
         if os.path.isfile(instance.file.path):
             os.remove(instance.file.path)
+
+
+def on_file_upload(sender, instance, created, **kwargs):
+    """Run processing on file upload"""
+
+    # Run the processing just on file creation, avoiding to repeat the
+    # processing procedure on every model update
+    if created:
+        process_audio_file(instance.id)

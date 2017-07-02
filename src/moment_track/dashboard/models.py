@@ -4,8 +4,9 @@ from __future__ import unicode_literals
 from datetime import date, timedelta
 
 import magic
-
 import uuid
+import math
+
 from django.conf import global_settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -18,6 +19,7 @@ from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 from vatno_validator.validators import VATNoValidator
 
+from moment_track import settings
 from dashboard.accounts import user_displayable_name
 
 
@@ -236,9 +238,21 @@ class AudioFile(models.Model):
                 code='invalid'
             )
 
+    @property
+    def total_fragments(self):
+        return int(
+            math.ceil(
+                self.duration.total_seconds() / settings.MOMENTTRACK_AUDIO_FRAGMENT_DURATION.total_seconds()
+            )
+        )
 
+    @property
+    def available_fragments(self):
+        return self.transcriptions.values_list('offset').distinct().count()
 
-
+    @property
+    def transcription_coverage(self):
+        return float(self.available_fragments) / float(self.total_fragments)
 
     def __str__(self):
         return '{name} @ "{path}"'.format(name=self.name, path=self.file.name)

@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+
+from datetime import timedelta
 from django.utils.translation import ugettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -38,6 +40,14 @@ else:
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_RESULT_BACKEND = 'django-db'
+
+
+# Project specific settings
+MOMENTTRACK_AUDIO_FRAGMENT_DURATION = timedelta(seconds=10)
+MOMENTTRACK_MIN_TRANSCRIPTION_CONFIDENCE = .65
+
+GOOGLE_SPEECH_RECOGNITION_API_KEY = "AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw"
+GOOGLE_CLOUD_SPEECH_CREDENTIALS = None  # INSERT GOOGLE CLOUD SPEECH JSON CREDENTIALS FILE CONTENT HERE
 
 
 # Application definition

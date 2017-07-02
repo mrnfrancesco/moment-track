@@ -24,3 +24,9 @@ class WebsiteConfig(AppConfig):
             sender=AudioFile,
             dispatch_uid='delete-file-on-audiofile-model-deletion'
         )
+
+        models.signals.post_save.connect(
+            signals.on_file_upload,
+            sender=AudioFile,
+            dispatch_uid='on-file-upload'
+        )
