@@ -246,6 +246,7 @@
                 $('#form-submit-button').click(function () {
                     var form = new FormData();
                     form.append('file', new File([data], filename));
+                    data = null;
                     var inputs = $('#upload-form [name][name!=csrfmiddlewaretoken]');
                     for (var i = 0; i < inputs.length; ++i) {
                         var $input = $(inputs[i]);
@@ -370,6 +371,7 @@
                     {# Convertion done #}
                     var outputFile = event.results[0];
                     onFileConvertionDone(filename, outputFile.data);
+                    delete outputFile.data;
                 };
 
                 var ext = filename.substr(filename.lastIndexOf('.'), filename.length);
@@ -380,6 +382,7 @@
                     '-i ' + inputFilename + ' -acodec flac output.flac',
                     VideoConverterJsApp.File(inputFilename, fileData)
                 );
+                delete fileData;
             }
 
             {# videoconverter onReady callback for showing first step form #}
@@ -500,6 +503,7 @@
                     var fileData = new Uint8Array(event.target.result);
 
                     onFileLoadingDone(file.name, fileData);
+                    delete fileData;
                 };
 
                 {# When user choose a file read it as an array buffer #}
