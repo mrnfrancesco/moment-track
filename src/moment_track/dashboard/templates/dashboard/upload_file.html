@@ -75,7 +75,7 @@
                         </div>
                     </div>
 
-                {% if not user.is_private %}
+                {% if user.is_private %}
                     <div class="row" id="step-file-downloading" style="display: none">
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-center">
                             <p id="file-downloading-text"><i class="fa fa-spin fa-spinner"></i> {% trans "Downloading file..." %}</p>
