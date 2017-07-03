@@ -252,5 +252,5 @@ class UploadAudioFileForm(forms.Form):
         max_length=500,
         widget=forms.Textarea(attrs={'maxlength': 500})
     )
-    is_public = forms.BooleanField(initial=False)
+    is_public = forms.BooleanField(required=False, initial=False)
     duration = forms.DurationField(widget=forms.HiddenInput())

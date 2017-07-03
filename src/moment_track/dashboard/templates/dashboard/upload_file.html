@@ -250,7 +250,11 @@
                     var inputs = $('#upload-form [name][name!=csrfmiddlewaretoken]');
                     for (var i = 0; i < inputs.length; ++i) {
                         var $input = $(inputs[i]);
-                        form.append($input.attr('name'), $input.val());
+                        if ($input.is(':checkbox')) {
+                            form.append($input.attr('name'), $input.prop('checked'));
+                        } else {
+                            form.append($input.attr('name'), $input.val());
+                        }
                     }
 
                     $.ajax({
