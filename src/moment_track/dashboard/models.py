@@ -216,6 +216,7 @@ class AudioFile(models.Model):
     )
 
     uploader = models.ForeignKey(User, on_delete=models.CASCADE, related_name='files')
+    upload_datetime = models.DateTimeField(auto_now_add=True)
     file = models.FileField(upload_to=_get_relative_file_path)
     is_public = models.BooleanField(default=False)
     name = models.CharField(max_length=256)
