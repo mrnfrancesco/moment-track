@@ -274,5 +274,5 @@ class Transcription(models.Model):
 
         return 'Transcription for "{file_name}" starting at {hh}:{mm}:{ss}'.format(
             file_name=audio.file.name,
-            hh=hours, mm=minutes, ss=seconds
+            hh=str(hours).zfill(2), mm=str(minutes).zfill(2), ss=str(seconds).zfill(2)
         )
