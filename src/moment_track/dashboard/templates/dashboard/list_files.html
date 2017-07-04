@@ -1,0 +1,127 @@
+{% extends 'dashboard/base.html' %}
+
+{% load i18n %}
+{% load flags %}
+{% load account %}
+{% load staticfiles %}
+{% load timedelta_filter %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="x_panel">
+                <div class="x_title text-center">
+                    <h1>{{ title }}</h1>
+                    <span>
+                    {% blocktrans %}
+                        Choose one and start searching using the <i class="fa fa-search"></i> icon
+                    {% endblocktrans %}
+                    </span>
+                </div>
+                <div class="x_content">
+                    <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap"
+                           cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th>{% trans "Name" %}</th>
+                                <th>{% trans "Description" %}</th>
+                                <th data-toogle="tooltip" data-placement="top" title="{% trans "File percentage available for search" %}">
+                                    {% trans "Coverage" %}<sup>*</sup>
+                                </th>
+                                <th>{% trans "Uploaded on" context "somewhat uploaded on date" %}</th>
+                                <th>{% trans "Duration" %}</th>
+                                <th>{% trans "Language" %}</th>
+                                <th>{% trans "Public" %}</th>
+                                <th>{% trans "Uploader" %}</th>
+                                <th>{% trans "Operations" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for audio in files %}
+                            {% user_display audio.uploader as uploader %}
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button class="btn btn-info" type="button" data-toggle="tooltip" data-placement="top" title="{% trans "Search" %}">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </td>
+                                <td><strong>{{ audio.name }}</strong></td>
+                                <td>{{ audio.description }}</td>
+                                <td>
+                                {% with coverage=audio.transcription_coverage %}
+                                    <span class="badge bg-{% if coverage < .5 %}red{% elif coverage < .75 %}orange{% else %}green{% endif %}">
+                                        {% widthratio coverage 1 100 %}%
+                                    </span>
+                                {% endwith %}
+                                </td>
+                                <td>{{ audio.upload_datetime|date:"SHORT_DATE_FORMAT" }} {{ audio.upload_datetime|time }}</td>
+                                <td>{{ audio.duration|timedelta:"{hours2}:{minutes2}:{seconds2}" }}</td>
+                                <td class="text-center">{{ audio.language_spoken|flag }}</td>
+                                <td>
+                                {% if audio.is_public %}
+                                    <span class="badge bg-green"><i class="fa fa-check"></i></span>
+                                {% else %}
+                                    <span class="badge bg-red"><i class="fa fa-times bg-red"></i></span>
+                                {% endif %}
+                                </td>
+                                <td>
+                                    <span data-toggle="tooltip" data-placement="top" title="{{ audio.uploader.email }}">
+                                        {{ uploader }}
+                                        <a class="btn btn-default btn-xs" href="{% url 'dashboard:list-files' %}?uploader={{ audio.uploader.id }}">
+                                            {% trans "List files" %} &blacktriangleright;
+                                        </a>
+                                    </span>
+                                </td>
+                                <td>
+                                {% if audio.uploader.id == user.id %}
+                                    <a class="btn btn-warning" href="{% url 'dashboard:edit-file' %}?file={{ audio.id }}">
+                                        <i class="fa fa-edit"></i> {% trans "Edit" %}
+                                    </a>
+                                {% else %}
+                                    <span class="btn btn-default btn-xs">
+                                        {% trans "No operation permitted on this file" %}
+                                    </span>
+                                {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_vendor_css %}
+    <link href="{% static 'dashboard/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}"
+          rel="stylesheet">
+{% endblock %}
+
+{% block extra_vendor_script %}
+    <script src="{% static 'dashboard/vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'dashboard/vendors/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'dashboard/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+{% endblock %}
+
+{% block extra_body %}
+    {# TODO: remove it if unused #}
+    {% include 'dashboard/snippet/ajax_csrf.html' %}
+
+    <script type="text/javascript">
+        $('#datatable-responsive').DataTable();
+
+        function do_something_with_ajax(param) {
+            $.post(
+                "some-url" + param,
+                {csrftoken: csrftoken}
+            ).success(function (response) {
+                // TODO: do something
+            });
+        }
+    </script>
+{% endblock %}
