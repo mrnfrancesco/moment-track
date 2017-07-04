@@ -13,14 +13,15 @@
                 </div>
                 <div class="x_content">
                     <form method="post" action="{% url 'dashboard:edit-file' %}?file={{ audio.id }}">
-                        {% if user.is_company %}
                         <p>
-                            {% user_display audio.uploader as uploader_name %}
-                            <label for="id_uploader_displayable_name">{% trans "Uploader" %}:</label>
-                            <input id="id_uploader_displayable_name" disabled="" type="text" value="{{ uploader_name }}" />
-                        </p>
-                        {% endif %}
-                        <p>
+                            {% if user.is_company %}
+                                {% user_display audio.uploader as uploader_name %}
+                                <label>{% trans "Uploader" %}:</label>
+                                <span data-toggle="tooltip" data-placement="top" title="{{ audio.uploader.email }}">
+                                    {{ uploader_name }}
+                                </span>
+                                <br/>
+                            {% endif %}
                             <label for="id_upload_datetime">{% trans "Uploaded" %}:</label>
                             {{ audio.upload_datetime|date:"SHORT_DATE_FORMAT" }} {{ audio.upload_datetime|time }}
                             <br/>
