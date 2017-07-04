@@ -42,7 +42,7 @@
                                 <td>{{ employee.date_joined }}</td>
                                 <td>{{ employee.last_login }}</td>
                                 <td class="btn-group btn-group-xs">
-                                    <a class="btn btn-info" href="#{{ employee.id }}">
+                                    <a class="btn btn-info" href="{% url 'dashboard:list-files' %}?uploader={{ employee.id }}">
                                         {% trans "View files" %}
                                     </a>
                                     <button class="btn btn-danger" type="button"
