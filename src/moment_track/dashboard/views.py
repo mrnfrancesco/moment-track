@@ -20,8 +20,8 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 
 from dashboard.accounts import user_displayable_name
 from dashboard.forms import CompanySignupForm, PrivateSignupForm, EmployeeSignupForm, UserForm, CompanyForm, \
-    CompanyUserForm, PayPalCreditsPacketPurchaseForm, UploadAudioFileForm
-from dashboard.models import EmployeeUser, AudioFile
+    CompanyUserForm, PayPalCreditsPacketPurchaseForm, UploadAudioFileForm, AudioFileForm
+from dashboard.models import EmployeeUser, AudioFile, User
 from dashboard.shortcuts import *
 from dashboard.utils import get_actual_user, company_user_only, employee_user_only, private_user_only
 
