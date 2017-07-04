@@ -1,0 +1,69 @@
+{% extends 'dashboard/base.html' %}
+{% load i18n %}
+{% load account %}
+{% load flags %}
+{% load timedelta_filter %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-4 col-md-offset-2">
+            <div class="x_panel">
+                <div class="x_title text-center">
+                    <h1>{% trans "Update file details" %}</h1>
+                </div>
+                <div class="x_content">
+                    <form method="post" action="{% url 'dashboard:edit-file' %}?file={{ audio.id }}">
+                        {% if user.is_company %}
+                        <p>
+                            {% user_display audio.uploader as uploader_name %}
+                            <label for="id_uploader_displayable_name">{% trans "Uploader" %}:</label>
+                            <input id="id_uploader_displayable_name" disabled="" type="text" value="{{ uploader_name }}" />
+                        </p>
+                        {% endif %}
+                        <p>
+                            <label for="id_upload_datetime">{% trans "Uploaded" %}:</label>
+                            {{ audio.upload_datetime|date:"SHORT_DATE_FORMAT" }} {{ audio.upload_datetime|time }}
+                            <br/>
+                            <label>{% trans "Duration" %}:</label>
+                            {{ audio.duration|timedelta:"{hours2}:{minutes2}:{seconds2}" }}
+                            <br/>
+                            <label>{% trans "Language" %}:</label>
+                            {{ audio.language_spoken|flag }}
+                        </p>
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                        {% endif %}
+                        <br/>
+                        <button class="btn btn-success" type="submit">{% trans "Update" %}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="x_panel">
+                <div class="x_content text-center">
+                    {% trans "Want to delete file?" %}
+                    <div class="separator"></div>
+                    <form action="{% url 'dashboard:delete-file' %}" method="post">
+                        {% csrf_token %}
+                        <input name="file" type="hidden" value="{{ audio.id }}">
+                        <button type="submit" class="btn btn-danger" style="width: 100%">
+                            {% trans "Delete File" %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_head %}
+<style type="text/css">
+    textarea {
+        width: 100%;
+    }
+</style>
+{% endblock %}
