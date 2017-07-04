@@ -451,7 +451,7 @@ def list_files(request):
                 files = AudioFile.objects.filter(uploader=user)
 
             # user is company and asks for employee's files, show them
-            elif user.is_company and actual_user.company.employees.filter(id=requested_user.id).exists():
+            elif user.is_company and actual_user.company.employees.filter(user__id=requested_user.id).exists():
                 title = _("Employee %s's files" % user_displayable_name(requested_user))
                 files = AudioFile.objects.filter(uploader=requested_user)
 
