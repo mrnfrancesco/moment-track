@@ -462,3 +462,41 @@ def list_files(request):
         'user': user
     }
     return render(request, 'dashboard/list_files.html', context)
+
+
+@verified_email_required
+def edit_file(request):
+    file_id = request.GET.get('file')
+    try:
+        audio = AudioFile.objects.get(id=file_id)
+    except AudioFile.DoesNotExist:
+        audio = None
+
+    # audio file does not exist
+    if audio is None:
+        get_adapter(request).add_message(
+            request,
+            messages.ERROR,
+            'dashboard/messages/file_does_not_exist.txt'
+        )
+        return redirect(reverse('dashboard:list-files'))
+
+    # user is not allowed to edit the specified file
+    if audio.uploader.id != request.user.id:
+        return redirect(reverse('dashboard:forbidden'))
+
+    # user is allowed to see and edit the specified file
+    if request.method == 'POST':
+        form = AudioFileForm(request.POST, instance=audio)
+
+        if form.is_valid():
+            form.save()
+            get_adapter(request).add_message(
+                request,
+                messages.SUCCESS,
+                'dashboard/messages/file_update_succeed.txt'
+            )
+    else:
+        form = AudioFileForm(instance=audio)
+
+    return render(request, 'dashboard/edit_file.html', {'form': form, 'audio': audio, 'user': request.user})
