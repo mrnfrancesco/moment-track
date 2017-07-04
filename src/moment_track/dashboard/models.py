@@ -215,14 +215,14 @@ class AudioFile(models.Model):
         'audio/x-flac'
     )
 
-    uploader = models.ForeignKey(User, on_delete=models.CASCADE, related_name='files')
-    upload_datetime = models.DateTimeField(auto_now_add=True)
-    file = models.FileField(upload_to=_get_relative_file_path)
+    uploader = models.ForeignKey(User, on_delete=models.CASCADE, related_name='files', editable=False)
+    upload_datetime = models.DateTimeField(auto_now_add=True, editable=False)
+    file = models.FileField(upload_to=_get_relative_file_path, editable=False)
     is_public = models.BooleanField(default=False)
     name = models.CharField(max_length=256)
     description = models.CharField(max_length=500, blank=True)
-    language_spoken = models.CharField(max_length=5, choices=LANGUAGE_SPOKEN_CHOICES)
-    duration = models.DurationField()
+    language_spoken = models.CharField(max_length=5, choices=LANGUAGE_SPOKEN_CHOICES, editable=False)
+    duration = models.DurationField(editable=False)
 
     def clean_file(self):
         # Get first 1024 Bytes file chunk
