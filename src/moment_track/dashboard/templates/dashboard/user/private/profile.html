@@ -25,9 +25,17 @@
         <div class="col-md-4">
             <div class="x_panel">
                 <div class="x_content text-center">
-                    {% blocktrans %}
-                        Want to change your e-mail address?
-                    {% endblocktrans %}
+                    {% trans "Want to connect or disconnect your social account?" %}
+                    <div class="separator"></div>
+                    <a href="{% url 'socialaccount_connections' %}" class="btn btn-success" style="width: 100%">
+                        {% trans "Manage social accounts" %}
+                    </a>
+                </div>
+            </div>
+
+            <div class="x_panel">
+                <div class="x_content text-center">
+                    {% trans "Want to change your e-mail address?" %}
                     <div class="separator"></div>
                     <a href="{% url 'account_email' %}" class="btn btn-info" style="width: 100%">
                         {% trans "Manage e-mail(s)" %}
