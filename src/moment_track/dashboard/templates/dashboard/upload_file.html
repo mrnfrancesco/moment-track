@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load staticfiles %}
+{% load socialaccount %}
 
 {% block head_title %}{% trans "New file upload" %}{% endblock %}
 
@@ -75,7 +76,8 @@
                         </div>
                     </div>
 
-                {% if user.is_private %}
+                {% get_social_accounts user as social_accounts %}
+                {% if user.is_private and social_accounts.dropbox_oauth2 %}
                     <div class="row" id="step-file-downloading" style="display: none">
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-center">
                             <p id="file-downloading-text"><i class="fa fa-spin fa-spinner"></i> {% trans "Downloading file..." %}</p>
@@ -208,7 +210,10 @@
 {% endblock %}
 
 {% block extra_vendor_script %}
+    {% get_social_accounts user as social_accounts %}
+    {% if user.is_private and social_accounts.dropbox_oauth2 %}
     <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="zq6xbpqx3zh2i00"></script>
+    {% endif %}
     <script src="{% static 'dashboard/js/slugify.js' %}"></script>
     <script src="{% static 'dashboard/js/human-readable-file-size.js' %}"></script>
     <script src="{% static 'dashboard/js/progress-bar.js' %}"></script>
@@ -406,7 +411,8 @@
             {# Init videoconverter (aka ffmpeg) and related worker #}
             VideoConverterJsApp.init("{% static 'dashboard/js/videoconverter.js/worker.js' %}");
 
-        {% if user.is_private %}
+        {% get_social_accounts user as social_accounts %}
+        {% if user.is_private and social_accounts.dropbox_oauth2 %}
             {# Event handling for Dropbox chooser #}
             $('#dropbox-chooser-container').append(
                 Dropbox.createChooseButton({
