@@ -500,6 +500,7 @@ def edit_file(request):
                 messages.SUCCESS,
                 'dashboard/messages/file_update_succeed.txt'
             )
+            return redirect(reverse('dashboard:list-files'))
     else:
         form = AudioFileForm(instance=audio)
 
