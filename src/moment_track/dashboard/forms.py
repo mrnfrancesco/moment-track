@@ -55,6 +55,8 @@ class CompanySignupForm(SignupForm):
             user = super(CompanySignupForm, self).save(request)
 
             user.user_type = user.COMPANY
+            user.first_name = self.cleaned_data.get('contact_person_first_name')
+            user.last_name = self.cleaned_data.get('contact_person_last_name')
             user.save()
 
             company = Company(
