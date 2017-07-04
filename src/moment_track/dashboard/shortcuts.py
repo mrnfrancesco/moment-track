@@ -86,15 +86,13 @@ def calculate_credits_usage(audio):
             # take the biggest credit with minutes-per-credit <= duration
             result = unexpired_credits.filter(offer__minutes_per_credit__lte=duration).last()
             if result is not None:
-                result.credits_remaining -= 1
-                result.save()
+                CreditsPacketPurchase.objects.filter(pk=result.pk).update(credits_remaining=F('credits_remaining') - 1)
                 duration -= result.offer.minutes_per_credit
             else:
                 # take the smallest credit with minute-per-credit > duration
                 result = unexpired_credits.filter(offer__minutes_per_credit__gt=duration).first()
                 if result is not None:
-                    result.credits_remaining -= 1
-                    result.save()
+                    CreditsPacketPurchase.objects.filter(pk=result.pk).update(credits_remaining=F('credits_remaining') - 1)
                     duration -= result.offer.minutes_per_credit
                 else:
                     raise ValueError('Not enough credits left')
