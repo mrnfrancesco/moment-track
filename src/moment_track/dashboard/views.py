@@ -256,10 +256,6 @@ def employee_company_details(request):
     return render(request, 'dashboard/user/employee/company.html', context)
 
 
-def index(request):
-    return render(request, 'dashboard/index.html')
-
-
 @verified_email_required
 def credits(request):
     # exclude employees from this view

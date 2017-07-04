@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.http import Http404, HttpResponseForbidden
 from django.views.defaults import page_not_found, permission_denied
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 
 from dashboard import views
 
@@ -24,10 +24,12 @@ app_name = 'dashboard'
 urlpatterns = [
     url(r'^forbidden/$', permission_denied, {'exception': HttpResponseForbidden()}, name='forbidden'),
 
-    url(r'^$', views.index, name='index'),
+    # file listing, editing, deleting and content searching
+    url(r'^$', RedirectView.as_view(url='files/list/', permanent=True), name='index'),
     url(r'^files/list/$', views.list_files, name='list-files'),
     url(r'^files/edit/$', views.edit_file, name='edit-file'),
     url(r'^files/delete/$', views.delete_file, name='delete-file'),
+
     url(
         r'^privacy-policy/$',
         TemplateView.as_view(template_name='dashboard/legal-notes/privacy-policy.html'),
