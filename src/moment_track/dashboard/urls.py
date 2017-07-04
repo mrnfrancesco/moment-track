@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^files/list/$', views.list_files, name='list-files'),
     url(r'^files/edit/$', views.edit_file, name='edit-file'),
     url(r'^files/delete/$', views.delete_file, name='delete-file'),
+    url(r'^files/search/$', views.search_in_file, name='search-in-file'),
 
     url(
         r'^privacy-policy/$',

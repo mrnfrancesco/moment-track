@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from collections import OrderedDict
+
 from allauth.account.decorators import verified_email_required
 from allauth.account.views import SignupView
 from allauth.account.models import EmailAddress
@@ -24,6 +26,7 @@ from dashboard.forms import CompanySignupForm, PrivateSignupForm, EmployeeSignup
 from dashboard.models import EmployeeUser, AudioFile, User
 from dashboard.shortcuts import *
 from dashboard.utils import get_actual_user, company_user_only, employee_user_only, private_user_only
+from moment_track import settings
 
 
 class CompanyUserSignupView(SignupView):
@@ -535,3 +538,70 @@ def delete_file(request):
             return redirect(reverse('dashboard:list-files'))
     else:
         return HttpResponseNotAllowed(['POST'])
+
+
+def search_in_file(request):
+    user = request.user
+
+    # check audio file existence
+    try:
+        audio = AudioFile.objects.get(id=request.GET.get('file'))
+    except AudioFile.DoesNotExist:
+        get_adapter(request).add_message(
+            request,
+            messages.ERROR,
+            'dashboard/messages/file_does_not_exist.txt'
+        )
+        return redirect(reverse('dashboard:list-files'))
+
+    # if audio is public no check is required
+    if not audio.is_public:
+        # guest users cannot do nothing with non-public files
+        if user.is_anonymous:
+            return redirect(reverse('dashboard:forbidden'))
+        # user is not the uploader
+        elif user != audio.uploader:
+            # private and employee users are not allowed to view other users' non-public files
+            if user.is_private or user.is_employee:
+                return redirect(reverse('dashboard:forbidden'))
+            # company user can use its own files and the employees' ones
+            elif user.is_company and not get_actual_user(user).company.employees.filter(user=audio.uploader).exists():
+                return redirect(reverse('dashboard:forbidden'))
+
+    # user is performing a search
+    if request.method == 'POST':
+        query_string = request.POST.get('querystring')
+        transcriptions = audio.transcriptions.filter(text__icontains=query_string)
+
+        # at least one result obtained
+        if transcriptions.exists():
+            results = dict()
+            for transcription in transcriptions:
+                # first time the transcription result is seen
+                if transcription.offset not in results:
+                    # add new result
+                    results[transcription.offset] = {
+                        'start_time': transcription.offset,
+                        'end_time': transcription.offset + settings.MOMENTTRACK_AUDIO_FRAGMENT_DURATION,
+                        'confidence': transcription.confidence
+                    }
+                # transcription already seen
+                else:
+                    # update the confidence if the new one is greater
+                    if transcription.confidence > results[transcription.offset]['confidence']:
+                        results[transcription.offset]['confidence'] = transcription.confidence
+
+            # extract the real results as a list ordered by start time ascending
+            results = OrderedDict(sorted(results.items())).values()
+
+        # no match found with the specified query string
+        else:
+            results = []
+
+    # user is requesting the page without any query string
+    else:
+        query_string = ''
+        results = []
+
+    context = {'audio': audio, 'query_string': query_string, 'results': results}
+    return render(request, 'dashboard/search.html', context)
