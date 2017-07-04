@@ -254,3 +254,12 @@ class UploadAudioFileForm(forms.Form):
     )
     is_public = forms.BooleanField(required=False, initial=False)
     duration = forms.DurationField(widget=forms.HiddenInput())
+
+
+class AudioFileForm(forms.ModelForm):
+    class Meta:
+        model = AudioFile
+        fields = ('name', 'description', 'is_public')
+        widgets = {
+            'description': forms.Textarea(attrs={'maxlength': 500, 'rows': 5})
+        }
