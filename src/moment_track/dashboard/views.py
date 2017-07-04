@@ -434,7 +434,8 @@ def list_files(request):
             # company user will see all the company's files
             if user.is_company:
                 title = _("%s's files" % actual_user.company.name)
-                company_staff = [user.id, actual_user.company.employees.values_list('user__id', flat=True)]
+                company_staff = [employee_id for employee_id in actual_user.company.employees.values_list('user__id', flat=True)]
+                company_staff.append(user.id)
                 files = AudioFile.objects.filter(uploader__in=company_staff)
             # private and employees will see their own files
             else:
