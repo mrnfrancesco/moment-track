@@ -18,6 +18,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import ensure_csrf_cookie
 
+from dashboard.accounts import user_displayable_name
 from dashboard.forms import CompanySignupForm, PrivateSignupForm, EmployeeSignupForm, UserForm, CompanyForm, \
     CompanyUserForm, PayPalCreditsPacketPurchaseForm, UploadAudioFileForm
 from dashboard.models import EmployeeUser, AudioFile
@@ -391,3 +392,73 @@ def upload_file(request):
                 'user': request.user
             }
             return render(request, 'dashboard/upload_file.html', context)
+
+
+def list_files(request):
+    requested_user_id = request.GET.get('uploader')
+    user = request.user
+    actual_user = get_actual_user(user)
+    try:
+        requested_user = User.objects.get(id=requested_user_id)
+    except User.DoesNotExist:
+        requested_user = None
+
+    # user is guest
+    if user.is_anonymous:
+
+        # no specific user requested, show all public files
+        if requested_user is None:
+            title = _("Public files")
+            files = AudioFile.objects.filter(is_public=True)
+
+        # specific user requested, show its own public files only
+        else:
+            # requested user exists
+            if requested_user is not None:
+                title = _("%s's public files" % user_displayable_name(requested_user))
+                files = AudioFile.objects.filter(uploader=requested_user, is_public=True)
+
+            # requested user does not exist
+            else:
+                title = _("Requested user does not exist")
+                files = AudioFile.objects.none()
+
+    # user is authenticated
+    else:
+
+        # if no specific user requested
+        if requested_user_id is None:
+            # company user will see all the company's files
+            if user.is_company:
+                title = _("%s's files" % actual_user.company.name)
+                company_staff = [user.id, actual_user.company.employees.values_list('user__id', flat=True)]
+                files = AudioFile.objects.filter(uploader__in=company_staff)
+            # private and employees will see their own files
+            else:
+                title = _("Your files")
+                files = AudioFile.objects.filter(uploader=user)
+
+        # specific user requested
+        else:
+
+            # user asks for its own files, show them
+            if user.id == requested_user.id:
+                title = _("Your files")
+                files = AudioFile.objects.filter(uploader=user)
+
+            # user is company and asks for employee's files, show them
+            elif user.is_company and actual_user.company.employees.filter(id=requested_user.id).exists():
+                title = _("Employee %s's files" % user_displayable_name(requested_user))
+                files = AudioFile.objects.filter(uploader=requested_user)
+
+            # user asks for other user files, show the public ones only
+            else:
+                title = _("%s's public files" % user_displayable_name(requested_user))
+                files = AudioFile.objects.filter(uploader=requested_user, is_public=True)
+
+    context = {
+        'files': files.order_by('-upload_datetime'),
+        'title': title,
+        'user': user
+    }
+    return render(request, 'dashboard/list_files.html', context)
