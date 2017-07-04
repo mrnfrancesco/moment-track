@@ -109,19 +109,5 @@
 {% endblock %}
 
 {% block extra_body %}
-    {# TODO: remove it if unused #}
-    {% include 'dashboard/snippet/ajax_csrf.html' %}
-
-    <script type="text/javascript">
-        $('#datatable-responsive').DataTable();
-
-        function do_something_with_ajax(param) {
-            $.post(
-                "some-url" + param,
-                {csrftoken: csrftoken}
-            ).success(function (response) {
-                // TODO: do something
-            });
-        }
-    </script>
+    <script type="text/javascript">$('#datatable-responsive').DataTable();</script>
 {% endblock %}
