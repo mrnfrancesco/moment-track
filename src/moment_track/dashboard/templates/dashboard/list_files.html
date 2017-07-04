@@ -44,9 +44,9 @@
                             <tr>
                                 <td></td>
                                 <td>
-                                    <button class="btn btn-info" type="button" data-toggle="tooltip" data-placement="top" title="{% trans "Search" %}">
+                                    <a href="{% url 'dashboard:search-in-file' %}?file={{ audio.id }}" class="btn btn-info" type="button" data-toggle="tooltip" data-placement="top" title="{% trans "Search" %}">
                                         <i class="fa fa-search"></i>
-                                    </button>
+                                    </a>
                                 </td>
                                 <td><strong>{{ audio.name }}</strong></td>
                                 <td>{{ audio.description }}</td>
