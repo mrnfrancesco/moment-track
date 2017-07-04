@@ -386,13 +386,7 @@ def upload_file(request):
                     messages.ERROR,
                     'dashboard/messages/no_credits_available.txt'
                 )
-                return redirect(
-                    reverse(
-                        'dashboard:{user_type}-user-credits'.format(
-                            user_type='private' if request.user.is_private else 'company'
-                        )
-                    )
-                )
+                return redirect(reverse('dashboard:credits'))
         else:
             context = {
                 'total_available_credits': get_total_available_credits(request.user),
