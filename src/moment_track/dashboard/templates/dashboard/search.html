@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12 form-group top_search">
             <form class="input-group" action="{% url 'dashboard:search-in-file' %}?file={{ audio.id }}" method="post">
-                <input name="querystring" class="form-control" type="text" placeholder="{% trans "Search for..." %}" value="{{ query_string }}"/>
+                <input autofocus name="querystring" class="form-control" type="text" placeholder="{% trans "Search for..." %}" value="{{ query_string }}"/>
                 {% csrf_token %}
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
