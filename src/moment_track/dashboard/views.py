@@ -12,7 +12,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
 from django.forms import model_to_dict
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -500,3 +500,38 @@ def edit_file(request):
         form = AudioFileForm(instance=audio)
 
     return render(request, 'dashboard/edit_file.html', {'form': form, 'audio': audio, 'user': request.user})
+
+
+@verified_email_required
+def delete_file(request):
+    if request.method == 'POST':
+        file_id = request.POST.get('file')
+        try:
+            audio = AudioFile.objects.get(id=file_id)
+        except AudioFile.DoesNotExist:
+            audio = None
+
+        # audio file does not exist
+        if audio is None:
+            get_adapter(request).add_message(
+                request,
+                messages.ERROR,
+                'dashboard/messages/file_does_not_exist.txt'
+            )
+            return redirect(reverse('dashboard:list-files'))
+
+        # user is not allowed to delete the specified file
+        elif audio.uploader.id != request.user.id:
+            return redirect(reverse('dashboard:forbidden'))
+
+        # user is allowed to delete the specified file
+        else:
+            audio.delete()
+            get_adapter(request).add_message(
+                request,
+                messages.SUCCESS,
+                'dashboard/messages/file_delete_succeed.txt'
+            )
+            return redirect(reverse('dashboard:list-files'))
+    else:
+        return HttpResponseNotAllowed(['POST'])
