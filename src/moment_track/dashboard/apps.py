@@ -7,7 +7,7 @@ from django.db import models
 from paypal.standard.ipn.signals import valid_ipn_received
 
 
-class WebsiteConfig(AppConfig):
+class DashboardConfig(AppConfig):
     name = 'dashboard'
 
     def ready(self):

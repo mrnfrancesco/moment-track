@@ -55,7 +55,7 @@ GOOGLE_CLOUD_SPEECH_CREDENTIALS = None  # INSERT GOOGLE CLOUD SPEECH JSON CREDEN
 INSTALLED_APPS = [
     'sslserver',
     'django_celery_results',
-    'dashboard.apps.WebsiteConfig',
+    'dashboard.apps.DashboardConfig',
     'django.contrib.auth',
     'django.contrib.sites',
     'allauth',
