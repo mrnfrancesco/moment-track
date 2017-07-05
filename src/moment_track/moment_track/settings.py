@@ -69,6 +69,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'phonenumber_field',
     'timedeltatemplatefilter',
+    'rest_framework',
+    'rest_framework_swagger',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -102,6 +105,30 @@ TEMPLATES = [
 WSGI_APPLICATION = 'moment_track.wsgi.application'
 
 SITE_ID = 1
+
+# API settings
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+            'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.OrderingFilter',
+    ],
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    'DEFAULT_VERSION': 'v1',
+    'PAGE_SIZE': 10,
+}
+
+# API documentation settings
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+    'DOC_EXPANSION': 'list',
+    'SUPPORTED_SUBMIT_METHODS': ['get'],
+}
 
 
 # Database

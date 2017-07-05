@@ -10,3 +10,6 @@ celery==4.0.2
 django-celery-results==1.0.1
 SpeechRecognition==3.7.1
 django-timedeltatemplatefilter==0.1.2
+djangorestframework==3.6.3
+django-filter==1.0.4
+django-rest-swagger==2.1.2
