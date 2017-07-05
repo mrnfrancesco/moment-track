@@ -138,14 +138,16 @@ def invert_employee_account_active_status(request, employee_id):
     got_error = True
 
     if request.method == 'POST':
-        if EmployeeUser.objects.filter(id=employee_id).exists():
-            employee = EmployeeUser.objects.get(id=employee_id)
+        try:
+            employee = get_actual_user(request.user).company.employees.get(id=employee_id)
             user = employee.user
             user.is_active = not user.is_active
             user.save()
 
             status = 'active' if user.is_active else 'inactive'
             got_error = False
+        except EmployeeUser.DoesNotExist:
+            pass
 
     return JsonResponse({'error': got_error, 'status': status})
 
