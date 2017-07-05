@@ -1,0 +1,30 @@
+{% extends "rest_framework_swagger/base.html" %}
+
+{% load staticfiles %}
+
+{% block head_title %}Moment Track API{% endblock %}
+{% block favicon %}<link rel="icon" type="image/ico" href="{% static 'dashboard/favicon.ico' %}" />{% endblock %}
+
+{% block logo %}
+<a id="logo" href="{% url 'api-doc' %}">
+    <img class="logo__img" alt="Moment Track public API" height="30" width="30" src="{% static 'dashboard/img/logo-160x160.png' %}"/>
+    <span class="logo__title">Moment Track public API</span>
+</a>
+{% endblock %}
+
+{% block extra_styles %}
+    <style type="text/css">
+        .swagger-section #header {
+            background: #EDEDED;
+            border-bottom: 1px solid #D9DEE4;
+        }
+
+        .swagger-section #header #logo .logo__title {
+            color: #3A3A3A;
+        }
+
+        body {
+            background: #F7F7F7;
+        }
+    </style>
+{% endblock %}
