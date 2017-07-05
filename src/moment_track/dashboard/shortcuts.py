@@ -9,6 +9,9 @@ from dashboard.utils import get_actual_user
 
 
 def get_unexpired_credits(user):
+    """Return a QuerySet representing the unexpired non-empty credits
+    available for the specified user.
+    """
     # if employee look at the company's contact person credits
     if user.is_employee:
         user = get_actual_user(user).company.contact_person.user
@@ -21,6 +24,9 @@ def get_unexpired_credits(user):
 
 
 def get_total_available_processing_minutes(user):
+    """Return the total available processing minutes for the specified user
+    as results of the available credits.
+    """
     return get_unexpired_credits(user).annotate(
         minutes_left=F('offer__minutes_per_credit') * F('credits_remaining')
     ).aggregate(
@@ -29,12 +35,14 @@ def get_total_available_processing_minutes(user):
 
 
 def get_total_available_credits(user):
+    """Return the total available credits for the specified user."""
     return get_unexpired_credits(user).aggregate(
         credits_remaining=Sum('credits_remaining')
     ).get('credits_remaining') or 0
 
 
 def get_credits_distribution(user):
+    """Return a QuerySet representing the available credits for the specified user."""
     today = date.today()
 
     credits_distribution = get_unexpired_credits(user).values(
@@ -52,6 +60,9 @@ def get_credits_distribution(user):
 
 
 def get_unexpired_offers():
+    """Return a dictionary representing the available non-expired offers
+    for credits purchasing.
+    """
     today = date.today()
 
     offers = CreditsPacketOffer.objects.exclude(
@@ -74,7 +85,11 @@ def get_unexpired_offers():
     return offers
 
 
+@transaction.atomic
 def calculate_credits_usage(audio):
+    """Calculate the best usage possible of credits to process the specified audio
+    and update the database accordingly.
+    """
     duration = math.ceil(audio.duration.total_seconds() / 60.0)
 
     with transaction.atomic():

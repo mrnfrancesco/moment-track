@@ -30,6 +30,7 @@ from moment_track import settings
 
 
 class CompanyUserSignupView(SignupView):
+    """Let to sign up a new company user"""
     template_name = 'account/signup_company.html'
     form_class = CompanySignupForm
     view_name = 'dashboard:company_signup'
@@ -38,6 +39,7 @@ company_signup = CompanyUserSignupView.as_view()
 
 
 class PrivateUserSignupView(SignupView):
+    """Let to sign up a new private user"""
     template_name = 'account/signup_private.html'
     form_class = PrivateSignupForm
     view_name = 'dashboard:private_signup'
@@ -48,6 +50,11 @@ private_signup = PrivateUserSignupView.as_view()
 @verified_email_required
 @company_user_only
 def company_employees(request):
+    """Let the company user see the list of its company's employees and add some more.
+
+    Adding an employee automatically sign up the new user with a random password
+    sent to the employee.
+    """
     # if this is a POST request we need to process the form data
     # otherwise we just create a blank employee signup form
     if request.method == 'POST':
@@ -134,6 +141,7 @@ def company_employees(request):
 @company_user_only
 @ensure_csrf_cookie
 def invert_employee_account_active_status(request, employee_id):
+    """Let the company user activate/deactivate an employee account"""
     status = 'unknown'
     got_error = True
 
@@ -153,6 +161,7 @@ def invert_employee_account_active_status(request, employee_id):
 
 
 def _user_profile(request):
+    """Handle the editing of a user profile"""
     user = request.user
     # in case the user is trying to modify data
     if request.method == 'POST':
@@ -182,6 +191,7 @@ def _user_profile(request):
 @verified_email_required
 @private_user_only
 def private_user_profile(request):
+    """Let the private user see and eventually edit its own profile."""
     context = _user_profile(request)
     return render(request, 'dashboard/user/private/profile.html', context)
 
@@ -189,6 +199,7 @@ def private_user_profile(request):
 @verified_email_required
 @employee_user_only
 def employee_user_profile(request):
+    """Let the employee user see and eventually edit its own profile."""
     context = _user_profile(request)
     return render(request, 'dashboard/user/employee/profile.html', context)
 
@@ -196,6 +207,7 @@ def employee_user_profile(request):
 @verified_email_required
 @company_user_only
 def company_user_profile(request):
+    """Let the company user see and eventually edit its own profile."""
     user = request.user
     company_user = get_actual_user(request.user)
 
@@ -231,6 +243,7 @@ def company_user_profile(request):
 @verified_email_required
 @company_user_only
 def company_details(request):
+    """Let the company user to see and eventually edit the company's information"""
     company_user = get_actual_user(request.user)
     company = company_user.company
 
@@ -249,6 +262,7 @@ def company_details(request):
 @verified_email_required
 @employee_user_only
 def employee_company_details(request):
+    """Let the employee have information regarding their company"""
     employee_user = get_actual_user(request.user)
     company = employee_user.company
     company_user = company.contact_person
@@ -264,6 +278,10 @@ def employee_company_details(request):
 
 @verified_email_required
 def credits(request):
+    """Let the user know how many credits he/her has and when they will expire.
+
+    The user can choose to buy some more too.
+    """
     # exclude employees from this view
     if not (request.user.is_private or request.user.is_company):
         redirect(reverse('dashboard:forbidden'))
@@ -302,6 +320,7 @@ def credits(request):
 
 @verified_email_required
 def payment_cancelled(request):
+    """Redirect to credits page and show payment cancelled message."""
     get_adapter(request).add_message(
         request,
         messages.WARNING,
@@ -312,6 +331,7 @@ def payment_cancelled(request):
 
 @verified_email_required
 def payment_completed(request):
+    """Redirect to credits page and show payment completed message"""
     get_adapter(request).add_message(
         request,
         messages.SUCCESS,
@@ -322,12 +342,17 @@ def payment_completed(request):
 
 @verified_email_required
 def upload_file_error(request):
+    """The page show a list of errors occurred during file upload."""
     errors = request.session.pop('errors', {_("Unknown field"): [_("Unknown error")]})
     return render(request, 'dashboard/upload_file_error.html', {'errors': errors})
 
 
 @verified_email_required
 def not_enough_credits(request):
+    """Show an error page in case of not enough credits are available for processing file.
+
+    The page show the available credits and processing minutes.
+    """
     context = {
         'total_available_credits': get_total_available_credits(request.user),
         'total_available_processing_minutes': get_total_available_processing_minutes(request.user),
@@ -339,6 +364,7 @@ def not_enough_credits(request):
 
 @verified_email_required
 def upload_file_success(request):
+    """Redirect to index page and show an upload succeed message"""
     get_adapter(request).add_message(
         request,
         messages.SUCCESS,
@@ -349,6 +375,7 @@ def upload_file_success(request):
 
 @verified_email_required
 def upload_file(request):
+    """Let the user upload an audio/x-flac file to be processed"""
     if request.method == 'POST':
         form = UploadAudioFileForm(request.POST)
 
@@ -400,6 +427,17 @@ def upload_file(request):
 
 
 def list_files(request):
+    """Let the user have a list of uploaded files available for searching
+    and/or editing.
+
+    The list is different from user type to user type:
+
+        * `guest user`, can see only public files
+        * `private user`, can see all of its own files and the other users' public files
+        * `employee user`, can see all of its own files and the other users' public files
+        * `company user`, can see all of its own files, the other users' public files and
+            his/her company's employees public and private files
+    """
     requested_user_id = request.GET.get('uploader')
     user = request.user
     actual_user = get_actual_user(user)
@@ -472,6 +510,9 @@ def list_files(request):
 
 @verified_email_required
 def edit_file(request):
+    """Let the user edit some information about the specified file
+    chosen from the list of its own uploaded files.
+    """
     file_id = request.GET.get('file')
     try:
         audio = AudioFile.objects.get(id=file_id)
@@ -511,6 +552,7 @@ def edit_file(request):
 
 @verified_email_required
 def delete_file(request):
+    """Let the user delete its own files."""
     if request.method == 'POST':
         file_id = request.POST.get('file')
         try:
@@ -545,6 +587,7 @@ def delete_file(request):
 
 
 def search_in_file(request):
+    """Let the user perform a search for text into the specified file."""
     user = request.user
 
     # check audio file existence

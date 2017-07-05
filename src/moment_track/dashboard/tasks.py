@@ -15,6 +15,9 @@ from moment_track import settings
 
 @shared_task(bind=True, ignore_result=True)
 def transcript_audio_fragment(self, audio_id, duration, offset):
+    """Celery task to transcript the specified file fragment and
+    save the results to the database as Transcription model instances.
+    """
     try:
         audio_model = AudioFile.objects.get(id=audio_id)
         language = str(audio_model.language_spoken)
@@ -84,6 +87,9 @@ def transcript_audio_fragment(self, audio_id, duration, offset):
 
 @shared_task(bind=True)
 def process_audio_file(self, audio_id):
+    """Celery task to parallelize the processing of the
+    entire audio file fragment by fragment.
+    """
     try:
         audio = AudioFile.objects.get(id=audio_id)
 

@@ -8,9 +8,11 @@ from paypal.standard.ipn.signals import valid_ipn_received
 
 
 class DashboardConfig(AppConfig):
+    """Web app configuration"""
     name = 'dashboard'
 
     def ready(self):
+        """Connect some signals on framework start"""
         from dashboard import signals
         from dashboard.models import AudioFile
 

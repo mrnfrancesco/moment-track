@@ -51,6 +51,7 @@ class CompanySignupForm(SignupForm):
     )
 
     def save(self, request):
+        """Save the form data into database"""
         with transaction.atomic():
             user = super(CompanySignupForm, self).save(request)
 
@@ -90,6 +91,7 @@ class PrivateSignupForm(SignupForm):
     )
 
     def save(self, request):
+        """Save the form data into database"""
         with transaction.atomic():
             user = super(PrivateSignupForm, self).save(request)
 
@@ -117,6 +119,7 @@ class PrivateSocialSignupForm(SocialSignupForm):
     )
 
     def save(self, request):
+        """Save the form data into database"""
         with transaction.atomic():
             user = super(PrivateSocialSignupForm, self).save(request)
 
@@ -140,6 +143,7 @@ class EmployeeSignupForm(SignupForm):
             del self.fields['password2']
 
     def save(self, request):
+        """Save the form data into database"""
         with transaction.atomic():
             user = super(EmployeeSignupForm, self).save(request)
 
@@ -154,6 +158,7 @@ class EmployeeSignupForm(SignupForm):
 
 
 class UserForm(forms.ModelForm):
+    """Form used to update user profile"""
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
         for field_name in ('date_joined', 'last_login', 'email'):
@@ -184,18 +189,21 @@ class UserForm(forms.ModelForm):
 
 
 class CompanyForm(forms.ModelForm):
+    """Form used to update company information"""
     class Meta:
         model = Company
         fields = ('name', 'vat_no')
 
 
 class CompanyUserForm(forms.ModelForm):
+    """Form used to update company user profile"""
     class Meta:
         model = CompanyUser
         fields = ('phone_number',)
 
 
 class PayPalCreditsPacketPurchaseForm(PayPalPaymentsForm):
+    """Form used to buy some credits using PayPal"""
     def __init__(self, *args, **kwargs):
         super(PayPalCreditsPacketPurchaseForm, self).__init__(*args, **kwargs)
 
@@ -244,6 +252,7 @@ class PayPalCreditsPacketPurchaseForm(PayPalPaymentsForm):
 
 
 class UploadAudioFileForm(forms.Form):
+    """Form used to send information on a newly uploaded file"""
     language_spoken = forms.CharField(
         widget=forms.Select(choices=AudioFile.LANGUAGE_SPOKEN_CHOICES),
         initial='it'
@@ -259,6 +268,7 @@ class UploadAudioFileForm(forms.Form):
 
 
 class AudioFileForm(forms.ModelForm):
+    """Form used to update information on a file"""
     class Meta:
         model = AudioFile
         fields = ('name', 'description', 'is_public')

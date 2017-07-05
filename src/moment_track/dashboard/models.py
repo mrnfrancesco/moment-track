@@ -25,6 +25,8 @@ from dashboard.accounts import user_displayable_name
 
 @python_2_unicode_compatible
 class User(AbstractUser):
+    """A fully featured user base model with an extra field
+    to differentiate between user types"""
     PRIVATE = 1
     COMPANY = 2
     EMPLOYEE = 3
@@ -41,14 +43,17 @@ class User(AbstractUser):
 
     @property
     def is_private(self):
+        """Return True if the current user is a private user, False otherwise."""
         return self.user_type == User.PRIVATE
 
     @property
     def is_company(self):
+        """Return True if the current user is a company user, False otherwise."""
         return self.user_type == User.COMPANY
 
     @property
     def is_employee(self):
+        """Return True if the current user is an employee user, False otherwise."""
         return self.user_type == User.EMPLOYEE
 
     def __str__(self):
@@ -81,10 +86,12 @@ class AbstractUserModel(models.Model):
 
     @property
     def is_authenticated(self):
+        """Return always True"""
         return True
 
     @property
     def is_anonymous(self):
+        """Return always False"""
         return False
 
     def __str__(self):
@@ -96,6 +103,7 @@ class AbstractUserModel(models.Model):
 
 @python_2_unicode_compatible
 class PrivateUser(AbstractUserModel):
+    """Model to represent a private user"""
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='private_user')
 
     def __str__(self):
@@ -104,6 +112,7 @@ class PrivateUser(AbstractUserModel):
 
 @python_2_unicode_compatible
 class Company(models.Model):
+    """Model to represent a company"""
     name = models.CharField(max_length=50)
     vat_no = models.CharField(max_length=30, validators=[VATNoValidator()], unique=True)
 
@@ -113,6 +122,7 @@ class Company(models.Model):
 
 @python_2_unicode_compatible
 class CompanyUser(AbstractUserModel):
+    """Model to represent a company user"""
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='company_user')
     phone_number = PhoneNumberField()
     company = models.OneToOneField(Company, on_delete=models.CASCADE, related_name='contact_person')
@@ -126,6 +136,7 @@ class CompanyUser(AbstractUserModel):
 
 @python_2_unicode_compatible
 class EmployeeUser(AbstractUserModel):
+    """Model to represent an employee user"""
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='employee_user')
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='employees')
 
@@ -138,6 +149,7 @@ class EmployeeUser(AbstractUserModel):
 
 @python_2_unicode_compatible
 class CreditsPacketOffer(models.Model):
+    """Model to represent a credits packet offer"""
     MIN_MINUTES_PER_CREDIT = 5
     MAX_MINUTES_PER_CREDIT = 60
 
@@ -167,6 +179,9 @@ class CreditsPacketOffer(models.Model):
 
 @python_2_unicode_compatible
 class CreditsPacketPurchase(models.Model):
+    """Model to represent the purchase of credits chosen
+    from the available credits packet offers
+    """
     MIN_CREDITS_PURCHASED = 1
 
     customer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='purchases')
@@ -199,6 +214,9 @@ class CreditsPacketPurchase(models.Model):
 
 
 def _get_relative_file_path(instance, filename):
+    """Return a relative path based on actual date
+    with unique file name as uuid.
+    """
     # Give file a unique name
     return '{date}/{filename}.flac'.format(
         date=date.today().strftime('%Y/%m/%d'),
@@ -208,6 +226,7 @@ def _get_relative_file_path(instance, filename):
 
 @python_2_unicode_compatible
 class AudioFile(models.Model):
+    """Model to represent a flac audio file."""
     LANGUAGE_SPOKEN_CHOICES = global_settings.LANGUAGES
 
     ALLOWED_MIME_TYPES = (
@@ -225,6 +244,7 @@ class AudioFile(models.Model):
     duration = models.DurationField(editable=False)
 
     def clean_file(self):
+        """Check if the uploaded file is really a flac file"""
         # Get first 1024 Bytes file chunk
         chunk = next(chunk for chunk in self.file.chunks(1024))
         # Retrieve the mime type of the file
@@ -241,6 +261,7 @@ class AudioFile(models.Model):
 
     @property
     def total_fragments(self):
+        """Returns the total number of fragments to use to process file"""
         return int(
             math.ceil(
                 self.duration.total_seconds() / settings.MOMENTTRACK_AUDIO_FRAGMENT_DURATION.total_seconds()
@@ -249,10 +270,14 @@ class AudioFile(models.Model):
 
     @property
     def available_fragments(self):
+        """Returns the actual number of fragments available after processing"""
         return self.transcriptions.values_list('offset').distinct().count()
 
     @property
     def transcription_coverage(self):
+        """Return the percentage of transcription coverage as
+        available fragments on total fragments ratio.
+        """
         return float(self.available_fragments) / float(self.total_fragments)
 
     def __str__(self):
@@ -261,6 +286,7 @@ class AudioFile(models.Model):
 
 @python_2_unicode_compatible
 class Transcription(models.Model):
+    """Model to represent a file fragment transcription"""
     file = models.ForeignKey(AudioFile, on_delete=models.CASCADE, related_name='transcriptions')
     offset = models.DurationField()
     confidence = models.FloatField()
