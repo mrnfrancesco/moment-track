@@ -573,32 +573,20 @@ def search_in_file(request):
     # user is performing a search
     if request.method == 'POST':
         query_string = request.POST.get('querystring')
-        transcriptions = audio.transcriptions.filter(text__icontains=query_string)
 
-        # at least one result obtained
-        if transcriptions.exists():
-            results = dict()
-            for transcription in transcriptions:
-                # first time the transcription result is seen
-                if transcription.offset not in results:
-                    # add new result
-                    results[transcription.offset] = {
-                        'start_time': transcription.offset,
-                        'end_time': transcription.offset + settings.MOMENTTRACK_AUDIO_FRAGMENT_DURATION,
-                        'confidence': transcription.confidence
-                    }
-                # transcription already seen
-                else:
-                    # update the confidence if the new one is greater
-                    if transcription.confidence > results[transcription.offset]['confidence']:
-                        results[transcription.offset]['confidence'] = transcription.confidence
+        transcriptions = audio.transcriptions\
+            .filter(text__icontains=query_string)\
+            .order_by('offset', 'confidence')\
+            .values_list('offset', 'confidence')
 
-            # extract the real results as a list ordered by start time ascending
-            results = OrderedDict(sorted(results.items())).values()
-
-        # no match found with the specified query string
-        else:
-            results = []
+        results = [
+            {
+                'start_time': offset,
+                'end_time': offset + settings.MOMENTTRACK_AUDIO_FRAGMENT_DURATION,
+                'confidence': confidence
+            }
+            for offset, confidence in OrderedDict(transcriptions).items()
+        ]
 
     # user is requesting the page without any query string
     else:
