@@ -1,0 +1,41 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Verify Your E-mail Address" %}{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-1">
+            <div class="x_panel">
+                <div class="x_title text-center">
+                    <h1>{% trans "Verify Your E-mail Address" %}</h1>
+                    <span>
+                        {% trans "This part of the site requires that you verify ownership of your e-mail address" %}
+                    </span>
+                </div>
+                <div class="x_content text-center">
+
+                    <p>{% blocktrans %}
+                        We have sent an e-mail to you for your verification.<br/>
+                        Please click on the link inside the e-mail.
+                    {% endblocktrans %}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="x_panel">
+                <div class="x_content text-center">
+                    <h3>{% trans "Problems?" %}</h3>
+                    {% url 'account_email' as email_url %}
+                    <a class="btn btn-success" href="{{ email_url }}">{% trans "change your e-mail address" %}</a><br/>
+                    {% trans "or" %}<br/>
+                    <p>{% trans "contact us for support" %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

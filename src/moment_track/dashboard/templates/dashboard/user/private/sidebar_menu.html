@@ -1,0 +1,17 @@
+{% load i18n %}
+
+<div class="menu_section active">
+    <h3>{% trans "Multimedia" %}</h3>
+    <ul class="nav side-menu">
+        <li><a href="{% url 'dashboard:list-files' %}"><i class="fa fa-search"></i> {% trans "List files" %} <span class="fa fa-chevron-right"></span></a></li>
+        <li><a href="{% url 'dashboard:upload-file' %}"><i class="fa fa-upload"></i> {% trans "Upload new file" %} <span class="fa fa-chevron-right"></span></a></li>
+    </ul>
+</div>
+
+<div class="menu_section">
+    <h3>{% trans "Management" %}</h3>
+    <ul class="nav side-menu">
+        <li><a href="{% url 'dashboard:credits' %}"><i class="fa fa-ticket"></i> {% trans "Credits" %} <span class="fa fa-chevron-right"></span></a></li>
+        <li><a href="{% url 'dashboard:private-user-profile' %}"><i class="fa fa-user"></i> {% trans "Profile" %} <span class="fa fa-chevron-right"></span></a></li>
+    </ul>
+</div>

@@ -1,0 +1,290 @@
+{% load staticfiles %}
+{% load i18n %}
+{% load account socialaccount %}
+
+{% get_current_language as LANGUAGE_CODE %}
+{% get_providers as socialaccount_providers %}
+
+<!DOCTYPE html>
+
+<html lang="{{ LANGUAGE_CODE }}" dir="ltr" class="no-js">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static 'dashboard/favicon.ico' %}" type="image/x-icon">
+
+    <title>{% block head_title %}Moment Track{% endblock %}</title>
+
+    <link href="{% static 'dashboard/vendors/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/vendors/nprogress/nprogress.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/vendors/pnotify/pnotify.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/vendors/pnotify/pnotify.buttons.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/vendors/pnotify/pnotify.mobile.css' %}" rel="stylesheet">
+    {% block extra_vendor_css %}{% endblock %}
+    <link href="{% static 'dashboard/css/custom.css' %}" rel="stylesheet">
+    <style type="text/css">
+        form input,
+        form button[type=submit] {
+            width: 100%;
+        }
+
+        form input[type=checkbox],
+        form input[type=radio] {
+            width: auto;
+        }
+
+        ul.errorlist {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+
+        ul.errorlist li {
+            padding: .2em .6em .3em;
+            font-size: 75%;
+            font-weight: 700;
+            line-height: 1;
+            color: #fff;
+            vertical-align: baseline;
+            border-radius: .25em;
+            background-color: #c9302c;
+            border-color: #ac2925;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        {% block body %}
+            {# sidebar menu #}
+            <div class="menu_fixed col-md-3 left_col">
+                <div class="left_col scroll-view">
+                    {# navbar app logo #}
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a href="{% url 'dashboard:index' %}" class="site_title">
+                            <img src="{% static 'dashboard/img/logo-160x160.png' %}" style="max-height: 40px"/>
+                            <span>Moment<strong>Track</strong></span>
+                        </a>
+                    </div>
+                    {# /navbar app logo #}
+
+                    <div class="clearfix"></div>
+                    <br/>
+
+                    {# sidebar menu #}
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        {% if user.is_private %}
+                            {% include 'dashboard/user/private/sidebar_menu.html' %}
+                        {% elif user.is_company %}
+                            {% include 'dashboard/user/company/sidebar_menu.html' %}
+                        {% elif user.is_employee %}
+                            {% include 'dashboard/user/employee/sidebar_menu.html' %}
+                        {% else %}
+                            {% include 'dashboard/user/guest/sidebar_menu.html' %}
+                        {% endif %}
+                    </div>
+                    {# /sidebar menu #}
+                </div>
+            </div>
+            {# /sidebar menu #}
+
+            {# top navigation #}
+            <div class="top_nav">
+                <div class="nav_menu">
+                    <nav>
+                        <div class="nav toggle">
+                            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                        </div>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            {% if user.is_authenticated %}
+                                <li class="">
+                                    <a href="javascript:" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                                       aria-expanded="false">
+                                        <img src="{% static 'dashboard/img/logo-160x160.png' %}"
+                                             style="border-radius: 0">
+                                        {% user_display user as user_display %}
+                                        {{ user_display }}
+                                        <span class=" fa fa-angle-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right">
+
+                                        {# extra user menu fields #}
+                                        {% block navbar_right_user_dropdown_menu %}{% endblock %}
+                                        {# /extra user menu fields #}
+
+                                        <li>
+                                            {% if user.is_private %}
+                                                {% url 'dashboard:private-user-profile' as profile_url %}
+                                            {% elif user.is_employee %}
+                                                {% url 'dashboard:employee-user-profile' as profile_url %}
+                                            {% elif user.is_company %}
+                                                {% url 'dashboard:company-user-profile'  as profile_url %}
+                                            {% endif %}
+                                            <a href="{{ profile_url }}">
+                                                <i class="fa fa-user pull-right"></i>
+                                                {% trans "Profile" %}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'account_logout' %}">
+                                                <i class="fa fa-sign-out pull-right"></i>
+                                                {% trans "Log Out" %}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% else %}
+                                <li class="">
+                                    <a href="javascript:" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                                       aria-expanded="false">
+                                        <img src="{% static 'dashboard/img/logo-160x160.png' %}"
+                                             style="border-radius: 0">
+                                        {% trans "Hi there!" %}
+                                        <span class=" fa fa-angle-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                        <li>
+                                            <a href="{% url 'account_login' %}">
+                                                <i class="fa fa-sign-in pull-right"></i>{% trans "Log in" %}
+                                            </a>
+                                        </li>
+
+                                        {% for provider in socialaccount_providers %}
+                                            {% if provider.id == "openid" %}
+                                                {% for brand in provider.get_brands %}
+                                                    <li>
+                                                        <a title="{{ brand.name }}"
+                                                           href="{% provider_login_url provider.id openid=brand.openid_url process='login' %}">
+                                                            <i class="fa fa-{{ brand.name | lower }} pull-right"></i>
+                                                            {{ brand.name }}
+                                                            {% blocktrans with brand_name=brand.name %}
+                                                                Log in with {{ brand_name }}
+                                                            {% endblocktrans %}
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <li>
+                                                <a title="{{ provider.name }}"
+                                                   href="{% provider_login_url provider.id process='login' scope=scope auth_params=auth_params %}">
+                                                    <i class="fa fa-{{ provider.name | lower }} pull-right"></i>
+                                                    {% blocktrans with provider_name=provider.name %}
+                                                        Log in with {{ provider_name }}
+                                                    {% endblocktrans %}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+
+                                        <li class="separator"></li>
+                                        <li>
+                                            <a href="{% url 'dashboard:signup-private' %}">
+                                                <i class="fa fa-users pull-right"></i>{% trans "Sign up as private" %}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'dashboard:signup-company' %}">
+                                                <i class="fa fa-building-o pull-right"></i>{% trans "Sign up as company" %}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            {# /top navigation #}
+
+            <div class="right_col" role="main">
+                {% block top_page_content %}
+                    {# Little hack to have top margin if no top page content is specified #}
+                    <div class="page-title"><div class="title_left"><h3>&nbsp</h3></div></div>
+                    <div class="clearfix"></div>
+                {% endblock %}
+                {% block content %}{% endblock %}
+            </div>
+
+            {# footer content #}
+            <footer>
+                <div class="pull-right">
+                    &copy; Copyright 2017 Moment<strong>Track</strong>, Inc.
+                    |
+                    {% trans "All rights reserved" %}
+                    |
+                    <a href="{% url 'dashboard:privacy-policy' %}">{% trans "Privacy Policy" %}</a>
+                    |
+                    <a href="{% url 'dashboard:terms-of-service' %}">{% trans "Terms of Service" %}</a>
+                </div>
+                <div class="clearfix"></div>
+            </footer>
+            {# /footer content #}
+
+        {% endblock %}
+
+        <script src="{% static 'dashboard/vendors/jquery/jquery.min.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/bootstrap/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/fastclick/fastclick.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/nprogress/nprogress.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/pnotify/pnotify.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/pnotify/pnotify.buttons.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/pnotify/pnotify.mobile.js' %}"></script>
+        <script src="{% static 'dashboard/vendors/pnotify/pnotify.desktop.js' %}"></script>
+        {% block extra_vendor_script %}{% endblock %}
+        <script src="{% static 'dashboard/js/custom.js' %}"></script>
+        {% block extra_body %}{% endblock %}
+
+        {% if messages %}
+            <script type="text/javascript">
+                <!--
+                $(function () {
+                    {# Permission request to use PNotify with desktop notification #}
+                    PNotify.desktop.permission();
+                });
+                //-->
+            </script>
+            {% for message in messages %}
+                <script type="text/javascript">
+                    <!--
+                    $(function () {
+                        var level = 'info';
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                            level = 'error';
+                        {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                            level = 'warning';
+                        {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                            level = 'success';
+                        {% endif %}
+
+                        new PNotify({
+                            text: '{{ message | escapejs }}',
+                            text_escape: true,
+                            icon: false,
+                            type: level,
+                            styling: 'bootstrap3',
+                            buttons: {
+                                sticker: false
+                            },
+                            desktop: {
+                                desktop: true,
+                                title: "Moment Track",
+                                icon: "{% static 'dashboard/favicon.ico' %}"
+                            }
+                        });
+                    });
+                    //-->
+                </script>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

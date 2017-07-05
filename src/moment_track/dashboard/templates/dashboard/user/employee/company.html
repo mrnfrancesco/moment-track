@@ -1,0 +1,53 @@
+{% extends 'dashboard/base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-3 col-md-offset-2">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h3>Company</h3>
+                </div>
+                <div class="x_content">
+                    <table class="table table-hover">
+                        <tbody>
+                        {% for field in company %}
+                            <tr>
+                                <th><label for="{{ field.id_for_label }}">{{ field.label }}</label></th>
+                                <td><span id="{{ field.id_for_label }}">{{ field.data }}</span></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h3>Contact Person</h3>
+                </div>
+                <div class="x_content">
+                    <table class="table table-hover">
+                        <tbody>
+                        {% for field in contact_person_user %}
+                            <tr>
+                                <th><label for="{{ field.id_for_label }}">{{ field.label }}</label></th>
+                                <td><span id="{{ field.id_for_label }}">{{ field.data }}</span></td>
+                            </tr>
+                        {% endfor %}
+
+                        {% for field in company_contact_person %}
+                            <tr>
+                                <th><label for="{{ field.id_for_label }}">{{ field.label }}</label></th>
+                                <td><span id="{{ field.id_for_label }}">{{ field.data }}</span></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

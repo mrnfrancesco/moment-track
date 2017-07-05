@@ -1,0 +1,56 @@
+{% extends 'dashboard/base.html' %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Not Enough Credits" %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="x_panel">
+                <div class="x_title text-center">
+                    <h1>{% trans "Not enough credits to process your file" %}</h1>
+                    <span>
+                        {% if user.is_employee %}
+                            {% trans "Please, contact the company's contact person to buy more" %}
+                        {% else %}
+                            {% trans "Please, go to the credits page to buy some more and retry" %}
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="x_content">
+                    <ul class="to_do">
+                        <li>
+                            <p>
+                                <i style="position: relative;" class="fa fa-ticket red"></i>
+                                {% blocktrans count credits=total_available_credits%}
+                                    <strong>1</strong> credit left
+                                {% plural %}
+                                    <strong>{{ credits }}</strong> credits left
+                                {% endblocktrans %}
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <i style="position: relative;" class="fa fa-clock-o red"></i>
+                                {% blocktrans count minutes=total_available_processing_minutes %}
+                                    <strong>1</strong> processing minute left
+                                {% plural %}
+                                    <strong>{{ minutes }}</strong> processing minutes left
+                                {% endblocktrans %}
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_head %}
+    <style type="text/css">
+        ul.to_do li p i.fa {
+            font-size: 1.5rem;
+        }
+    </style>
+{% endblock %}

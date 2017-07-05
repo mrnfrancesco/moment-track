@@ -1,0 +1,46 @@
+{% extends 'dashboard/base.html' %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Upload File Error" %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="x_panel">
+                <div class="x_title text-center">
+                    <h1>
+                        {% blocktrans count tot=errors|length %}
+                            An error occurred during file upload
+                        {% plural %}
+                            {{ tot }} errors occurred during file upload
+                        {% endblocktrans %}
+                    </h1>
+                    <span>{% trans "Check your file and retry or contact support if the problem persists" %}</span>
+                </div>
+                <div class="x_content">
+                    <ul class="to_do">
+                        {% for field, field_errors in errors.items %}
+                            {% for error in field_errors %}
+                                <li>
+                                    <p>
+                                        <i style="position: relative;" class="fa fa-times red"></i>
+                                        <strong>{{ field }}</strong>: {{ error }}
+                                    </p>
+                                </li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_head %}
+    <style type="text/css">
+        ul.to_do li p i.fa {
+            font-size: 1.5rem;
+        }
+    </style>
+{% endblock %}

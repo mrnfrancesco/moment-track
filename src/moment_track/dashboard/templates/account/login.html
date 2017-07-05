@@ -1,0 +1,76 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+
+{% get_providers as socialaccount_providers %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="x_panel">
+            <div class="x_content">
+                {% if socialaccount_providers %}
+                    {% url 'dashboard:signup-private' as signup_private_url %}
+                    {% url 'dashboard:signup-company' as signup_company_url %}
+                    {% blocktrans %}
+                        Please sign in with one of your existing third party accounts.<br/>
+                        Or, sign up for a <strong><a href="{{ signup_private_url }}">private account</a></strong> or a
+                        <strong><a href="{{ signup_company_url }}">company account</a></strong> and sign in below
+                    {% endblocktrans %}
+                {% else %}
+                    {% url 'dashboard:signup-private' as signup_private_url %}
+                    {% url 'dashboard:signup-company' as signup_company_url %}
+                    {% blocktrans %}
+                        If you have not created an account yet, then please
+                        sign up for a <strong><a href="{{ signup_private_url }}">private account</a></strong> or a
+                        <strong><a href="{{ signup_company_url }}">company account</a></strong>
+                    {% endblocktrans %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3 col-md-offset-3">
+        <div class="x_panel">
+            <div class="x_title text-center">
+                <h1>{% trans "Log In" %}</h1>
+                <span>{% trans "For private and company users" %}</span>
+            </div>
+            <div class="x_content">
+                <form method="POST" action="{% url 'account_login' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                    {% endif %}
+                    <button class="btn btn-success" style="width: 100%" type="submit">{% trans "Log In" %}</button>
+                    <div class="clearfix"></div>
+                    <div class="separator"></div>
+                    <a class="reset pass" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if socialaccount_providers %}
+        <div class="col-md-3">
+            <div class="x_panel">
+                <div class="x_title text-center">
+                    <h1>{% trans "Social" %}</h1>
+                    <span>{% trans "Only for private users" %}</span>
+                </div>
+                <div class="x_content text-center">
+                    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+                    {% include "socialaccount/snippets/login_extra.html" %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

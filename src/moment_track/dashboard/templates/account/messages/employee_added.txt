@@ -1,0 +1,2 @@
+{% load i18n %}
+{% blocktrans with company_name=company.name email=employee.email %}{{ email }} successfully added to {{ company_name }} employees.{% endblocktrans %}

@@ -1,0 +1,27 @@
+{% extends "socialaccount/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Login Cancelled" %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="x_panel">
+                <div class="x_title text-center">
+                    <h1>{% trans "Login Cancelled" %}</h1>
+                    <span>
+                        {% trans "You decided to cancel logging in to our site using one of your existing accounts" %}
+                    </span>
+                </div>
+                <div class="x_content text-center">
+                    {% url 'account_login' as login_url %}
+                    {% blocktrans %}
+                        If this was a mistake, please proceed to
+                        <a class="btn btn-default submit btn-xs" href="{{login_url}}">Sign In</a>
+                    {% endblocktrans %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

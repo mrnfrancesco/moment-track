@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+
+from datetime import timedelta
 from django.utils.translation import ugettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -25,27 +27,48 @@ SECRET_KEY = 'uf0#4+i!c8a^r4h8voz16be8=)-n8qgn)p^w4(^^fvw4d!6&1v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+PAYPAL_TEST = True
 
 ALLOWED_HOSTS = ['*']
+
+# Celery settings
+if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
+    CELERY_BROKER_URL = 'amqp://<username>:<password>@<host>:<port>//'
+else:
+    CELERY_BROKER_URL = 'amqp://guest:guest@127.0.0.1:5672//'
+
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_RESULT_BACKEND = 'django-db'
+
+
+# Project specific settings
+MOMENTTRACK_AUDIO_FRAGMENT_DURATION = timedelta(seconds=10)
+MOMENTTRACK_MIN_TRANSCRIPTION_CONFIDENCE = .65
+
+GOOGLE_SPEECH_RECOGNITION_API_KEY = "AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw"
+GOOGLE_CLOUD_SPEECH_CREDENTIALS = None  # INSERT GOOGLE CLOUD SPEECH JSON CREDENTIALS FILE CONTENT HERE
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'sslserver',
-    'website.apps.WebsiteConfig',
-    'django.contrib.admin',
+    'django_celery_results',
+    'dashboard.apps.WebsiteConfig',
     'django.contrib.auth',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.dropbox_oauth2',
+    'paypal.standard.ipn',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'phonenumber_field',
+    'timedeltatemplatefilter',
 ]
 
 MIDDLEWARE = [
@@ -119,14 +142,15 @@ else:
 
 # Authentication backends
 AUTHENTICATION_BACKENDS = (
-    # Needed to login by username in Django admin, regardless of `allauth`
-    'django.contrib.auth.backends.ModelBackend',
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-# Authetication settings
+AUTH_USER_MODEL = 'dashboard.User'
+
+# Django-Allauth settings
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
@@ -139,21 +163,42 @@ ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300
 ACCOUNT_PRESERVE_USERNAME_CASING = False
 ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = False
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
-ACCOUNT_USER_DISPLAY = 'website.accounts.user_displayable_name'
+ACCOUNT_USER_DISPLAY = 'dashboard.accounts.user_displayable_name'
 SOCIALACCOUNT_EMAIL_REQUIRED = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'optional'
 SOCIALACCOUNT_AUTO_SIGNUP = False
 SOCIALACCOUNT_FORMS = {
-    'signup': 'website.forms.PrivateSocialSignupForm'
+    'signup': 'dashboard.forms.PrivateSocialSignupForm'
 }
 SOCIALACCOUNT_QUERY_EMAIL = True
 
-LOGIN_REDIRECT_URL = '/profile'
+LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/accounts/login'
+
+# E-mail and SMTP backend settings
+# https://docs.djangoproject.com/en/1.11/ref/settings/#email-backend
+# https://docs.djangoproject.com/en/1.11/topics/email/#smtp-backend
+DEFAULT_FROM_EMAIL = 'support@moment-track.it'
+EMAIL_SUBJECT_PREFIX = '[Moment Track] '
+EMAIL_USE_LOCALTIME = False
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 25
+# Empty user and password means no authentication
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 
 if DEBUG:
     # If in debug mode, just send emails as console messages
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+# PayPal settings
+if PAYPAL_TEST:
+    PAYPAL_BUSINESS_EMAIL_ADDRESS = 'seller@moment-track.it'
+    PAYPAL_BUYER_EMAIL_ADDRESS = 'buyer@moment-track.it'
+else:
+    PAYPAL_BUSINESS_EMAIL_ADDRESS = 'francesco.mrn24@gmail.com'
 
 
 # Password validation
@@ -200,5 +245,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_ROOT = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
+# Uploaded files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -1,0 +1,135 @@
+{% extends 'dashboard/base.html' %}
+
+{% load i18n %}
+{% load timedelta_filter %}
+{% load account %}
+{% load flags %}
+
+{% block head_title %}
+    {% blocktrans with audio_name=audio.name %}Search into "{{ audio_name }}"{% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12 form-group top_search">
+            <form class="input-group" action="{% url 'dashboard:search-in-file' %}?file={{ audio.id }}" method="post">
+                <input autofocus name="querystring" class="form-control" type="text" placeholder="{% trans "Search for..." %}" value="{{ query_string }}"/>
+                {% csrf_token %}
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                </span>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6 col-sm-8 col-xs-12">
+            <div class="x_panel">
+                {% if query_string %}
+                    <div class="x_title">
+                        <h2>{% blocktrans with query_string=query_string %}Results for "{{ query_string }}"{% endblocktrans %}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="table-responsive">
+                            <table class="table table-striped jambo_table">
+                                <thead>
+                                <tr>
+                                    <th>{% trans "Start time" %}</th>
+                                    <th>{% trans "End time" %}</th>
+                                    <th>{% trans "Confidence" %}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if results %}
+                                    {% for result in results %}
+                                        <tr>
+                                            <td>{{ result.start_time|timedelta:"{hours2}:{minutes2}:{seconds2}" }}</td>
+                                            <td>{{ result.end_time|timedelta:"{hours2}:{minutes2}:{seconds2}" }}</td>
+                                            <td>
+                                            {% with confidence=result.confidence %}
+                                                <span class="badge bg-{% if confidence <= .5 %}red{% elif confidence <= .75 %}orange{% else %}green{% endif %}">
+                                                    {% widthratio confidence 1 100 %}%
+                                                </span>
+                                            {% endwith %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="3" class="text-center">
+                                            {% blocktrans %}
+                                                No Match found!<br/>
+                                                Try using different words or prefer single word to entire phrase
+                                            {% endblocktrans %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="x_content text-center">
+                        <h4>{% trans "Start searching using the above bar" %}</h4>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-6 col-sm-8 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>
+                        {% with coverage=audio.transcription_coverage %}
+                            <span
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="{% trans "File percentage available for search" %}"
+                                class="badge bg-{% if coverage < .5 %}red{% elif coverage < .75 %}orange{% else %}green{% endif %}"
+                                style="color: #fff">
+                                {% widthratio coverage 1 100 %}%
+                            </span>
+                        {% endwith %}
+                        {{ audio.name }}
+                    </h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <p>
+                        {% if user.id != audio.uploader.id %}
+                            {% user_display audio.uploader as uploader_name %}
+                            <label>{% trans "Uploader" %}:</label>
+                            <span data-toggle="tooltip" data-placement="top" title="{{ audio.uploader.email }}">
+                                {{ uploader_name }}
+                            </span>
+                            <a class="btn btn-default btn-xs" href="{% url 'dashboard:list-files' %}?uploader={{ audio.uploader.id }}">
+                                {% trans "List files" %} &blacktriangleright;
+                            </a>
+                            <br/>
+                        {% endif %}
+                        <label>{% trans "Uploaded on" context "somewhat uploaded on date" %}:</label>
+                        {{ audio.upload_datetime|date:"SHORT_DATE_FORMAT" }} {{ audio.upload_datetime|time }}
+                        <br/>
+                        <label>{% trans "Duration" %}:</label>
+                        {{ audio.duration|timedelta:"{hours2}:{minutes2}:{seconds2}" }}
+                        <br/>
+                        <label>{% trans "Language" %}:</label>
+                        {{ audio.language_spoken|flag }}
+                        <br/>
+                        <label>{% trans "Public" %}:</label>
+                        {% if audio.is_public %}
+                            <i class="fa fa-check green"></i>
+                        {% else %}
+                            <i class="fa fa-times red"></i>
+                        {% endif %}
+                        <br/>
+                        <label>{% trans "Description" %}:</label>
+                        {{ audio.description }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

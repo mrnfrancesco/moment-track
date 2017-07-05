@@ -1,0 +1,524 @@
+{% extends 'dashboard/base.html' %}
+
+{% load i18n %}
+{% load staticfiles %}
+{% load socialaccount %}
+
+{% block head_title %}{% trans "New file upload" %}{% endblock %}
+
+{% block content %}
+    <div class="row" id="step-0">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="x_panel">
+                <div class="x_content">
+                    <br/>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-center">
+                        <p><i class="fa fa-spin fa-spinner"></i> {% trans "App is loading" %}</p>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                        <div class="progress">
+                            <div id="videoconverter-loading-progress-bar" class="progress-bar progress-bar-striped"
+                                 aria-valuenow="0"
+                                 aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="step-1" style="display: none">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="x_panel">
+                <div class="x_title text-center">
+                    <h1>{% trans "Choose your file and wait" %}</h1>
+                    <span>{% trans "Pretty easy uh?" %}</span>
+                </div>
+                <div class="x_content">
+                    <div class="row" id="step-choose-file">
+                        <div class="{% if user.is_private %}col-md-6{% else %}col-md-12{% endif %}">
+                            <label for="choose-file-input">{% trans "Choose a file:" %}</label>
+                            <input id="choose-file-input" type="file" name="file" accept="audio/*,video/*"/>
+                        </div>
+                    {% if user.is_private %}
+                        <div class="col-md-6" id="dropbox-chooser-container"></div>
+                    {% endif %}
+                    </div>
+
+                    <div class="row" id="step-file-information" style="display: none">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <ul class="list-unstyled timeline">
+                                <li>
+                                    <div class="block">
+                                        <div class="tags">
+                                            <a class="tag"><span id="file-info-size"></span></a>
+                                        </div>
+                                        <div class="block_content">
+                                            <h2 class="title"><a id="file-info-name"></a></h2>
+                                            <div class="byline">
+                                                <span>{% trans "File Type" %}</span>
+                                                <a id="file-info-type"></a>
+                                                <br/>
+                                                <span>{% trans "Duration" %}</span>
+                                                <a id="file-info-duration"></a>
+                                            </div>
+                                            <p class="excerpt">
+                                                {% blocktrans %}
+                                                    As soon as loading is completed, your file will be automatically
+                                                    converted in the appropriate file format. Please, be patiente...
+                                                {% endblocktrans %}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                {% get_social_accounts user as social_accounts %}
+                {% if user.is_private and social_accounts.dropbox_oauth2 %}
+                    <div class="row" id="step-file-downloading" style="display: none">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-center">
+                            <p id="file-downloading-text"><i class="fa fa-spin fa-spinner"></i> {% trans "Downloading file..." %}</p>
+                            <p id="file-downloaded-text" style="display: none">
+                                <i class="fa fa-check green"></i>
+                                <strong>{% trans "File downloaded" %}</strong>
+                            </p>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="progress">
+                                <div id="file-downloading-progress-bar" class="progress-bar progress-bar-striped"
+                                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                    <span id="file-downloading-progress-bar-text"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                    <div class="row" id="step-file-loading" style="display: none">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-center">
+                            <p id="file-loading-text"><i class="fa fa-spin fa-spinner"></i> {% trans "File is loading" %}</p>
+                            <p id="file-loaded-text" style="display: none">
+                                <i class="fa fa-check green"></i>
+                                <strong>{% trans "File loaded" %}</strong>
+                            </p>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="progress">
+                                <div id="file-loading-progress-bar" class="progress-bar progress-bar-striped"
+                                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                    <span id="file-loading-progress-bar-text"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id="step-file-converting" style="display: none">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-center">
+                            <p id="file-converting-text"><i class="fa fa-spin fa-spinner"></i> {% trans "Converting file" %}</p>
+                            <p id="file-converted-text" style="display: none">
+                                <i class="fa fa-check green"></i>
+                                <strong>{% trans "File converted" %}</strong>
+                            </p>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="progress">
+                                <div id="file-converting-progress-bar" class="progress-bar progress-bar-striped"
+                                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                    <span id="file-converting-progress-bar-text"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="actionBar" style="display: none">
+                        <div class="separator"></div>
+                        <button id="buttonNext" class="btn btn-default" style="float: right">{% trans "Next" %}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="step-2" style="display: none">
+        <div class="col-md-offset-3 col-md-6">
+            <div class="x_panel">
+                <div class="x_title text-center">
+                    <h1>{% trans "Just some info on your file" %}</h1>
+                    <span>{% trans "You are just one step before the goal" %}</span>
+                </div>
+                <div class="x_content">
+                    <form id="upload-form" method="post" action="javascript:void(0)">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button id="form-submit-button" type="button" class="btn btn-success">{% trans "Finish" %}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="step-3" style="display: none">
+        <div class="col-md-offset-1 col-md-10">
+            <div class="x_panel">
+                <div class="x_title text-center">
+                    <h1>{% trans "Uploading data, please wait..." %}</h1>
+                    <span>{% trans "If you are uploading very large file, this could take a while" %}</span>
+                </div>
+                <div class="x_content" style="padding-bottom: 2rem; padding-top: 3rem;">
+                    <div class="row" id="step-file-converting">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-center">
+                            <p id="file-uploading-text"><i class="fa fa-spin fa-spinner"></i> {% trans "Uploading file" %}</p>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="progress">
+                                <div id="file-uploading-progress-bar" class="progress-bar progress-bar-striped"
+                                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_head %}
+    <style type="text/css">
+        textarea {
+            width: 100%;
+            height: 100px;
+        }
+
+        #form-submit-button {
+            width: 100%;
+        }
+
+        #dropbox-chooser-container {
+            text-align: center;
+            padding-top: 2.5rem;
+            border-left: 2px solid #E6E9ED;
+        }
+    </style>
+{% endblock %}
+
+{% block extra_vendor_css %}
+    <link href="{% static 'dashboard/vendors/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block extra_vendor_script %}
+    {% get_social_accounts user as social_accounts %}
+    {% if user.is_private and social_accounts.dropbox_oauth2 %}
+    <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="zq6xbpqx3zh2i00"></script>
+    {% endif %}
+    <script src="{% static 'dashboard/js/slugify.js' %}"></script>
+    <script src="{% static 'dashboard/js/human-readable-file-size.js' %}"></script>
+    <script src="{% static 'dashboard/js/progress-bar.js' %}"></script>
+    <script src="{% static 'dashboard/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/videoconverter.js/app.js' %}"></script>
+{% endblock %}
+
+{% block extra_body %}
+    <script type="text/javascript">
+        $(window).load(function () {
+            {# Limit textarea input based on maxlength attribute #}
+            $("textarea[maxlength]").bind('input propertychange', function () {
+                var maxLength = $(this).attr('maxlength');
+                if ($(this).val().length > maxLength) {
+                    $(this).val($(this).val().substring(0, maxLength));
+                }
+            });
+
+            function showFileInfo(name, size, type, duration) {
+                type = type || '{% trans "unknown" %}';
+                duration = duration || '{% trans "unknown" %}';
+
+                {# Show choosen file info #}
+                $('#file-info-name').html(name);
+                $('#file-info-size').html(formatBytes(size));
+                $('#file-info-type').html(type);
+                $('#file-info-duration').html(duration);
+
+                $('#step-file-information').show();
+            }
+
+            function onFileConvertionDone(filename, data) {
+                $('#id_name').val(filename);
+
+                $('#form-submit-button').click(function () {
+                    var form = new FormData();
+                    form.append('file', new File([data], filename));
+                    data = null;
+                    var inputs = $('#upload-form [name][name!=csrfmiddlewaretoken]');
+                    for (var i = 0; i < inputs.length; ++i) {
+                        var $input = $(inputs[i]);
+                        if ($input.is(':checkbox')) {
+                            form.append($input.attr('name'), $input.prop('checked'));
+                        } else {
+                            form.append($input.attr('name'), $input.val());
+                        }
+                    }
+
+                    $.ajax({
+                        url: "{% url 'dashboard:upload-file' %}",
+                        data: form,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        type: 'POST',
+                        timeout: 0,
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", $("[name=csrfmiddlewaretoken]").val());
+                        }
+                    }).done(function (response) {
+                        if (response['success']) {
+                            window.location.href = "{% url 'dashboard:upload-file-success' %}";
+                        } else {
+                            {# Redirect to error page with errors' details #}
+                            window.location.href = "{% url 'dashboard:upload-file-error' %}";
+                        }
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        new PNotify({
+                            text: "{% trans "An error occurred" %} (" + textStatus + ")",
+                            text_escape: true,
+                            icon: false,
+                            type: 'error',
+                            styling: 'bootstrap3',
+                            buttons: {
+                                sticker: false
+                            },
+                            desktop: {
+                                desktop: true,
+                                title: "Moment Track",
+                                icon: "{% static 'dashboard/favicon.ico' %}"
+                            }
+                        });
+                        fileUploadingBar.stopIntervalUpdate();
+                        $('#step-3').hide();
+                        $('#step-2').show();
+                    });
+
+                    $('#step-2').hide();
+                    $('#step-3').show();
+
+                    var fileUploadingBar = new ProgressBar({
+                        bar: 'file-uploading-progress-bar',
+                        infinite: true,
+                        infiniteAddValue: 10
+                    }).intervalUpdate(1500);
+                });
+
+                $('#actionBar').show();
+                $('#buttonNext').click(function () {
+                    $('#step-1').detach();
+                    $('#step-2').show();
+                });
+            }
+
+            function onFileLoadingDone(filename, fileData) {
+                filename = slug(filename);
+                {# Show ffmpeg progress on console #}
+                VideoConverterJsApp.callbacks.onError = function (message) {
+                    console.debug(message);
+
+                    {# Extract duration #}
+                    var duration = /^\s+Duration:\s((\d{2}):(\d{2}):(\d{2})\.(\d{2})).*$/.exec(message);
+                    if (duration) {
+                        $('#id_duration').val(duration[1]);
+                        $('#file-info-duration').html(duration[1]);
+                        {# Check if user has enough available processing minutes #}
+                        var hours = (Number(duration[2]) * 60);
+                        var minutes = Number(duration[3]);
+                        var milliseconds = (Math.ceil(Number(duration[5]) / 100));
+                        var seconds = Number(duration[4]);
+                        if (milliseconds > 0) {
+                            seconds = Math.ceil((seconds + milliseconds) / 60);
+                        }
+
+                        var totalMinutes = hours + minutes + seconds;
+
+                        if (totalMinutes >= {{ total_available_processing_minutes }}) {
+                            {# redirect the user off this page! #}
+                            window.location.href = "{% url 'dashboard:not-enough-credits' %}";
+                        }
+
+                        {# If duration is already found, stop searching for it #}
+                        VideoConverterJsApp.callbacks.onError = console.debug
+                    }
+                };
+
+                {# Start file format convertion #}
+                var fileConvertingBar;
+
+                {# Show convertion process on worker start running #}
+                VideoConverterJsApp.callbacks.onStartRunning = function () {
+                    $('#step-file-converting').show();
+                    fileConvertingBar = new ProgressBar({
+                        bar: 'file-converting-progress-bar',
+                        text: 'file-converting-progress-bar-text',
+                        infinite: true,
+                        infiniteAddValue: 20
+                    });
+                    fileConvertingBar.intervalUpdate(1000);
+                };
+
+                {# Handle converted file #}
+                VideoConverterJsApp.callbacks.onDone = function (event) {
+                    {# Show convertion progress bar #}
+                    fileConvertingBar.setDone('{% trans "Done" %}');
+                    $('#file-converting-text').detach();
+                    $('#file-converted-text').show();
+
+                    {# Detach callbacks #}
+                    VideoConverterJsApp.callbacks.onStartRunning = false;
+                    VideoConverterJsApp.callbacks.onError = false;
+                    VideoConverterJsApp.callbacks.onDone = false;
+
+                    {# Convertion done #}
+                    var outputFile = event.results[0];
+                    onFileConvertionDone(filename, outputFile.data);
+                    delete outputFile.data;
+                };
+
+                var ext = filename.substr(filename.lastIndexOf('.'), filename.length);
+                var inputFilename = 'input' + ext;
+
+                {# Run the ffmpeg's worker to start converting file #}
+                VideoConverterJsApp.run(
+                    '-i ' + inputFilename + ' -acodec flac output.flac',
+                    VideoConverterJsApp.File(inputFilename, fileData)
+                );
+                delete fileData;
+            }
+
+            {# videoconverter onReady callback for showing first step form #}
+            VideoConverterJsApp.callbacks.onReady = function () {
+                $('#step-0').detach();
+                $('#step-1').show();
+                videoconverterLoadingProgressBar.stopIntervalUpdate();
+            };
+
+            {# Fake progress bar for videoconverter loading #}
+            var videoconverterLoadingProgressBar = new ProgressBar({
+                bar: 'videoconverter-loading-progress-bar',
+                infinite: true
+            });
+            videoconverterLoadingProgressBar.intervalUpdate(500);
+
+            {# Init videoconverter (aka ffmpeg) and related worker #}
+            VideoConverterJsApp.init("{% static 'dashboard/js/videoconverter.js/worker.js' %}");
+
+        {% get_social_accounts user as social_accounts %}
+        {% if user.is_private and social_accounts.dropbox_oauth2 %}
+            {# Event handling for Dropbox chooser #}
+            $('#dropbox-chooser-container').append(
+                Dropbox.createChooseButton({
+                    success: function (files) {
+                        var file = files[0];
+
+                        $('#step-choose-file').hide();
+                        showFileInfo(file.name, file.bytes);
+
+                        $('#step-file-downloading').show();
+                        var downloadingProgressBar = new ProgressBar({
+                            bar: 'file-downloading-progress-bar',
+                            text: 'file-downloading-progress-bar-text'
+                        });
+
+                        var oReq = new XMLHttpRequest();
+
+                        oReq.onprogress = function (event) {
+                            downloadingProgressBar.set(event.total, event.loaded);
+                        };
+
+                        oReq.onload = function () {
+                            $('#step-choose-file').detach();
+                            downloadingProgressBar.setDone('{% trans "Done" %}');
+                            $('#file-downloading-text').detach();
+                            $('#file-downloaded-text').show();
+
+                            var fileData = new Uint8Array(oReq.response);
+                            onFileLoadingDone(file.name, fileData);
+                        };
+
+                        oReq.onerror = function (event) {
+                            $('#step-choose-file').show();
+                            $('#step-file-downloading').hide();
+                            downloadingProgressBar.empty('');
+                            new PNotify({
+                                text: "{% trans "An error occurred during file download" %} (" + event + ")",
+                                text_escape: true,
+                                icon: false,
+                                type: 'error',
+                                styling: 'bootstrap3',
+                                buttons: {
+                                    sticker: false
+                                },
+                                desktop: {
+                                    desktop: true,
+                                    title: "Moment Track",
+                                    icon: "{% static 'dashboard/favicon.ico' %}"
+                                }
+                            });
+                        };
+
+                        oReq.open("GET", file.link, true);
+                        oReq.responseType = "arraybuffer";
+                        oReq.send(null);
+                    },
+                    linkType: 'direct',
+                    extensions: ['audio', 'video']
+                })
+            );
+        {% endif %}
+
+            {# Event handling for file input #}
+            $('#choose-file-input').change(function (event) {
+                var file = event.target.files[0];
+                {# Slugify name to avoid ffmpeg cmd arguments parsing errors #}
+                var inputFilename = slug(file.name);
+                var reader = new FileReader();
+
+                var fileLoadingProgressBar = new ProgressBar({
+                    bar: 'file-loading-progress-bar',
+                    text: 'file-loading-progress-bar-text'
+                });
+
+                reader.onloadstart = function (event) {
+                    {# Remove choose file input #}
+                    $('#step-choose-file').detach();
+
+                    showFileInfo(file.name, file.size, file.type);
+
+                    {# show file loading progress bar #}
+                    $('#step-file-loading').show();
+                };
+
+                {# File loading progress event handling #}
+                reader.onprogress = function (event) {
+                    fileLoadingProgressBar.set(event.total, event.loaded);
+                };
+
+                {# File handling (format check, convertion, encoding, ...) #}
+                reader.onload = function (event) {
+                    {# Show loading progress as done #}
+                    fileLoadingProgressBar.setDone('{% trans "Done" %}');
+                    $('#file-loading-text').detach();
+                    $('#file-loaded-text').show();
+
+                    {# Get file content #}
+                    var fileData = new Uint8Array(event.target.result);
+
+                    onFileLoadingDone(file.name, fileData);
+                    delete fileData;
+                };
+
+                {# When user choose a file read it as an array buffer #}
+                reader.readAsArrayBuffer(file);
+            });
+        });
+    </script>
+{% endblock %}
