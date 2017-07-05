@@ -16,9 +16,27 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
+from rest_framework import routers
+from rest_framework_swagger.views import get_swagger_view
+
+from dashboard.api import views as api_views
+
+
+router = routers.DefaultRouter()
+router.register(r'files', api_views.AudioFileViewSet)
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('dashboard.urls')),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^paypal/', include('paypal.standard.ipn.urls')),
+
+    url(r'^api/v1/$', get_swagger_view(), name='api-doc'),
+    url(r'^api/v1/', include(router.urls, namespace='v1')),
+    url(r'^api/v1/statistics/$', api_views.Statistics.as_view(), name='api-statistics'),
+    url(
+        r'^api/v1/files/(?P<id>[0-9]+)/search/(?P<query>.+)/$',
+        api_views.SearchInFile.as_view(),
+        name='api-search-in-file'
+    ),
 ]
