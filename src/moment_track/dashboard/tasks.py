@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
+import random
 import speech_recognition as sr
 
 from celery import shared_task, group
@@ -113,6 +114,10 @@ def process_audio_file(self, audio_id):
 
                 # Update start time to fetch next fragment
                 start_time += settings.MOMENTTRACK_AUDIO_FRAGMENT_DURATION
+
+            # shuffling tasks improve the chances to have a result in a search
+            # during file processing
+            random.shuffle(tasks)
 
             # run processing tasks in parallel
             group(*tasks)()
