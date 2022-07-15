@@ -7,7 +7,7 @@ django-sslserver==0.19
 python-magic==0.4.13
 django-paypal==0.3.6
 celery==4.0.2
-django-celery-results==1.0.1
+django-celery-results==2.4.0
 SpeechRecognition==3.7.1
 django-timedeltatemplatefilter==0.1.2
 djangorestframework==3.6.3
